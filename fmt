@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -xe
+
+if ! [ -d .git ]; then
+    echo "[!] Please run this script from the root of the repository"
+    exit 1
+fi
+
+find Core -type f -name "*.c" -o -name "*.h" | xargs clang-format -i
