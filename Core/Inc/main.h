@@ -57,6 +57,24 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define TSAL_R_Pin GPIO_PIN_0
+#define TSAL_R_GPIO_Port GPIOA
+#define TSAL_G_Pin GPIO_PIN_1
+#define TSAL_G_GPIO_Port GPIOA
+#define TSAL_B_Pin GPIO_PIN_2
+#define TSAL_B_GPIO_Port GPIOA
+#define IMD_LED_Pin GPIO_PIN_5
+#define IMD_LED_GPIO_Port GPIOA
+#define AMS_LED_Pin GPIO_PIN_6
+#define AMS_LED_GPIO_Port GPIOA
+#define TS_OFF_LED_Pin GPIO_PIN_7
+#define TS_OFF_LED_GPIO_Port GPIOA
+#define EXTRA_LED_2_Pin GPIO_PIN_5
+#define EXTRA_LED_2_GPIO_Port GPIOC
+#define USER_LED_Pin GPIO_PIN_0
+#define USER_LED_GPIO_Port GPIOB
+#define EXTRA_LED_1_Pin GPIO_PIN_10
+#define EXTRA_LED_1_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 
