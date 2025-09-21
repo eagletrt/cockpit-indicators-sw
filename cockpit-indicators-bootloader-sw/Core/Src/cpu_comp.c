@@ -1,12 +1,12 @@
 /************************************************************************************/ /**
-* \file         Source/boot.c
-* \brief        Bootloader core module source file.
-* \ingroup      Core
+* \file         Source/ARMCM0_STM32C0/GCC/cpu_comp.c
+* \brief        Bootloader cpu module source file.
+* \ingroup      Target_ARMCM0_STM32C0
 * \internal
 *----------------------------------------------------------------------------------------
 *                          C O P Y R I G H T
 *----------------------------------------------------------------------------------------
-*   Copyright (c) 2011  by Feaser    http://www.feaser.com    All rights reserved
+*   Copyright (c) 2023  by Feaser    http://www.feaser.com    All rights reserved
 *
 *----------------------------------------------------------------------------------------
 *                            L I C E N S E
@@ -32,63 +32,21 @@
 #include "boot.h" /* bootloader generic header          */
 
 /************************************************************************************/ /**
-** \brief     Initializes the bootloader core.
-** \return    none
+** \brief     Disable global interrupts.
+** \return    none.
 **
 ****************************************************************************************/
-void BootInit(void) {
-    /* initialize the CPU */
-    CpuInit();
-    /* initialize the watchdog */
-    CopInit();
-    /* initialize the millisecond timer */
-    TimerInit();
-    /* initialize the non-volatile memory driver */
-    NvmInit();
-#if (BOOT_FILE_SYS_ENABLE > 0)
-    /* initialize the file system module */
-    FileInit();
-#endif
-#if (BOOT_COM_ENABLE > 0)
-    /* initialize the communication module */
-    ComInit();
-#endif
-#if (BOOT_INFO_TABLE_ENABLE > 0)
-    /* initialize the info table check module */
-    InfoTableInit();
-#endif
-#if (ADDON_GATEWAY_MOD_ENABLE > 0)
-    /* initialize the gateway module */
-    GatewayInit();
-#endif
-    /* initialize the backdoor entry */
-    BackDoorInit();
-} /*** end of BootInit ***/
+void CpuIrqDisable(void) {
+    __asm volatile("cpsid i");
+} /*** end of CpuIrqDisable ***/
 
 /************************************************************************************/ /**
-** \brief     Task function of the bootloader core that drives the program.
-** \return    none
+** \brief     Enable global interrupts.
+** \return    none.
 **
 ****************************************************************************************/
-void BootTask(void) {
-    /* service the watchdog */
-    CopService();
-    /* update the millisecond timer */
-    TimerUpdate();
-#if (BOOT_FILE_SYS_ENABLE > 0)
-    /* call worker task for updating firmware from locally attached file storage */
-    FileTask();
-#endif /* BOOT_FILE_SYS_ENABLE > 0 */
-#if (BOOT_COM_ENABLE > 0)
-    /* process possibly pending communication data */
-    ComTask();
-#endif
-#if (ADDON_GATEWAY_MOD_ENABLE > 0)
-    /* run the gateway */
-    GatewayTask();
-#endif
-    /* control the backdoor */
-    BackDoorCheck();
-} /*** end of BootTask ***/
+void CpuIrqEnable(void) {
+    __asm volatile("cpsie i");
+} /*** end of CpuIrqEnable ***/
 
-/*********************************** end of boot.c *************************************/
+/*********************************** end of cpu_comp.c *********************************/
