@@ -7,4 +7,4 @@ if ! [ -d .git ]; then
     exit 1
 fi
 
-find Core -type f -name "*.c" -o -name "*.h" | xargs clang-format -i
+find Core cockpit-indicators-bootloader-sw/Core -type f -name "*.c" -o -name "*.h" | xargs clang-format -i
