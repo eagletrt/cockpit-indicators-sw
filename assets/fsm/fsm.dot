@@ -1,0 +1,36 @@
+digraph "fsm" {
+    bgcolor="white"
+    layout="dot"
+    center=true
+    concentrate=false
+
+    INIT [
+        style="filled"
+        color="#66ff66"
+        fillcolor="#c1ffc1"
+    ]
+    IDLE
+    FLASH
+    ERROR [
+        style="filled"
+        color="#ff6666"
+        fillcolor="#ffc1c1"
+    ]
+
+    // INIT transitions
+    INIT -> IDLE  [label="init_done"]
+    INIT -> ERROR [label="init_error"]
+
+    // IDLE transitions
+    IDLE -> IDLE
+    IDLE -> FLASH [label="start_flash"]
+    IDLE -> ERROR [label="error_detected"]
+
+    // FLASH transitions
+    FLASH -> FLASH
+    FLASH -> IDLE  [label="flash_done"]
+    FLASH -> ERROR [label="error_detected"]
+
+    // ERROR transitions
+    ERROR -> ERROR
+}

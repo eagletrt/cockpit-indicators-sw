@@ -26,6 +26,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "fsm.h"
 
 /* USER CODE END Includes */
 
@@ -98,11 +99,14 @@ int main(void) {
     MX_TIM16_Init();
     /* USER CODE BEGIN 2 */
 
+    fsm_state_t fsm_state = FSM_STATE_INIT;
+
     /* USER CODE END 2 */
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     while (1) {
+        fsm_state = fsm_run_state(fsm_state, NULL);
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
