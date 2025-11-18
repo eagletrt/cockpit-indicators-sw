@@ -16,6 +16,8 @@ Functions and types have been generated with prefix "fsm_"
 #include "fsm.h"
 
 /*** USER CODE BEGIN MACROS ***/
+#include <feedback.h>
+#include <indicators.h>
 
 /*** USER CODE END MACROS ***/
 
@@ -44,6 +46,38 @@ transition_func_t *const fsm_transition_table[FSM_NUM_STATES][FSM_NUM_STATES] = 
 fsm_event_data_t *fsm_fired_event = NULL;
 
 /*** USER CODE BEGIN GLOBALS ***/
+
+MushroomPins mushroom_pins_global = {
+    .M1_port = SHUTDOWN_STATUS_A_GPIO_Port,
+    .M1_pin = SHUTDOWN_STATUS_A_Pin,
+    .M2_port = SHUTDOWN_STATUS_B_GPIO_Port,
+    .M2_pin = SHUTDOWN_STATUS_B_Pin
+};
+
+MushroomState mushroom_state_global = {
+    .M1_pressed = false,
+    .M2_pressed = false,
+    .changed_state = false
+};
+
+LEDPins led_pins_global = {
+    .AMS_port = AMS_LED_GPIO_Port,
+    .AMS_pin = AMS_LED_Pin,
+    .IMD_port = IMD_LED_GPIO_Port,
+    .IMD_pin = IMD_LED_Pin,
+    .TS_OFF_port = TS_OFF_LED_GPIO_Port,
+    .TS_OFF_pin = TS_OFF_LED_Pin,
+    .MISSION_ports = { LED_BIT_0_GPIO_Port, LED_BIT_1_GPIO_Port, LED_BIT_2_GPIO_Port },
+    .MISSION_pins = { LED_BIT_0_Pin, LED_BIT_1_Pin, LED_BIT_2_Pin }
+};
+
+LEDState led_state_global = {
+    .AMS = false,
+    .IMD = false,
+    .TS_OFF = false,
+    .mission_id = 0,
+    .changed_state = false
+};
 
 /*** USER CODE END GLOBALS ***/
 
@@ -78,6 +112,18 @@ fsm_state_t fsm_do_INIT(fsm_state_data_t *data) {
     fsm_state_t next_state = FSM_STATE_IDLE;
 
     /*** USER CODE BEGIN DO_INIT ***/
+    // Initialization functions
+    Feedback_Init(&mushroom_pins_global, &mushroom_state_global);
+
+    if (!Indicators_Init(&led_pins_global, &led_state_global)) {
+        next_state = FSM_STATE_ERROR;
+    }
+
+    // Power on tests
+    if (get_mushroom_state()) {
+        // At least one mushroom button is pressed during initialization
+        next_state = FSM_STATE_ERROR;
+    }
 
     /*** USER CODE END DO_INIT ***/
 
@@ -98,6 +144,16 @@ fsm_state_t fsm_do_IDLE(fsm_state_data_t *data) {
     fsm_state_t next_state = FSM_NO_CHANGE;
 
     /*** USER CODE BEGIN DO_IDLE ***/
+
+    //TODO: Implement can module to receive commands and update led_state_global accordingly
+
+    update_indicators(&led_state_global, &led_pins_global);
+    update_mission(&led_state_global, &led_pins_global);
+
+    if (get_mushroom_state()) {
+        // At least one mushroom button is pressed
+        relay_error("To be implemented", 18);
+    }
 
     /*** USER CODE END DO_IDLE ***/
 

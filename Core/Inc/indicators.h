@@ -30,6 +30,14 @@ typedef struct {
 } LEDPins;
 
 /*!
+ * \brief Initialize the indicator LEDs to OFF state.
+ * \param pins The struct containing the pins to the LED indicators.
+ * 
+ * \retval True if initialization is successful, else false
+ */
+bool Indicators_Init(const LEDPins *pins, LEDState *state);
+
+/*!
  * \brief Update the indicator LEDs based on the current state.
  * \param state The struct containing the current state of the LED indicators.
  * \param pins The struct containing the pins to the LED indicators.

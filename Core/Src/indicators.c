@@ -1,5 +1,22 @@
 #include "indicators.h"
 
+bool Indicators_Init(const LEDPins *pins, LEDState *state) {
+
+    // Initialize all indicator LEDs to OFF
+    if (pins == NULL || state == NULL) {
+        return false;
+    }
+
+    HAL_GPIO_WritePin(pins->AMS_port, pins->AMS_pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(pins->IMD_port, pins->IMD_pin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(pins->TS_OFF_port, pins->TS_OFF_pin, GPIO_PIN_RESET);
+
+    for (int i = 0; i < MISSION_PINS; i++) {
+        HAL_GPIO_WritePin(pins->MISSION_ports[i], pins->MISSION_pins[i], GPIO_PIN_RESET);
+    }
+    return true;
+}
+
 void update_indicators(const LEDState *state, const LEDPins *pins) {
 
     if (state == NULL || pins == NULL) {

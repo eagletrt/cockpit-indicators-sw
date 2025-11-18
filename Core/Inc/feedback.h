@@ -67,6 +67,7 @@ void clear_changed_state_flag();
 
 /*!
  * \brief  Force update of the mushroom button states from GPIO pins and reset changed_state flag
+ *         useful if a reset can be triggered without power cycling the MCU
  */
 void update_mushroom_state();
 
