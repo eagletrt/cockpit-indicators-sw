@@ -1,36 +1,48 @@
 #include "indicators.h"
 
-bool Indicators_Init(const LEDPins *pins, LEDState *state) {
-
-    // Initialize all indicator LEDs to OFF
-    if (pins == NULL || state == NULL) {
+/*!
+ * \brief Private helper function to validate the IndicatorsHandler struct.
+ * \param hindi The handler struct for indicators.
+ * \return true if valid, false otherwise
+ */
+static bool prv_validate_handler(struct IndicatorsHandler *hindi) {
+    if (hindi == NULL || hindi->ams == NULL || hindi->imd == NULL || hindi->ts_off == NULL || hindi->mission == NULL) {
         return false;
-    }
-
-    HAL_GPIO_WritePin(pins->AMS_port, pins->AMS_pin, GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(pins->IMD_port, pins->IMD_pin, GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(pins->TS_OFF_port, pins->TS_OFF_pin, GPIO_PIN_RESET);
-
-    for (int i = 0; i < MISSION_PINS; i++) {
-        HAL_GPIO_WritePin(pins->MISSION_ports[i], pins->MISSION_pins[i], GPIO_PIN_RESET);
     }
     return true;
 }
 
-void update_indicators(const LEDState *state, const LEDPins *pins) {
+bool indicators_init(struct IndicatorsHandler *hindi) {
 
-    if (state == NULL || pins == NULL) {
+    // Initialize all indicator LEDs to OFF
+    if (!prv_validate_handler(hindi)) {
+        return false;
+    }
+
+    hindi->ams(false);
+    hindi->imd(false);
+    hindi->ts_off(false);
+
+    for (int i = 0; i < MISSION_PINS; i++) {
+        hindi->mission(false, i);
+    }
+    return true;
+}
+
+void update_indicators(struct IndicatorsHandler *hindi) {
+
+    if (!prv_validate_handler(hindi)) {
         return;
     }
 
-    HAL_GPIO_WritePin(pins->AMS_port, pins->AMS_pin, state->AMS ? GPIO_PIN_SET : GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(pins->IMD_port, pins->IMD_pin, state->IMD ? GPIO_PIN_SET : GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(pins->TS_OFF_port, pins->TS_OFF_pin, state->TS_OFF ? GPIO_PIN_SET : GPIO_PIN_RESET);
+    hindi->ams(hindi->ams_state);
+    hindi->imd(hindi->imd_state);
+    hindi->ts_off(hindi->ts_off_state);
 }
 
-bool update_mission(const LEDState *state, const LEDPins *pins) {
+bool update_mission(struct IndicatorsHandler *hindi) {
 
-    if (state == NULL || pins == NULL) {
+    if (!prv_validate_handler(hindi)) {
         return false;
     }
 
@@ -39,14 +51,14 @@ bool update_mission(const LEDState *state, const LEDPins *pins) {
     // Mission 1 -> LED 0 on
     // Mission 2 -> LED 1 on ecc...
 
-    uint8_t mission = state->mission_id;
+    uint8_t mission = hindi->mission_id;
 
     if (mission > MAX_MISSION_LEDS) {
         return false;
     }
 
     for (int i = 0; i < MISSION_PINS; i++) {
-        HAL_GPIO_WritePin(pins->MISSION_ports[i], pins->MISSION_pins[i], (mission >> i) & 0x01 ? GPIO_PIN_SET : GPIO_PIN_RESET);
+        hindi->mission((mission >> i) & 0x01, i);
     }
 
     return true;

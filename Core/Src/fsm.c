@@ -55,8 +55,8 @@ MushroomPins mushroom_pins_global = {
 };
 
 MushroomState mushroom_state_global = {
-    .M1_pressed = false,
-    .M2_pressed = false,
+    .m1_pressed = false,
+    .m2_pressed = false,
     .changed_state = false
 };
 

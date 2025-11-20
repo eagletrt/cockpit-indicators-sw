@@ -4,49 +4,53 @@
 #include "main.h"
 #include <stdbool.h>
 
-typedef struct {
+/*!
+ * \brief Function signature for reading feedback state
+ * \return true if pressed, false otherwise
+ */
+typedef bool (*read_feedback_pin)(void);
 
-    volatile bool M1_pressed;    //<! First shutdown mushroom button state
-    volatile bool M2_pressed;    //<! Second shutdown mushroom button state
+/*!
+ * \brief Struct that handles all relevant feedback information
+ */
+struct FeedbackHandler {
+
+    read_feedback_pin read_m1; //<! Function to read first mushroom button state, must return true if pressed
+    read_feedback_pin read_m2; //<! Function to read second mushroom button state, must return true if pressed
+
+    volatile bool m1_pressed;    //<! First shutdown mushroom button state
+    volatile bool m2_pressed;    //<! Second shutdown mushroom button state
     volatile bool changed_state; //<! Flag to indicate if the state has changed
-
-} MushroomState;
-
-typedef struct {
-
-    GPIO_TypeDef *M1_port; //<! GPIO port for first shutdown mushroom button
-    uint16_t M1_pin;       //<! GPIO pin for first shutdown mushroom button
-
-    GPIO_TypeDef *M2_port; //<! GPIO port for second shutdown mushroom button
-    uint16_t M2_pin;       //<! GPIO pin for second shutdown mushroom button
-
-} MushroomPins;
+};
 
 /*!
  * \brief  Initialize feedback module
- * \param  pins: Pointer to MushroomPins structure with GPIO configuration
- * \param  state: Pointer to MushroomState structure to hold button states
+ * \param  mhand: Pointer to MushroomHandlers structure.
+ * \warning The mushroom handlers struct must remain in scope for the entire runtime of the program.
  * 
  * \return true if initialization is successful, false if any button is pressed during initialization
  */
-bool Feedback_Init(MushroomPins *pins, MushroomState *state);
+bool feedback_init(struct FeedbackHandler *mhand);
 
 /*!
- * \brief  EXTI line detection callbacks
- * \param  GPIO_Pin: Specifies the pins connected EXTI line
+ * \brief  General event callback for mushroom button state changes
+ * \param  fb: 0 - M1, 1 - M2 
  * \param  edge: 0 - rising edge, 1 - falling edge
  */
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin, int edge);
+void general_event_callback(uint8_t fb, int edge);
+// TODO: Should fb be an enum?
 
 /*!
- * \brief  EXTI line rising edge detection callback
+ * \brief  Function to be called on line rising edge detection
+ * \param  fb: 0 - M1, 1 - M2
  */
-void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin);
+void rising_mushroom_callback(uint8_t fb);
 
 /*!
- * \brief  EXTI line falling edge detection callback
+ * \brief  Function to be called on line falling edge detection
+ * \param  fb: 0 - M1, 1 - M2
  */
-void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin);
+void falling_mushroom_callback(uint8_t fb);
 
 /*!
  * \brief  If this function is called while any of the mushroom buttons are pressed, 

@@ -1,21 +1,32 @@
 #include "feedback.h"
 
-static MushroomPins *mushroom_pins = NULL;
-static volatile MushroomState *mushroom_state = NULL;
+static volatile struct FeedbackHandler *feedback_handler = NULL;
+volatile bool feedback_enable_interrupts = true;
 
-bool Feedback_Init(MushroomPins *pins, MushroomState *state) {
+/*!
+ * \brief Private helper function to validate the IndicatorsHandler struct.
+ * \param mhand The handler struct for indicators.
+ * \return true if valid, false otherwise
+ */
+static bool prv_validate_handler(struct FeedbackHandler *mhand) {
+    if (mhand == NULL || mhand->read_m1 == NULL || mhand->read_m2 == NULL) {
+        return false;
+    }
+    return true;
+}
 
-    __disable_irq();
-    mushroom_pins = pins;
-    mushroom_state = state;
-    __enable_irq();
+bool feedback_init(struct FeedbackHandler *mhand) {
+
+    feedback_enable_interrupts = false;
+    feedback_handler = mhand;
+    feedback_enable_interrupts = true;
 
     // Initialize the mushroom button states
-    mushroom_state->M1_pressed = (HAL_GPIO_ReadPin(mushroom_pins->M1_port, mushroom_pins->M1_pin) == GPIO_PIN_RESET);
-    mushroom_state->M2_pressed = (HAL_GPIO_ReadPin(mushroom_pins->M2_port, mushroom_pins->M2_pin) == GPIO_PIN_RESET);
-    mushroom_state->changed_state = false;
+    feedback_handler->m1_pressed = feedback_handler->read_m1();
+    feedback_handler->m2_pressed = feedback_handler->read_m2();
+    feedback_handler->changed_state = false;
 
-    if (mushroom_state->M1_pressed || mushroom_state->M2_pressed) {
+    if (feedback_handler->m1_pressed || feedback_handler->m2_pressed) {
         // At least one button is pressed during initialization
         return false;
     }
@@ -24,31 +35,33 @@ bool Feedback_Init(MushroomPins *pins, MushroomState *state) {
 }
 
 // Call the general EXTI callback with edge information
-void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin) {
-    HAL_GPIO_EXTI_Callback(GPIO_Pin, 0);
+void rising_mushroom_callback(uint8_t fb) {
+    general_event_callback(fb, 0);
 }
-void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin) {
-    HAL_GPIO_EXTI_Callback(GPIO_Pin, 1);
+void falling_mushroom_callback(uint8_t fb) {
+    general_event_callback(fb, 1);
 }
 
 // TODO: Check if debouncing is needed
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin, int edge) {
+void general_event_callback(uint8_t fb, int edge) {
 
     // Return if rising edge as the reset logic is not handled here (???)
     if (edge == 0) {
         return;
     }
 
-    if (mushroom_pins == NULL || mushroom_state == NULL) {
+    if (!prv_validate_handler(feedback_handler) || !feedback_enable_interrupts) {
         return; // Not initialized
     }
 
-    if (GPIO_Pin == mushroom_pins->M1_pin) {
-        mushroom_state->M1_pressed = (HAL_GPIO_ReadPin(mushroom_pins->M1_port, mushroom_pins->M1_pin) == GPIO_PIN_RESET);
-        mushroom_state->changed_state = true;
-    } else if (GPIO_Pin == mushroom_pins->M2_pin) {
-        mushroom_state->M2_pressed = (HAL_GPIO_ReadPin(mushroom_pins->M2_port, mushroom_pins->M2_pin) == GPIO_PIN_RESET);
-        mushroom_state->changed_state = true;
+    // Always set the pressed state to true on falling edge
+    // TODO: Discuss if it should be better to read the pin state instead to not risk misinputs
+    if (fb == 0) {
+        feedback_handler->m1_pressed = true;
+        feedback_handler->changed_state = true;
+    } else if (fb == 1) {
+        feedback_handler->m2_pressed = true;
+        feedback_handler->changed_state = true;
     }
 }
 
@@ -58,22 +71,22 @@ void relay_error(char *error_message, int message_length) {
 }
 
 bool get_mushroom_state() {
-    if (mushroom_state == NULL) {
+    if (!prv_validate_handler(feedback_handler)) {
         return false; // Not initialized
     }
-    return mushroom_state->M1_pressed || mushroom_state->M2_pressed;
+    return feedback_handler->m1_pressed || feedback_handler->m2_pressed;
 }
 
 void clear_changed_state_flag() {
-    if (mushroom_state != NULL) {
-        mushroom_state->changed_state = false;
+    if (prv_validate_handler(feedback_handler)) {
+        feedback_handler->changed_state = false;
     }
 }
 
 void update_mushroom_state() {
-    if (mushroom_state != NULL) {
-        mushroom_state->M1_pressed = (HAL_GPIO_ReadPin(mushroom_pins->M1_port, mushroom_pins->M1_pin) == GPIO_PIN_RESET);
-        mushroom_state->M2_pressed = (HAL_GPIO_ReadPin(mushroom_pins->M2_port, mushroom_pins->M2_pin) == GPIO_PIN_RESET);
-        mushroom_state->changed_state = false;
+    if (prv_validate_handler(feedback_handler)) {
+        feedback_handler->m1_pressed = feedback_handler->read_m1();
+        feedback_handler->m2_pressed = feedback_handler->read_m2();
+        feedback_handler->changed_state = false;
     }
 }
