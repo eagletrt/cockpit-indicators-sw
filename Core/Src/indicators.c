@@ -19,6 +19,12 @@ bool indicators_init(struct IndicatorsHandler *hindi) {
         return false;
     }
 
+    hindi->ams_state = false;
+    hindi->imd_state = false;
+    hindi->ts_off_state = false;
+    hindi->mission_id = 0;
+    hindi->changed_state = false;
+
     hindi->ams(false);
     hindi->imd(false);
     hindi->ts_off(false);

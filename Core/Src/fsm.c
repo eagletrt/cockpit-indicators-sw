@@ -47,36 +47,52 @@ fsm_event_data_t *fsm_fired_event = NULL;
 
 /*** USER CODE BEGIN GLOBALS ***/
 
-MushroomPins mushroom_pins_global = {
-    .M1_port = SHUTDOWN_STATUS_A_GPIO_Port,
-    .M1_pin = SHUTDOWN_STATUS_A_Pin,
-    .M2_port = SHUTDOWN_STATUS_B_GPIO_Port,
-    .M2_pin = SHUTDOWN_STATUS_B_Pin
+/* Wrapper function for Mushroom 1 */
+static bool prv_read_m1_pin(void) {
+    return (HAL_GPIO_ReadPin(SHUTDOWN_STATUS_A_GPIO_Port, SHUTDOWN_STATUS_A_Pin) == GPIO_PIN_RESET);
+}
+
+/* Wrapper function for Mushroom 2 */
+static bool prv_read_m2_pin(void) {
+    return (HAL_GPIO_ReadPin(SHUTDOWN_STATUS_B_GPIO_Port, SHUTDOWN_STATUS_B_Pin) == GPIO_PIN_RESET);
+}
+
+/*Wrapper function for AMS led*/
+static void prv_set_ams_indicator(bool state) {
+    HAL_GPIO_WritePin(AMS_LED_GPIO_Port, AMS_LED_Pin, state ? GPIO_PIN_SET : GPIO_PIN_RESET);
+}
+
+/*Wrapper function for IMD led*/
+static void prv_set_imd_indicator(bool state) {
+    HAL_GPIO_WritePin(IMD_LED_GPIO_Port, IMD_LED_Pin, state ? GPIO_PIN_SET : GPIO_PIN_RESET);
+}
+
+/*Wrapper function for TS_OFF led*/
+static void prv_set_ts_off_indicator(bool state) {
+    HAL_GPIO_WritePin(TS_OFF_LED_GPIO_Port, TS_OFF_LED_Pin, state ? GPIO_PIN_SET : GPIO_PIN_RESET);
+}
+
+/*Wrapper function for mission profile indicators*/
+static void prv_set_mission_indicator(bool state, uint8_t pin) {
+    if (pin >= MISSION_PINS) {
+        return; // Invalid pin
+    }
+    uint16_t pins[] = { LED_BIT_0_Pin, LED_BIT_1_Pin, LED_BIT_2_Pin };
+    GPIO_TypeDef *ports[] = { LED_BIT_0_GPIO_Port, LED_BIT_1_GPIO_Port, LED_BIT_2_GPIO_Port };
+    HAL_GPIO_WritePin(ports[pin], pins[pin], state ? GPIO_PIN_SET : GPIO_PIN_RESET);
+}
+
+struct FeedbackHandler mushroom_global_handler = {
+    .read_m1 = prv_read_m1_pin,
+    .read_m2 = prv_read_m2_pin,
+
 };
 
-MushroomState mushroom_state_global = {
-    .m1_pressed = false,
-    .m2_pressed = false,
-    .changed_state = false
-};
-
-LEDPins led_pins_global = {
-    .AMS_port = AMS_LED_GPIO_Port,
-    .AMS_pin = AMS_LED_Pin,
-    .IMD_port = IMD_LED_GPIO_Port,
-    .IMD_pin = IMD_LED_Pin,
-    .TS_OFF_port = TS_OFF_LED_GPIO_Port,
-    .TS_OFF_pin = TS_OFF_LED_Pin,
-    .MISSION_ports = { LED_BIT_0_GPIO_Port, LED_BIT_1_GPIO_Port, LED_BIT_2_GPIO_Port },
-    .MISSION_pins = { LED_BIT_0_Pin, LED_BIT_1_Pin, LED_BIT_2_Pin }
-};
-
-LEDState led_state_global = {
-    .AMS = false,
-    .IMD = false,
-    .TS_OFF = false,
-    .mission_id = 0,
-    .changed_state = false
+struct IndicatorsHandler indicators_global_handler = {
+    .ams = prv_set_ams_indicator,
+    .imd = prv_set_imd_indicator,
+    .ts_off = prv_set_ts_off_indicator,
+    .mission = prv_set_mission_indicator,
 };
 
 /*** USER CODE END GLOBALS ***/
@@ -113,9 +129,9 @@ fsm_state_t fsm_do_INIT(fsm_state_data_t *data) {
 
     /*** USER CODE BEGIN DO_INIT ***/
     // Initialization functions
-    Feedback_Init(&mushroom_pins_global, &mushroom_state_global);
+    feedback_init(&mushroom_global_handler);
 
-    if (!Indicators_Init(&led_pins_global, &led_state_global)) {
+    if (!indicators_init(&indicators_global_handler)) {
         next_state = FSM_STATE_ERROR;
     }
 
@@ -147,8 +163,8 @@ fsm_state_t fsm_do_IDLE(fsm_state_data_t *data) {
 
     //TODO: Implement can module to receive commands and update led_state_global accordingly
 
-    update_indicators(&led_state_global, &led_pins_global);
-    update_mission(&led_state_global, &led_pins_global);
+    update_indicators(&indicators_global_handler);
+    update_mission(&indicators_global_handler);
 
     if (get_mushroom_state()) {
         // At least one mushroom button is pressed
