@@ -47,6 +47,23 @@ fsm_event_data_t *fsm_fired_event = NULL;
 
 /*** USER CODE BEGIN GLOBALS ***/
 
+// EXTI Callbacks to be called from HAL
+void HAL_GPIO_EXTI_falling_Callback(uint16_t GPIO_Pin) {
+    if (GPIO_Pin == SHUTDOWN_STATUS_A_Pin) {
+        falling_mushroom_callback(0);
+    } else if (GPIO_Pin == SHUTDOWN_STATUS_B_Pin) {
+        falling_mushroom_callback(1);
+    }
+};
+
+void HAL_GPIO_EXTI_rising_Callback(uint16_t GPIO_Pin) {
+    if (GPIO_Pin == SHUTDOWN_STATUS_A_Pin) {
+        rising_mushroom_callback(0);
+    } else if (GPIO_Pin == SHUTDOWN_STATUS_B_Pin) {
+        rising_mushroom_callback(1);
+    }
+}
+
 /* Wrapper function for Mushroom 1 */
 static bool prv_read_m1_pin(void) {
     return (HAL_GPIO_ReadPin(SHUTDOWN_STATUS_A_GPIO_Port, SHUTDOWN_STATUS_A_Pin) == GPIO_PIN_RESET);
