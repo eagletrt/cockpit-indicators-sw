@@ -4,33 +4,33 @@ digraph "fsm" {
     center=true
     concentrate=false
 
-    INIT [
+    init [
         style="filled"
         color="#66ff66"
         fillcolor="#c1ffc1"
     ]
-    IDLE
-    FLASH
-    ERROR [
+    idle
+    flash
+    error [
         style="filled"
         color="#ff6666"
         fillcolor="#ffc1c1"
     ]
 
-    // INIT transitions
-    INIT -> IDLE  [label="init_done"]
-    INIT -> ERROR [label="init_error"]
+    // init transitions
+    init -> idle  [label="init_done"]
+    init -> error [label="init_error"]
 
-    // IDLE transitions
-    IDLE -> IDLE
-    IDLE -> FLASH [label="start_flash"]
-    IDLE -> ERROR [label="error_detected"]
+    // idle transitions
+    idle -> idle
+    idle -> flash [label="start_flash"]
+    idle -> error [label="error_detected"]
 
-    // FLASH transitions
-    FLASH -> FLASH
-    FLASH -> IDLE  [label="flash_done"]
-    FLASH -> ERROR [label="error_detected"]
+    // flash transitions
+    flash -> flash
+    flash -> idle  [label="flash_done"]
+    flash -> error [label="error_detected"]
 
-    // ERROR transitions
-    ERROR -> ERROR
+    // error transitions
+    error -> error
 }
