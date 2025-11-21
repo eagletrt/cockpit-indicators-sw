@@ -1,92 +1,111 @@
 #include "feedback.h"
 
-static volatile struct FeedbackHandler *feedback_handler = NULL;
-volatile bool feedback_enable_interrupts = true;
+// Don't know if dynamic allocation would be better here
+static struct FeedbackHandler *feedback_handlers[MAX_FEEDBACK_HANDLERS] = { NULL }; // Array of pointers to feedback handlers
+static size_t feedback_handler_count = 0;
+static volatile bool feedback_enable_interrupts = true;
 
 /*!
- * \brief Private helper function to validate the IndicatorsHandler struct.
- * \param mhand The handler struct for indicators.
+ * \brief Private helper function to validate the FeedbackHandler struct.
+ * \param mhand The handler struct for feedback.
  * \return true if valid, false otherwise
  */
 static bool prv_validate_handler(struct FeedbackHandler *mhand) {
-    if (mhand == NULL || mhand->read_m1 == NULL || mhand->read_m2 == NULL) {
+    if (mhand == NULL || mhand->read_fb == NULL) {
         return false;
     }
     return true;
 }
 
-bool feedback_init(struct FeedbackHandler *mhand) {
+enum FeedbackReturnCode feedback_init(struct FeedbackHandler *mhand[], size_t handler_count) {
 
-    feedback_enable_interrupts = false;
-    feedback_handler = mhand;
-    feedback_enable_interrupts = true;
+    if (mhand == NULL || handler_count == 0 || handler_count > MAX_FEEDBACK_HANDLERS) {
+        return FEEDBACK_INVALID; // Invalid parameters
+    }
+    feedback_handler_count = handler_count;
 
-    // Initialize the mushroom button states
-    feedback_handler->m1_pressed = feedback_handler->read_m1();
-    feedback_handler->m2_pressed = feedback_handler->read_m2();
-    feedback_handler->changed_state = false;
+    enum FeedbackReturnCode ret_code = FEEDBACK_NOT_PRESSED;
 
-    if (feedback_handler->m1_pressed || feedback_handler->m2_pressed) {
-        // At least one button is pressed during initialization
-        return false;
+    // Check for valid handlers in the array and initialize their states
+    for (size_t i = 0; i < handler_count; i++) {
+        if (!prv_validate_handler(mhand[i])) {
+            // Cleanup on error
+            memset(feedback_handlers, 0, sizeof(feedback_handlers));
+            feedback_handler_count = 0;
+
+            return FEEDBACK_INVALID; // Invalid handler found
+        }
+
+        feedback_enable_interrupts = false;
+        feedback_handlers[i] = mhand[i];
+        feedback_enable_interrupts = true;
+
+        // Initialize the feedback button states
+        feedback_handlers[i]->fb_pressed = feedback_handlers[i]->read_fb();
+        feedback_handlers[i]->changed_state = false;
+
+        if (feedback_handlers[i]->fb_pressed) {
+            // At least one button is pressed during initialization
+            ret_code = FEEDBACK_PRESSED;
+        }
     }
 
-    return true;
+    return ret_code;
 }
 
-// Call the general EXTI callback with edge information
-void rising_mushroom_callback(uint8_t fb) {
-    general_event_callback(fb, 0);
+// Call the general event callback with edge information
+void feedback_rising_edge_callback(struct FeedbackHandler *fb) {
+    int_feedback_event_callback(fb, EDGE_TYPE_RISING_EDGE);
 }
-void falling_mushroom_callback(uint8_t fb) {
-    general_event_callback(fb, 1);
+void feedback_falling_edge_callback(struct FeedbackHandler *fb) {
+    int_feedback_event_callback(fb, EDGE_TYPE_FALLING_EDGE);
 }
 
 // TODO: Check if debouncing is needed
-void general_event_callback(uint8_t fb, int edge) {
-
-    // Return if rising edge as the reset logic is not handled here (???)
-    if (edge == 0) {
+void int_feedback_event_callback(struct FeedbackHandler *fb, enum EdgeType edge) {
+    // Return if rising edge as the reset logic is not handled here
+    if (edge == EDGE_TYPE_RISING_EDGE) {
         return;
     }
 
-    if (!prv_validate_handler(feedback_handler) || !feedback_enable_interrupts) {
-        return; // Not initialized
+    if (!prv_validate_handler(fb) || !feedback_enable_interrupts) {
+        return; // Not initialized or interrupts disabled
     }
 
     // Always set the pressed state to true on falling edge
     // TODO: Discuss if it should be better to read the pin state instead to not risk misinputs
-    if (fb == 0) {
-        feedback_handler->m1_pressed = true;
-        feedback_handler->changed_state = true;
-    } else if (fb == 1) {
-        feedback_handler->m2_pressed = true;
-        feedback_handler->changed_state = true;
+    fb->fb_pressed = true;
+    fb->changed_state = true;
+}
+
+enum FeedbackReturnCode feedback_get_state() {
+    if (feedback_handler_count == 0) {
+        return FEEDBACK_ERROR; // No handlers initialized
+    }
+    for (size_t i = 0; i < feedback_handler_count; i++) {
+        if (!prv_validate_handler(feedback_handlers[i])) {
+            return FEEDBACK_ERROR; // Invalid handler found
+        }
+        if (feedback_handlers[i]->fb_pressed) {
+            return FEEDBACK_PRESSED;
+        }
+    }
+    return FEEDBACK_NOT_PRESSED;
+}
+
+void feedback_clear_changed_state_flag() {
+    for (size_t i = 0; i < feedback_handler_count; i++) {
+        if (prv_validate_handler(feedback_handlers[i])) {
+            feedback_handlers[i]->changed_state = false;
+        }
     }
 }
 
-void relay_error(char *error_message, int message_length) {
-    // Implementation to relay error message over CAN bus
-    // This is a placeholder function and should be implemented as per the CAN bus protocol used
-}
-
-bool get_mushroom_state() {
-    if (!prv_validate_handler(feedback_handler)) {
-        return false; // Not initialized
-    }
-    return feedback_handler->m1_pressed || feedback_handler->m2_pressed;
-}
-
-void clear_changed_state_flag() {
-    if (prv_validate_handler(feedback_handler)) {
-        feedback_handler->changed_state = false;
-    }
-}
-
-void update_mushroom_state() {
-    if (prv_validate_handler(feedback_handler)) {
-        feedback_handler->m1_pressed = feedback_handler->read_m1();
-        feedback_handler->m2_pressed = feedback_handler->read_m2();
-        feedback_handler->changed_state = false;
+void feedback_update_state() {
+    for (size_t i = 0; i < feedback_handler_count; i++) {
+        if (prv_validate_handler(feedback_handlers[i])) {
+            feedback_handlers[i]->fb_pressed = feedback_handlers[i]->read_fb();
+            feedback_handlers[i]->changed_state = false;
+        }
     }
 }

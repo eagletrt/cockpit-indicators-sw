@@ -47,23 +47,6 @@ fsm_event_data_t *fsm_fired_event = NULL;
 
 /*** USER CODE BEGIN GLOBALS ***/
 
-// EXTI Callbacks to be called from HAL
-void HAL_GPIO_EXTI_falling_Callback(uint16_t GPIO_Pin) {
-    if (GPIO_Pin == SHUTDOWN_STATUS_A_Pin) {
-        falling_mushroom_callback(0);
-    } else if (GPIO_Pin == SHUTDOWN_STATUS_B_Pin) {
-        falling_mushroom_callback(1);
-    }
-};
-
-void HAL_GPIO_EXTI_rising_Callback(uint16_t GPIO_Pin) {
-    if (GPIO_Pin == SHUTDOWN_STATUS_A_Pin) {
-        rising_mushroom_callback(0);
-    } else if (GPIO_Pin == SHUTDOWN_STATUS_B_Pin) {
-        rising_mushroom_callback(1);
-    }
-}
-
 /* Wrapper function for Mushroom 1 */
 static bool prv_read_m1_pin(void) {
     return (HAL_GPIO_ReadPin(SHUTDOWN_STATUS_A_GPIO_Port, SHUTDOWN_STATUS_A_Pin) == GPIO_PIN_RESET);
@@ -99,10 +82,18 @@ static void prv_set_mission_indicator(bool state, uint8_t pin) {
     HAL_GPIO_WritePin(ports[pin], pins[pin], state ? GPIO_PIN_SET : GPIO_PIN_RESET);
 }
 
-struct FeedbackHandler mushroom_global_handler = {
-    .read_m1 = prv_read_m1_pin,
-    .read_m2 = prv_read_m2_pin,
+struct FeedbackHandler mushroom_A = {
+    .read_fb = prv_read_m1_pin,
+};
 
+struct FeedbackHandler mushroom_B = {
+    .read_fb = prv_read_m2_pin,
+
+};
+
+struct FeedbackHandler *mushroom_global_handler[] = {
+    &mushroom_A,
+    &mushroom_B,
 };
 
 struct IndicatorsHandler indicators_global_handler = {
@@ -111,6 +102,23 @@ struct IndicatorsHandler indicators_global_handler = {
     .ts_off = prv_set_ts_off_indicator,
     .mission = prv_set_mission_indicator,
 };
+
+// EXTI Callbacks to be called from HAL
+void HAL_GPIO_EXTI_falling_Callback(uint16_t GPIO_Pin) {
+    if (GPIO_Pin == SHUTDOWN_STATUS_A_Pin) {
+        feedback_falling_edge_callback(&mushroom_A);
+    } else if (GPIO_Pin == SHUTDOWN_STATUS_B_Pin) {
+        feedback_falling_edge_callback(&mushroom_B);
+    }
+};
+
+void HAL_GPIO_EXTI_rising_Callback(uint16_t GPIO_Pin) {
+    if (GPIO_Pin == SHUTDOWN_STATUS_A_Pin) {
+        feedback_rising_edge_callback(&mushroom_A);
+    } else if (GPIO_Pin == SHUTDOWN_STATUS_B_Pin) {
+        feedback_rising_edge_callback(&mushroom_B);
+    }
+}
 
 /*** USER CODE END GLOBALS ***/
 
@@ -146,15 +154,17 @@ fsm_state_t fsm_do_INIT(fsm_state_data_t *data) {
 
     /*** USER CODE BEGIN DO_INIT ***/
     // Initialization functions
-    feedback_init(&mushroom_global_handler);
+    if (feedback_init(mushroom_global_handler, (size_t)2) != FEEDBACK_NOT_PRESSED) {
+        next_state = FSM_STATE_ERROR;
+    }
 
     if (!indicators_init(&indicators_global_handler)) {
         next_state = FSM_STATE_ERROR;
     }
 
     // Power on tests
-    if (get_mushroom_state()) {
-        // At least one mushroom button is pressed during initialization
+    if (feedback_get_state() == FEEDBACK_PRESSED) {
+        // At least one mushroom button is pressed during initialization (this is redundant with feedback_init check)
         next_state = FSM_STATE_ERROR;
     }
 
@@ -183,9 +193,8 @@ fsm_state_t fsm_do_IDLE(fsm_state_data_t *data) {
     update_indicators(&indicators_global_handler);
     update_mission(&indicators_global_handler);
 
-    if (get_mushroom_state()) {
-        // At least one mushroom button is pressed
-        relay_error("To be implemented", 18);
+    if (feedback_get_state() == FEEDBACK_PRESSED) {
+        // Relay mushroom button pressed
     }
 
     /*** USER CODE END DO_IDLE ***/
