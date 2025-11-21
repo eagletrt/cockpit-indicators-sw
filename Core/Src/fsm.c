@@ -190,8 +190,8 @@ fsm_state_t fsm_do_IDLE(fsm_state_data_t *data) {
 
     //TODO: Implement can module to receive commands and update led_state_global accordingly
 
-    update_indicators(&indicators_global_handler);
-    update_mission(&indicators_global_handler);
+    indicators_update(&indicators_global_handler);
+    indicators_update_mission(&indicators_global_handler);
 
     if (feedback_get_state() == FEEDBACK_PRESSED) {
         // Relay mushroom button pressed

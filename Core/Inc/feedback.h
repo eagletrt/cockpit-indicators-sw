@@ -16,9 +16,9 @@ typedef bool (*read_feedback)(void);
  */
 struct FeedbackHandler {
 
-    read_feedback read_fb;       //<! Function to read feedback button state, must return true if pressed
-    volatile bool fb_pressed;    //<! Feedback button state
-    volatile bool changed_state; //<! Flag to indicate if the state has changed
+    read_feedback read_fb;       //!< Function to read feedback button state, must return true if pressed
+    volatile bool fb_pressed;    //!< Feedback button state
+    volatile bool changed_state; //!< Flag to indicate if the state has changed
 };
 
 #define MAX_FEEDBACK_HANDLERS 3
@@ -27,10 +27,10 @@ struct FeedbackHandler {
  * \brief Possible return codes for feedback functions
  */
 enum FeedbackReturnCode {
-    FEEDBACK_PRESSED,     //<! At least one feedback button is pressed
-    FEEDBACK_NOT_PRESSED, //<! No feedback buttons are pressed
-    FEEDBACK_ERROR,       //<! Error in reading feedback button states
-    FEEDBACK_INVALID      //<! Invalid feedback handler
+    FEEDBACK_PRESSED,     //!< At least one feedback button is pressed
+    FEEDBACK_NOT_PRESSED, //!< No feedback buttons are pressed
+    FEEDBACK_ERROR,       //!< Error in reading feedback button states
+    FEEDBACK_INVALID      //!< Invalid feedback handler
 };
 // This technically breaks the embedded convention but FEEDBACK_RETURN_CODE_FEEDBACK_PRESSED is too long
 
