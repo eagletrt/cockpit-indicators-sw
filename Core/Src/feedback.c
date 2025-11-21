@@ -1,7 +1,7 @@
 #include "feedback.h"
 
 // Don't know if dynamic allocation would be better here
-static struct FeedbackHandler *feedback_handlers[MAX_FEEDBACK_HANDLERS] = { NULL }; // Array of pointers to feedback handlers
+static struct FeedbackHandler *feedback_handlers[FEEDBACK_MAX_HANDLERS] = { NULL }; // Array of pointers to feedback handlers
 static size_t feedback_handler_count = 0;
 static volatile bool feedback_enable_interrupts = true;
 
@@ -19,7 +19,7 @@ static bool prv_validate_handler(struct FeedbackHandler *mhand) {
 
 enum FeedbackReturnCode feedback_init(struct FeedbackHandler *mhand[], size_t handler_count) {
 
-    if (mhand == NULL || handler_count == 0 || handler_count > MAX_FEEDBACK_HANDLERS) {
+    if (mhand == NULL || handler_count == 0 || handler_count > FEEDBACK_MAX_HANDLERS) {
         return FEEDBACK_INVALID; // Invalid parameters
     }
     feedback_handler_count = handler_count;
@@ -91,6 +91,28 @@ enum FeedbackReturnCode feedback_get_state() {
         }
     }
     return FEEDBACK_NOT_PRESSED;
+}
+
+size_t feedback_get_pressed(char *names[], size_t max_names) {
+    if (feedback_handler_count == 0 || max_names == 0 || names == NULL) {
+        return 0; // No handlers initialized
+    }
+    size_t pressed_count = 0;
+    for (size_t i = 0; i < feedback_handler_count; i++) {
+        if (!prv_validate_handler(feedback_handlers[i])) {
+            continue; // Skip invalid handler
+        }
+        if (pressed_count >= max_names) {
+            break; // Reached maximum names capacity
+        }
+        if (feedback_handlers[i]->fb_pressed) {
+            if (pressed_count < max_names) {
+                names[pressed_count] = feedback_handlers[i]->fb_name;
+                pressed_count++;
+            }
+        }
+    }
+    return pressed_count;
 }
 
 void feedback_clear_changed_state_flag() {

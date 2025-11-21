@@ -17,11 +17,12 @@ typedef bool (*read_feedback)(void);
 struct FeedbackHandler {
 
     read_feedback read_fb;       //!< Function to read feedback button state, must return true if pressed
+    char fb_name[20];            //!< Name of the feedback button
     volatile bool fb_pressed;    //!< Feedback button state
     volatile bool changed_state; //!< Flag to indicate if the state has changed
 };
 
-#define MAX_FEEDBACK_HANDLERS 3
+#define FEEDBACK_MAX_HANDLERS 3
 
 /*!
  * \brief Possible return codes for feedback functions
@@ -76,6 +77,14 @@ void feedback_falling_edge_callback(struct FeedbackHandler *fb);
  * \return FeedbackReturnCode indicating the state of the feedback buttons (FEEDBACK_PRESSED, FEEDBACK_NOT_PRESSED, FEEDBACK_ERROR)
  */
 enum FeedbackReturnCode feedback_get_state();
+
+/*!
+ * \brief  Fills the provided array with the names of currently pressed feedback buttons
+ * \param  names A 2D char array to hold the names of pressed feedback buttons
+ * \warning The array must be at least of size FEEDBACK_MAX_HANDLERS else the function will ALWAYS return 0
+ * \return The number of pressed feedback buttons whose names were written to the array
+ */
+size_t feedback_get_pressed(char *names[], size_t max_names);
 
 /*!
  * \brief  Clears the changed_state flag in FeedbackHandler

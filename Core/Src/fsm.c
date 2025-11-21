@@ -84,11 +84,12 @@ static void prv_set_mission_indicator(bool state, uint8_t pin) {
 
 struct FeedbackHandler mushroom_A = {
     .read_fb = prv_read_m1_pin,
+    .fb_name = "Cockpit Mushroom",
 };
 
 struct FeedbackHandler mushroom_B = {
     .read_fb = prv_read_m2_pin,
-
+    .fb_name = "Rear L Mushroom",
 };
 
 struct FeedbackHandler *mushroom_global_handler[] = {
@@ -194,7 +195,9 @@ fsm_state_t fsm_do_IDLE(fsm_state_data_t *data) {
     indicators_update_mission(&indicators_global_handler);
 
     if (feedback_get_state() == FEEDBACK_PRESSED) {
-        // Relay mushroom button pressed
+        char *names[FEEDBACK_MAX_HANDLERS];
+        size_t pressed_count = feedback_get_pressed(names, FEEDBACK_MAX_HANDLERS);
+        // Handle pressed feedback buttons if needed
     }
 
     /*** USER CODE END DO_IDLE ***/
