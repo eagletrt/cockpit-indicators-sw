@@ -11,7 +11,7 @@ static volatile bool feedback_enable_interrupts = true;
  * \return true if valid, false otherwise
  */
 static bool prv_validate_handler(struct FeedbackHandler *mhand) {
-    if (mhand == NULL || mhand->read_fb == NULL) {
+    if (mhand == NULL || mhand->read_fb == NULL || mhand->fb_name == NULL) {
         return false;
     }
     return true;

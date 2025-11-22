@@ -17,7 +17,7 @@ typedef bool (*read_feedback)(void);
 struct FeedbackHandler {
 
     read_feedback read_fb;       //!< Function to read feedback button state, must return true if pressed
-    char fb_name[20];            //!< Name of the feedback button
+    char *fb_name;               //!< Name of the feedback button
     volatile bool fb_pressed;    //!< Feedback button state
     volatile bool changed_state; //!< Flag to indicate if the state has changed
 };
