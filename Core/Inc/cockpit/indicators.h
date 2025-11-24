@@ -2,7 +2,8 @@
 #define INDICATORS_H
 
 #include <stdbool.h>
-#include <main.h>
+#include <stdint.h>
+#include <stdio.h>
 
 #define MISSION_PINS (3)
 #define MAX_MISSION_LEDS ((1 << MISSION_PINS) - 1)

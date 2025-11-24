@@ -57,36 +57,14 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define TSAL_R_Pin GPIO_PIN_0
-#define TSAL_R_GPIO_Port GPIOA
-#define TSAL_G_Pin GPIO_PIN_1
-#define TSAL_G_GPIO_Port GPIOA
-#define TSAL_B_Pin GPIO_PIN_2
-#define TSAL_B_GPIO_Port GPIOA
-#define IMD_LED_Pin GPIO_PIN_5
-#define IMD_LED_GPIO_Port GPIOA
-#define AMS_LED_Pin GPIO_PIN_6
-#define AMS_LED_GPIO_Port GPIOA
-#define TS_OFF_LED_Pin GPIO_PIN_7
-#define TS_OFF_LED_GPIO_Port GPIOA
-#define EXTRA_LED_2_Pin GPIO_PIN_5
-#define EXTRA_LED_2_GPIO_Port GPIOC
-#define USER_LED_Pin GPIO_PIN_0
-#define USER_LED_GPIO_Port GPIOB
-#define EXTRA_LED_1_Pin GPIO_PIN_10
-#define EXTRA_LED_1_GPIO_Port GPIOB
-#define LED_BIT_2_Pin GPIO_PIN_7
-#define LED_BIT_2_GPIO_Port GPIOC
-#define LED_BIT_1_Pin GPIO_PIN_8
-#define LED_BIT_1_GPIO_Port GPIOD
-#define LED_BIT_0_Pin GPIO_PIN_9
-#define LED_BIT_0_GPIO_Port GPIOD
-#define LED_CHAIN_DATA_Pin GPIO_PIN_0
-#define LED_CHAIN_DATA_GPIO_Port GPIOD
-#define SHUTDOWN_STATUS_A_Pin GPIO_PIN_5
-#define SHUTDOWN_STATUS_A_GPIO_Port GPIOD
-#define SHUTDOWN_STATUS_B_Pin GPIO_PIN_6
-#define SHUTDOWN_STATUS_B_GPIO_Port GPIOD
+#define SW_SD_Pin GPIO_PIN_7
+#define SW_SD_GPIO_Port GPIOB
+#define SHUTD_1_Pin GPIO_PIN_2
+#define SHUTD_1_GPIO_Port GPIOA
+#define SHTD_2_Pin GPIO_PIN_3
+#define SHTD_2_GPIO_Port GPIOA
+#define ADRESS_LED_Pin GPIO_PIN_6
+#define ADRESS_LED_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 
