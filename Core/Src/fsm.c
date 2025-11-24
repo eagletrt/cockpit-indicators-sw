@@ -95,7 +95,7 @@ struct FeedbackHandler *mushroom_global_handler[] = {
     &mushroom_B,
 };
 
-struct IndicatorsHandler indicators_global_handler = {
+struct IndicatorsFunctionSet indicator_functions = {
     .ams = prv_set_ams_indicator,
     .imd = prv_set_imd_indicator,
     .ts_off = prv_set_ts_off_indicator,
@@ -156,7 +156,7 @@ fsm_state_t fsm_do_init(fsm_state_data_t *data) {
         next_state = FSM_STATE_ERROR;
     }
 
-    if (!indicators_init(&indicators_global_handler)) {
+    if (!indicators_init(&indicator_functions)) {
         next_state = FSM_STATE_ERROR;
     }
 
@@ -186,8 +186,8 @@ fsm_state_t fsm_do_idle(fsm_state_data_t *data) {
     /*** USER CODE BEGIN DO_IDLE ***/
     //TODO: Implement can module to receive commands and update led_state_global accordingly
 
-    indicators_update(&indicators_global_handler);
-    indicators_update_mission(&indicators_global_handler);
+    indicators_update();
+    indicators_update_mission();
 
     if (feedback_get_state() == FEEDBACK_PRESSED) {
         char *names[FEEDBACK_MAX_HANDLERS];
