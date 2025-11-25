@@ -12,6 +12,15 @@
 typedef bool (*read_feedback)(void);
 
 /*!
+ * \brief Possible return codes for feedback functions
+ */
+enum FeedbackLineState {
+    FEEDBACK_HIGH, //!< Feedback line is high
+    FEEDBACK_LOW,  //!< Feedback line is low
+    FEEDBACK_ERROR //!< Error in reading feedback button states
+};
+
+/*!
  * \brief Struct that handles all relevant feedback information
  */
 struct FeedbackHandler {
@@ -23,15 +32,6 @@ struct FeedbackHandler {
     volatile enum FeedbackLineState fb_pressed_after;  //!< Feedback button state after
     volatile enum FeedbackLineState fb_sw_pressed;     //!< Steering wheel feedback button state
     volatile bool changed_state;                       //!< Flag to indicate if the state has changed
-};
-
-/*!
- * \brief Possible return codes for feedback functions
- */
-enum FeedbackLineState {
-    FEEDBACK_HIGH, //!< Feedback line is high
-    FEEDBACK_LOW,  //!< Feedback line is low
-    FEEDBACK_ERROR //!< Error in reading feedback button states
 };
 
 /*!
