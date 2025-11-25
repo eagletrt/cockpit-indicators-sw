@@ -1,7 +1,6 @@
 #include "feedback.h"
 
 static struct FeedbackHandler feedback_handler;
-static volatile bool feedback_enable_interrupts = true;
 static bool initialized = false;
 
 enum FeedbackLineState feedback_init(read_feedback fb_before, read_feedback fb_after, read_feedback fb_sw) {
@@ -10,20 +9,33 @@ enum FeedbackLineState feedback_init(read_feedback fb_before, read_feedback fb_a
         return FEEDBACK_ERROR; // Invalid parameters
     }
 
-    enum FeedbackLineState ret_code = FEEDBACK_LOW;
+    enum FeedbackLineState ret_code = FEEDBACK_HIGH;
 
     feedback_handler.read_fb_before = fb_before;
     feedback_handler.read_fb_after = fb_after;
     feedback_handler.read_fb_sw = fb_sw;
-    feedback_handler.fb_pressed_before = feedback_handler.read_fb_before();
-    feedback_handler.fb_pressed_after = feedback_handler.read_fb_after();
-    feedback_handler.fb_sw_pressed = feedback_handler.read_fb_sw();
+    feedback_handler.fb_pressed_before = (feedback_handler.read_fb_before() ? FEEDBACK_HIGH : FEEDBACK_LOW);
+    feedback_handler.fb_pressed_after = (feedback_handler.read_fb_after() ? FEEDBACK_HIGH : FEEDBACK_LOW);
+    feedback_handler.fb_sw_pressed = (feedback_handler.read_fb_sw() ? FEEDBACK_HIGH : FEEDBACK_LOW);
     initialized = true;
-    if (feedback_handler.fb_pressed_before == FEEDBACK_HIGH || feedback_handler.fb_pressed_after == FEEDBACK_HIGH || feedback_handler.fb_sw_pressed == FEEDBACK_HIGH) {
-        ret_code = FEEDBACK_HIGH; // At least one button is pressed during initialization
+
+    if (feedback_handler.fb_pressed_before == FEEDBACK_LOW || feedback_handler.fb_pressed_after == FEEDBACK_LOW || feedback_handler.fb_sw_pressed == FEEDBACK_LOW) {
+        ret_code = FEEDBACK_LOW; // At least one button is pressed during initialization
     }
 
     return ret_code;
+}
+
+enum FeedbackLineState feedback_get_state() {
+    if (initialized == false) {
+        return FEEDBACK_ERROR; // No handlers initialized
+    }
+
+    if (feedback_handler.fb_pressed_before == FEEDBACK_LOW || feedback_handler.fb_pressed_after == FEEDBACK_LOW || feedback_handler.fb_sw_pressed == FEEDBACK_LOW) {
+        return FEEDBACK_LOW; // At least one button is pressed
+    }
+
+    return FEEDBACK_HIGH; // No buttons are pressed
 }
 
 enum FeedbackLineState feedback_get_state_before() {
@@ -50,10 +62,8 @@ enum FeedbackLineState feedback_get_state_sw() {
 
 void feedback_update_state() {
     if (initialized) {
-        feedback_enable_interrupts = false;
-        feedback_handler.fb_pressed_before = feedback_handler.read_fb_before();
-        feedback_handler.fb_pressed_after = feedback_handler.read_fb_after();
-        feedback_handler.fb_sw_pressed = feedback_handler.read_fb_sw();
-        feedback_enable_interrupts = true;
+        feedback_handler.fb_pressed_before = (feedback_handler.read_fb_before() ? FEEDBACK_HIGH : FEEDBACK_LOW);
+        feedback_handler.fb_pressed_after = (feedback_handler.read_fb_after() ? FEEDBACK_HIGH : FEEDBACK_LOW);
+        feedback_handler.fb_sw_pressed = (feedback_handler.read_fb_sw() ? FEEDBACK_HIGH : FEEDBACK_LOW);
     }
 }

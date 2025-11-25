@@ -1,7 +1,6 @@
 #ifndef FEEDBACK_H
 #define FEEDBACK_H
 
-#include <string.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -44,6 +43,12 @@ enum FeedbackLineState {
  * \return FeedbackLineState indicating if any button is pressed during initialization (FEEDBACK_HIGH, FEEDBACK_LOW, FEEDBACK_ERROR)
  */
 enum FeedbackLineState feedback_init(read_feedback fb_before, read_feedback fb_after, read_feedback fb_sw);
+
+/*!
+ * \brief  Returns the current overall state of the feedback lines
+ * \return FeedbackLineState indicating the overall state (FEEDBACK_HIGH, FEEDBACK_LOW, FEEDBACK_ERROR)
+ */
+enum FeedbackLineState feedback_get_state();
 
 /*!
  * \brief  Returns the current state of the feedback line before

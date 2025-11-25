@@ -63,6 +63,14 @@ void Error_Handler(void);
 #define SHUTD_1_GPIO_Port GPIOA
 #define SHTD_2_Pin GPIO_PIN_3
 #define SHTD_2_GPIO_Port GPIOA
+#define AMS_Pin GPIO_PIN_4
+#define AMS_GPIO_Port GPIOA
+#define IMD_Pin GPIO_PIN_5
+#define IMD_GPIO_Port GPIOA
+#define TS_OFF_Pin GPIO_PIN_6
+#define TS_OFF_GPIO_Port GPIOA
+#define TSAL_Pin GPIO_PIN_7
+#define TSAL_GPIO_Port GPIOA
 #define ADRESS_LED_Pin GPIO_PIN_6
 #define ADRESS_LED_GPIO_Port GPIOB
 

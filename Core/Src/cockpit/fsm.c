@@ -18,6 +18,7 @@ Functions and types have been generated with prefix "fsm_"
 /*** USER CODE BEGIN MACROS ***/
 #include <feedback.h>
 #include <indicators.h>
+#include <post.h>
 /*** USER CODE END MACROS ***/
 
 // GLOBALS
@@ -45,79 +46,7 @@ transition_func_t *const fsm_transition_table[FSM_NUM_STATES][FSM_NUM_STATES] = 
 fsm_event_data_t *fsm_fired_event = NULL;
 
 /*** USER CODE BEGIN GLOBALS ***/
-/* Wrapper function for Mushroom 1 */
-static bool prv_read_m1_pin(void) {
-    return (HAL_GPIO_ReadPin(SHUTDOWN_STATUS_A_GPIO_Port, SHUTDOWN_STATUS_A_Pin) == GPIO_PIN_RESET);
-}
 
-/* Wrapper function for Mushroom 2 */
-static bool prv_read_m2_pin(void) {
-    return (HAL_GPIO_ReadPin(SHUTDOWN_STATUS_B_GPIO_Port, SHUTDOWN_STATUS_B_Pin) == GPIO_PIN_RESET);
-}
-
-/*Wrapper function for AMS led*/
-static void prv_set_ams_indicator(bool state) {
-    HAL_GPIO_WritePin(AMS_LED_GPIO_Port, AMS_LED_Pin, state ? GPIO_PIN_SET : GPIO_PIN_RESET);
-}
-
-/*Wrapper function for IMD led*/
-static void prv_set_imd_indicator(bool state) {
-    HAL_GPIO_WritePin(IMD_LED_GPIO_Port, IMD_LED_Pin, state ? GPIO_PIN_SET : GPIO_PIN_RESET);
-}
-
-/*Wrapper function for TS_OFF led*/
-static void prv_set_ts_off_indicator(bool state) {
-    HAL_GPIO_WritePin(TS_OFF_LED_GPIO_Port, TS_OFF_LED_Pin, state ? GPIO_PIN_SET : GPIO_PIN_RESET);
-}
-
-/*Wrapper function for mission profile indicators*/
-static void prv_set_mission_indicator(bool state, uint8_t pin) {
-    if (pin >= MISSION_PINS) {
-        return; // Invalid pin
-    }
-    uint16_t pins[] = { LED_BIT_0_Pin, LED_BIT_1_Pin, LED_BIT_2_Pin };
-    GPIO_TypeDef *ports[] = { LED_BIT_0_GPIO_Port, LED_BIT_1_GPIO_Port, LED_BIT_2_GPIO_Port };
-    HAL_GPIO_WritePin(ports[pin], pins[pin], state ? GPIO_PIN_SET : GPIO_PIN_RESET);
-}
-
-struct FeedbackHandler mushroom_A = {
-    .read_fb = prv_read_m1_pin,
-    .fb_name = "Cockpit Mushroom",
-};
-
-struct FeedbackHandler mushroom_B = {
-    .read_fb = prv_read_m2_pin,
-    .fb_name = "Rear L Mushroom",
-};
-
-struct FeedbackHandler *mushroom_global_handler[] = {
-    &mushroom_A,
-    &mushroom_B,
-};
-
-struct IndicatorsFunctionSet indicator_functions = {
-    .ams = prv_set_ams_indicator,
-    .imd = prv_set_imd_indicator,
-    .ts_off = prv_set_ts_off_indicator,
-    .mission = prv_set_mission_indicator,
-};
-
-// EXTI Callbacks to be called from HAL
-void HAL_GPIO_EXTI_falling_Callback(uint16_t GPIO_Pin) {
-    if (GPIO_Pin == SHUTDOWN_STATUS_A_Pin) {
-        feedback_falling_edge_callback(&mushroom_A);
-    } else if (GPIO_Pin == SHUTDOWN_STATUS_B_Pin) {
-        feedback_falling_edge_callback(&mushroom_B);
-    }
-};
-
-void HAL_GPIO_EXTI_rising_Callback(uint16_t GPIO_Pin) {
-    if (GPIO_Pin == SHUTDOWN_STATUS_A_Pin) {
-        feedback_rising_edge_callback(&mushroom_A);
-    } else if (GPIO_Pin == SHUTDOWN_STATUS_B_Pin) {
-        feedback_rising_edge_callback(&mushroom_B);
-    }
-}
 /*** USER CODE END GLOBALS ***/
 
 // Function to check if an event has fired
@@ -150,18 +79,27 @@ void fsm_event_trigger(fsm_event_data_t *event) {
 fsm_state_t fsm_do_init(fsm_state_data_t *data) {
     fsm_state_t next_state = FSM_STATE_IDLE;
 
+    struct PostInitData *post_init_data = (struct PostInitData *)data;
+
     /*** USER CODE BEGIN DO_INIT ***/
     // Initialization functions
-    if (feedback_init(mushroom_global_handler, (size_t)2) != FEEDBACK_NOT_PRESSED) {
+    if (feedback_init(post_init_data->fb_before, post_init_data->fb_after, NULL) == FEEDBACK_ERROR) {
         next_state = FSM_STATE_ERROR;
     }
+
+    // TO REVIEW: I have no idea if the scope of these functions is correct (aka remains after exiting this function)
+    struct IndicatorsFunctionSet indicator_functions = {
+        .ams = post_init_data->ams_indicator_set,
+        .imd = post_init_data->imd_indicator_set,
+        .ts_off = post_init_data->ts_off_indicator_set
+    };
 
     if (!indicators_init(&indicator_functions)) {
         next_state = FSM_STATE_ERROR;
     }
 
     // Power on tests
-    if (feedback_get_state() == FEEDBACK_PRESSED) {
+    if (feedback_get_state() == FEEDBACK_HIGH) {
         // At least one mushroom button is pressed during initialization (this is redundant with feedback_init check)
         next_state = FSM_STATE_ERROR;
     }
@@ -187,11 +125,17 @@ fsm_state_t fsm_do_idle(fsm_state_data_t *data) {
     //TODO: Implement can module to receive commands and update led_state_global accordingly
 
     indicators_update();
-    indicators_update_mission();
+    feedback_update_state();
 
-    if (feedback_get_state() == FEEDBACK_PRESSED) {
-        char *names[FEEDBACK_MAX_HANDLERS];
-        size_t pressed_count = feedback_get_pressed(names, FEEDBACK_MAX_HANDLERS);
+    if (feedback_get_state() == FEEDBACK_LOW) {
+        if (feedback_get_state_after() == FEEDBACK_LOW && feedback_get_state_before() == FEEDBACK_HIGH) {
+            // The cockpit mushroom button is pressed
+        } else if (feedback_get_state_after() == FEEDBACK_LOW && feedback_get_state_before() == FEEDBACK_LOW) {
+            // There has been a shutdown event
+        } else if (feedback_get_state_before() == FEEDBACK_LOW && feedback_get_state_after() == FEEDBACK_HIGH) {
+            // Input discrepancy
+            next_state = FSM_STATE_ERROR;
+        }
         // Handle pressed feedback buttons if needed
     }
     /*** USER CODE END DO_IDLE ***/
