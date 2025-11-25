@@ -48,29 +48,29 @@ enum FeedbackLineState feedback_init(read_feedback fb_before, read_feedback fb_a
  * \brief  Returns the current overall state of the feedback lines
  * \return FeedbackLineState indicating the overall state (FEEDBACK_HIGH, FEEDBACK_LOW, FEEDBACK_ERROR)
  */
-enum FeedbackLineState feedback_get_state();
+enum FeedbackLineState feedback_get_state(void);
 
 /*!
  * \brief  Returns the current state of the feedback line before
  * \return FeedbackLineState indicating the state of the feedback line (FEEDBACK_HIGH, FEEDBACK_LOW, FEEDBACK_ERROR)
  */
-enum FeedbackLineState feedback_get_state_before();
+enum FeedbackLineState feedback_get_state_before(void);
 
 /*!
  * \brief  Returns the current state of the feedback line after
  * \return FeedbackLineState indicating the state of the feedback line (FEEDBACK_HIGH, FEEDBACK_LOW, FEEDBACK_ERROR)
  */
-enum FeedbackLineState feedback_get_state_after();
+enum FeedbackLineState feedback_get_state_after(void);
 
 /*!
  * \brief  Returns the current state of the steering wheel feedback line
  * \return FeedbackLineState indicating the state of the feedback line (FEEDBACK_HIGH, FEEDBACK_LOW, FEEDBACK_ERROR)
  */
-enum FeedbackLineState feedback_get_state_sw();
+enum FeedbackLineState feedback_get_state_sw(void);
 
 /*!
  * \brief  Update the state of all feedback lines
  */
-void feedback_update_state();
+void feedback_update_state(void);
 
 #endif // FEEDBACK_H

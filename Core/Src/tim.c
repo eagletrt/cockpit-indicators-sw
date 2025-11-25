@@ -320,12 +320,11 @@ bool tim_test_timers_initialized() {
     bool tim1_initialized = (htim1.State == HAL_TIM_STATE_READY);
     bool tim3_initialized = (htim3.State == HAL_TIM_STATE_READY);
 
-    bool tim1_ch1_init = (htim1.ChannelState[TIM_CHANNEL_1] == HAL_TIM_CHANNEL_STATE_READY);
-    bool tim1_ch2_init = (htim1.ChannelNState[TIM_CHANNEL_2] == HAL_TIM_CHANNEL_STATE_READY);
-    bool tim1_ch3_init = (htim1.ChannelState[TIM_CHANNEL_3] == HAL_TIM_CHANNEL_STATE_READY);
-    bool tim3_ch1_init = (htim3.ChannelState[TIM_CHANNEL_1] == HAL_TIM_CHANNEL_STATE_READY);
-    bool tim3_ch2_init = (htim3.ChannelState[TIM_CHANNEL_2] == HAL_TIM_CHANNEL_STATE_READY);
-
+    bool tim1_ch1_init = (htim1.ChannelState[0] == HAL_TIM_CHANNEL_STATE_READY);
+    bool tim1_ch2_init = (htim1.ChannelNState[1] == HAL_TIM_CHANNEL_STATE_READY);
+    bool tim1_ch3_init = (htim1.ChannelState[2] == HAL_TIM_CHANNEL_STATE_READY);
+    bool tim3_ch1_init = (htim3.ChannelState[0] == HAL_TIM_CHANNEL_STATE_READY);
+    bool tim3_ch2_init = (htim3.ChannelState[1] == HAL_TIM_CHANNEL_STATE_READY);
     return tim1_initialized && tim3_initialized && tim1_ch1_init && tim1_ch2_init && tim1_ch3_init && tim3_ch1_init && tim3_ch2_init;
 }
 

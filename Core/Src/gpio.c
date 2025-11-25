@@ -65,17 +65,17 @@ void MX_GPIO_Init(void) {
 
 /* Wrapper function for Mushroom line before pin */
 bool GPIO_read_line_before_pin(void) {
-    return (HAL_GPIO_ReadPin(SHUTD_1_GPIO_Port, SHUTD_1_Pin) == GPIO_PIN_RESET);
+    return (HAL_GPIO_ReadPin(SHUTD_1_GPIO_Port, SHUTD_1_Pin) == GPIO_PIN_SET);
 }
 
 /* Wrapper function for Mushroom line after pin */
 bool GPIO_read_line_after_pin(void) {
-    return (HAL_GPIO_ReadPin(SHTD_2_GPIO_Port, SHTD_2_Pin) == GPIO_PIN_RESET);
+    return (HAL_GPIO_ReadPin(SHTD_2_GPIO_Port, SHTD_2_Pin) == GPIO_PIN_SET);
 }
 
 /* Wrapper function for steering wheel shutdown line */
 bool GPIO_read_steering_wheel_pin(void) {
-    return (HAL_GPIO_ReadPin(SW_SD_GPIO_Port, SW_SD_Pin) == GPIO_PIN_RESET);
+    return (HAL_GPIO_ReadPin(SW_SD_GPIO_Port, SW_SD_Pin) == GPIO_PIN_SET);
 }
 
 /* USER CODE END 2 */

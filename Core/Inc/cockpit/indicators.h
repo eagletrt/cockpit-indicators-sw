@@ -51,12 +51,12 @@ bool indicators_init(struct IndicatorsFunctionSet *indicator_handler);
  * \brief Check if indicators module is initialized.
  * \retval True if initialized, else false
  */
-bool is_indicators_initialized();
+bool is_indicators_initialized(void);
 
 /*!
  * \brief Update the indicators based on the current state.
  */
-void indicators_update();
+void indicators_update(void);
 
 /*!
  * \brief Change the AMS indicator state.

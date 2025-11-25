@@ -30,11 +30,11 @@ bool indicators_init(struct IndicatorsFunctionSet *set_indicator_fct) {
     return true;
 }
 
-bool is_indicators_initialized() {
+bool is_indicators_initialized(void) {
     return is_initialized;
 }
 
-void indicators_update() {
+void indicators_update(void) {
 
     if (indicators_global_handler.ams_state_on)
         indicators_global_handler.ams(indicators_global_handler.pwm_value);

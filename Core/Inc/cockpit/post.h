@@ -28,6 +28,25 @@ struct PostInitData {
     tim_post tim_post_function;
 };
 
+/*!
+ * \brief Run power-on self tests.
+ * \param init_data Pointer to PostInitData struct containing initialization data.
+ * 
+ * \retval POST_OK if all tests pass
+ * \retval POST_UNINITIALIZED if a module is uninitialized
+ * \retval POST_SETUP_ERROR if a setup error is detected
+ * \retval POST_NULL_POINTER if a null pointer is provided
+ */
 enum PostReturnCode post_run_power_on_tests(struct PostInitData *init_data);
+
+/*!
+ * \brief Run power-on initialization tests.
+ * 
+ * \retval POST_OK if all tests pass
+ * \retval POST_UNINITIALIZED if a module is uninitialized
+ * \retval POST_SETUP_ERROR if a setup error is detected
+ * \retval POST_NULL_POINTER if a null pointer is provided
+ */
+enum PostReturnCode post_run_power_on_init_tests();
 
 #endif // POST_H

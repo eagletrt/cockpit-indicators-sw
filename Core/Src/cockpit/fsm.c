@@ -89,7 +89,7 @@ fsm_state_t fsm_do_init(fsm_state_data_t *data) {
     }
 
     // Initialization functions
-    if (feedback_init(post_init_data->fb_before, post_init_data->fb_after, NULL) == FEEDBACK_ERROR && next_state != FSM_STATE_ERROR) {
+    if (feedback_init(post_init_data->fb_before, post_init_data->fb_after, post_init_data->fb_steering_wheel) == FEEDBACK_ERROR && next_state != FSM_STATE_ERROR) {
         next_state = FSM_STATE_ERROR;
     }
 
@@ -141,6 +141,9 @@ fsm_state_t fsm_do_idle(fsm_state_data_t *data) {
         } else if (feedback_get_state_before() == FEEDBACK_LOW && feedback_get_state_after() == FEEDBACK_HIGH) {
             // Input discrepancy
             next_state = FSM_STATE_ERROR;
+        }
+        if (feedback_get_state_sw() == FEEDBACK_LOW) {
+            // Steering wheel detached
         }
         // Handle pressed feedback buttons if needed
     }

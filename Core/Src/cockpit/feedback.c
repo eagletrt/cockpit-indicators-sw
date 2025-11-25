@@ -26,7 +26,7 @@ enum FeedbackLineState feedback_init(read_feedback fb_before, read_feedback fb_a
     return ret_code;
 }
 
-enum FeedbackLineState feedback_get_state() {
+enum FeedbackLineState feedback_get_state(void) {
     if (initialized == false) {
         return FEEDBACK_ERROR; // No handlers initialized
     }
@@ -38,21 +38,21 @@ enum FeedbackLineState feedback_get_state() {
     return FEEDBACK_HIGH; // No buttons are pressed
 }
 
-enum FeedbackLineState feedback_get_state_before() {
+enum FeedbackLineState feedback_get_state_before(void) {
     if (initialized == false) {
         return FEEDBACK_ERROR; // No handlers initialized
     }
 
     return feedback_handler.fb_pressed_before;
 }
-enum FeedbackLineState feedback_get_state_after() {
+enum FeedbackLineState feedback_get_state_after(void) {
     if (initialized == false) {
         return FEEDBACK_ERROR; // No handlers initialized
     }
 
     return feedback_handler.fb_pressed_after;
 }
-enum FeedbackLineState feedback_get_state_sw() {
+enum FeedbackLineState feedback_get_state_sw(void) {
     if (initialized == false) {
         return FEEDBACK_ERROR; // No handlers initialized
     }
@@ -60,7 +60,7 @@ enum FeedbackLineState feedback_get_state_sw() {
     return feedback_handler.fb_sw_pressed;
 }
 
-void feedback_update_state() {
+void feedback_update_state(void) {
     if (initialized) {
         feedback_handler.fb_pressed_before = (feedback_handler.read_fb_before() ? FEEDBACK_HIGH : FEEDBACK_LOW);
         feedback_handler.fb_pressed_after = (feedback_handler.read_fb_after() ? FEEDBACK_HIGH : FEEDBACK_LOW);

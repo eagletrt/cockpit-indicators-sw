@@ -22,7 +22,7 @@ enum PostReturnCode post_run_power_on_tests(struct PostInitData *init_data) {
     return POST_OK;
 }
 
-enum PostReturnCode post_run_power_on_init_tests() {
+enum PostReturnCode post_run_power_on_init_tests(void) {
     // Check if feedback module is initialized
     if (feedback_get_state() == FEEDBACK_ERROR) {
         return POST_UNINITIALIZED;
@@ -35,4 +35,5 @@ enum PostReturnCode post_run_power_on_init_tests() {
     if (!is_indicators_initialized()) {
         return POST_UNINITIALIZED;
     }
+    return POST_OK;
 };
