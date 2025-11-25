@@ -77,13 +77,19 @@ void fsm_event_trigger(fsm_event_data_t *event) {
 // Function to be executed in state init
 // valid return states: FSM_STATE_IDLE, FSM_STATE_ERROR
 fsm_state_t fsm_do_init(fsm_state_data_t *data) {
+
+    /*** USER CODE BEGIN DO_INIT ***/
     fsm_state_t next_state = FSM_STATE_IDLE;
 
     struct PostInitData *post_init_data = (struct PostInitData *)data;
 
-    /*** USER CODE BEGIN DO_INIT ***/
+    // Power on tests
+    if (post_run_power_on_tests(post_init_data) != POST_OK) {
+        next_state = FSM_STATE_ERROR;
+    }
+
     // Initialization functions
-    if (feedback_init(post_init_data->fb_before, post_init_data->fb_after, NULL) == FEEDBACK_ERROR) {
+    if (feedback_init(post_init_data->fb_before, post_init_data->fb_after, NULL) == FEEDBACK_ERROR && next_state != FSM_STATE_ERROR) {
         next_state = FSM_STATE_ERROR;
     }
 
@@ -91,18 +97,18 @@ fsm_state_t fsm_do_init(fsm_state_data_t *data) {
     struct IndicatorsFunctionSet indicator_functions = {
         .ams = post_init_data->ams_indicator_set,
         .imd = post_init_data->imd_indicator_set,
-        .ts_off = post_init_data->ts_off_indicator_set
+        .ts_off = post_init_data->ts_off_indicator_set,
+        .tsal = post_init_data->tsal_indicator_set
     };
 
-    if (!indicators_init(&indicator_functions)) {
+    if (!indicators_init(&indicator_functions) && next_state != FSM_STATE_ERROR) {
         next_state = FSM_STATE_ERROR;
     }
 
-    // Power on tests
-    if (feedback_get_state() == FEEDBACK_HIGH) {
-        // At least one mushroom button is pressed during initialization (this is redundant with feedback_init check)
+    if (post_run_power_on_init_tests() != POST_OK && next_state != FSM_STATE_ERROR) {
         next_state = FSM_STATE_ERROR;
     }
+
     /*** USER CODE END DO_INIT ***/
 
     switch (next_state) {

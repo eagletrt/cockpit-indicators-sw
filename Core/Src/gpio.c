@@ -22,7 +22,7 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN 0 */
-
+#include <tim.h>
 /* USER CODE END 0 */
 
 /*----------------------------------------------------------------------------*/
@@ -76,21 +76,6 @@ bool GPIO_read_line_after_pin(void) {
 /* Wrapper function for steering wheel shutdown line */
 bool GPIO_read_steering_wheel_pin(void) {
     return (HAL_GPIO_ReadPin(SW_SD_GPIO_Port, SW_SD_Pin) == GPIO_PIN_RESET);
-}
-
-/*Wrapper function for AMS led*/
-void GPIO_set_ams_indicator(bool state) {
-    HAL_GPIO_WritePin(AMS_GPIO_Port, AMS_Pin, state ? GPIO_PIN_SET : GPIO_PIN_RESET);
-}
-
-/*Wrapper function for IMD led*/
-void GPIO_set_imd_indicator(bool state) {
-    HAL_GPIO_WritePin(IMD_GPIO_Port, IMD_Pin, state ? GPIO_PIN_SET : GPIO_PIN_RESET);
-}
-
-/*Wrapper function for TS_OFF led*/
-void GPIO_set_ts_off_indicator(bool state) {
-    HAL_GPIO_WritePin(TS_OFF_GPIO_Port, TS_OFF_Pin, state ? GPIO_PIN_SET : GPIO_PIN_RESET);
 }
 
 /* USER CODE END 2 */

@@ -99,9 +99,10 @@ int main(void) {
     fsm_state_t fsm_state = FSM_STATE_INIT;
 
     struct PostInitData post_init_data = {
-        .ams_indicator_set = GPIO_set_ams_indicator,
-        .imd_indicator_set = GPIO_set_imd_indicator,
-        .ts_off_indicator_set = GPIO_set_ts_off_indicator,
+        .ams_indicator_set = tim_ams_set_pwm,
+        .imd_indicator_set = tim_imd_set_pwm,
+        .ts_off_indicator_set = tim_ts_off_set_pwm,
+        .tsal_indicator_set = tim_tsal_set_pwm,
         .fb_before = GPIO_read_line_before_pin,
         .fb_after = GPIO_read_line_after_pin,
         .fb_steering_wheel = GPIO_read_steering_wheel_pin

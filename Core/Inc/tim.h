@@ -29,7 +29,7 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
-
+#include <stdbool.h>
 /* USER CODE END Includes */
 
 extern TIM_HandleTypeDef htim1;
@@ -47,6 +47,27 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
 /* USER CODE BEGIN Prototypes */
 
+/* Wrapper function to set AMS PWM value (0-100%) */
+void tim_ams_set_pwm(uint8_t pwm_value);
+
+/* Wrapper function to set IMD PWM value (0-100%) */
+void tim_imd_set_pwm(uint8_t pwm_value);
+
+/* Wrapper function to set TS_OFF PWM value (0-100%) */
+void tim_ts_off_set_pwm(uint8_t pwm_value);
+
+/* Wrapper function to set TS_OFF PWM value (0-100%) */
+void tim_tsal_set_pwm(uint8_t pwm_value);
+
+/* Wrapper function to set TS_OFF PWM value (0-100%) */
+void tim_addressable_set_pwm(uint8_t pwm_value);
+
+/*!
+ * \brief Check if TIM module is initialized.
+ * \retval True if initialized, else false
+ */
+bool tim_test_timers_initialized(void);
+
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
@@ -54,4 +75,3 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 #endif
 
 #endif /* __TIM_H__ */
-
