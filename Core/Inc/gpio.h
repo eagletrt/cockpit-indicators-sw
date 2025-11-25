@@ -76,8 +76,6 @@ void MX_GPIO_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 
-struct GPIO_functions
-
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
