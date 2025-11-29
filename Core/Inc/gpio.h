@@ -34,6 +34,7 @@ extern "C" {
 
 /* USER CODE BEGIN Private defines */
 
+// Forward declarations
 enum FeedbackName;
 enum FeedbackState;
 
