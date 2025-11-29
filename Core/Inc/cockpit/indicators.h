@@ -33,10 +33,7 @@ struct IndicatorsHandler {
 
     uint8_t luminosity; //!< PWM value for all indicators (0-100)
 
-    bool ams_state_on;    //!< Accumulator Management System indicator
-    bool imd_state_on;    //!< Insulation Monitoring Device indicator
-    bool ts_off_state_on; //!< Traction System Off indicator
-    bool tsal_state_on;   //!< TSAL indicator
+    bool state[INDICATOR_NAME_COUNT]; //!< State of each indicator (on/off)
 
     bool initialized; //!< Indicates if the indicators handler has been initialized
 };

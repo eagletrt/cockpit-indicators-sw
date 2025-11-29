@@ -39,8 +39,6 @@ extern TIM_HandleTypeDef htim3;
 
 /* USER CODE BEGIN Private defines */
 
-enum IndicatorsName;
-
 /* USER CODE END Private defines */
 
 void MX_TIM1_Init(void);

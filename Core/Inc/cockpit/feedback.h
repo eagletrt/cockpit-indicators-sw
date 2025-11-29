@@ -9,8 +9,8 @@
  * \brief Possible return codes for feedback functions
  */
 enum FeedbackState {
-    FEEDBACK_STATUS_HIGH, //!< Feedback line is high
     FEEDBACK_STATUS_LOW,  //!< Feedback line is low
+    FEEDBACK_STATUS_HIGH, //!< Feedback line is high
     FEEDBACK_STATUS_ERROR //!< Error in reading feedback button states
 };
 
@@ -27,7 +27,7 @@ enum FeedbackName {
 /*!
  * \brief Possible return codes for feedback initialization function
  */
-enum FeedbackRC {
+enum FeedbackReturnCode {
     FEEDBACK_RC_ERROR,
     FEEDBACK_RC_OK
 };
@@ -44,11 +44,9 @@ typedef enum FeedbackState (*read_feedback)(enum FeedbackName feedback);
  */
 struct FeedbackHandler {
 
-    read_feedback read_fb;                             //!< Function to read feedback line state
-    volatile enum FeedbackState fb_pressed_before; //!< Feedback button state before
-    volatile enum FeedbackState fb_pressed_after;  //!< Feedback button state after
-    volatile enum FeedbackState fb_sw_pressed;     //!< Steering wheel feedback button state
-    volatile bool initialized;                         //!< Indicates if the feedback handler has been initialized
+    read_feedback read_fb;                                          //!< Function to read feedback line state
+    volatile enum FeedbackState fb_line_state[FEEDBACK_NAME_COUNT]; //!< Feedback button state array
+    volatile bool initialized;                                      //!< Indicates if the feedback handler has been initialized
 };
 
 /*!
@@ -57,7 +55,7 @@ struct FeedbackHandler {
  * 
  * \return FeedbackState indicating if any button is pressed during initialization (FEEDBACK_STATUS_HIGH, FEEDBACK_STATUS_LOW, FEEDBACK_STATUS_ERROR)
  */
-enum FeedbackRC feedback_init(read_feedback fb_read);
+enum FeedbackReturnCode feedback_init(read_feedback fb_read);
 
 /*!
  * \brief  Get the current state of a feedback line

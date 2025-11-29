@@ -30,13 +30,10 @@ extern "C" {
 
 /* USER CODE BEGIN Includes */
 #include <stdbool.h>
+#include "feedback.h"
 /* USER CODE END Includes */
 
 /* USER CODE BEGIN Private defines */
-
-// Forward declarations
-enum FeedbackName;
-enum FeedbackState;
 
 /*
  * \brief  Wrapper function for feedback shutdown line reading

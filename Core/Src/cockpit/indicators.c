@@ -10,10 +10,9 @@ bool indicators_init(indicator_set set_indicator_fct) {
 
     indicators_global_handler.set_indicator = set_indicator_fct;
 
-    indicators_global_handler.ams_state_on = false;
-    indicators_global_handler.imd_state_on = false;
-    indicators_global_handler.ts_off_state_on = false;
-    indicators_global_handler.tsal_state_on = false;
+    for (int i = 0; i < INDICATOR_NAME_COUNT; i++) {
+        indicators_global_handler.state[i] = false;
+    }
 
     indicators_global_handler.luminosity = 0;
 
@@ -29,39 +28,24 @@ bool is_indicators_initialized(void) {
 
 void indicators_update(void) {
 
-    if (indicators_global_handler.ams_state_on)
+    if (indicators_global_handler.state[INDICATOR_NAME_AMS])
         indicators_global_handler.set_indicator(INDICATOR_NAME_AMS, indicators_global_handler.luminosity);
     else
         indicators_global_handler.set_indicator(INDICATOR_NAME_AMS, 0);
 
-    if (indicators_global_handler.imd_state_on)
+    if (indicators_global_handler.state[INDICATOR_NAME_IMD])
         indicators_global_handler.set_indicator(INDICATOR_NAME_IMD, indicators_global_handler.luminosity);
     else
         indicators_global_handler.set_indicator(INDICATOR_NAME_IMD, 0);
 
-    if (indicators_global_handler.ts_off_state_on)
+    if (indicators_global_handler.state[INDICATOR_NAME_TS_OFF])
         indicators_global_handler.set_indicator(INDICATOR_NAME_TS_OFF, indicators_global_handler.luminosity);
     else
         indicators_global_handler.set_indicator(INDICATOR_NAME_TS_OFF, 0);
 }
 
 void indicators_set(bool state, enum IndicatorsName indicator) {
-    switch (indicator) {
-        case INDICATOR_NAME_AMS:
-            indicators_global_handler.ams_state_on = state;
-            break;
-        case INDICATOR_NAME_IMD:
-            indicators_global_handler.imd_state_on = state;
-            break;
-        case INDICATOR_NAME_TS_OFF:
-            indicators_global_handler.ts_off_state_on = state;
-            break;
-        case INDICATOR_NAME_TSAL:
-            indicators_global_handler.tsal_state_on = state;
-            break;
-        default:
-            break;
-    }
+    indicators_global_handler.state[indicator] = state;
     indicators_update();
 }
 
