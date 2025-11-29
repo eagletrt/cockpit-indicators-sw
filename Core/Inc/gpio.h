@@ -34,41 +34,15 @@ extern "C" {
 
 /* USER CODE BEGIN Private defines */
 
+enum FeedbackName;
+enum FeedbackState;
+
 /*
- * \brief  Wrapper function for Mushroom line before pin
+ * \brief  Wrapper function for feedback shutdown line reading
+ * \param  feedback_name Enum indicating which feedback line to read 
  * \return true if pressed, false otherwise
  */
-bool GPIO_read_line_before_pin(void);
-
-/*
- * \brief  Wrapper function for Mushroom line after pin
- * \return true if pressed, false otherwise
- */
-bool GPIO_read_line_after_pin(void);
-
-/*
- * \brief  Wrapper function for Steering Wheel shutdown pin
- * \return true if pressed, false otherwise
- */
-bool GPIO_read_steering_wheel_pin(void);
-
-/*
- * \brief  Wrapper function for AMS indicator
- * \param  state true to turn on, false to turn off
- */
-void GPIO_set_ams_indicator(bool state);
-
-/*
- * \brief  Wrapper function for IMD indicator
- * \param  state true to turn on, false to turn off
- */
-void GPIO_set_imd_indicator(bool state);
-
-/*
- * \brief  Wrapper function for TS_OFF indicator
- * \param  state true to turn on, false to turn off
- */
-void GPIO_set_ts_off_indicator(bool state);
+enum FeedbackState gpio_feedback_read(enum FeedbackName feedback);
 
 /* USER CODE END Private defines */
 

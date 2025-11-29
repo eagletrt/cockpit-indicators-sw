@@ -84,28 +84,20 @@ fsm_state_t fsm_do_init(fsm_state_data_t *data) {
     struct PostInitData *post_init_data = (struct PostInitData *)data;
 
     // Power on tests
-    if (post_run_power_on_tests(post_init_data) != POST_OK) {
+    if (post_run_power_on_tests(post_init_data) != POST_RC_OK) {
         next_state = FSM_STATE_ERROR;
     }
 
     // Initialization functions
-    if (feedback_init(post_init_data->fb_before, post_init_data->fb_after, post_init_data->fb_steering_wheel) == FEEDBACK_ERROR && next_state != FSM_STATE_ERROR) {
+    if (feedback_init(post_init_data->fb_read) == FEEDBACK_RC_ERROR && next_state != FSM_STATE_ERROR) {
         next_state = FSM_STATE_ERROR;
     }
 
-    // TO REVIEW: I have no idea if the scope of these functions is correct (aka remains after exiting this function)
-    struct IndicatorsFunctionSet indicator_functions = {
-        .ams = post_init_data->ams_indicator_set,
-        .imd = post_init_data->imd_indicator_set,
-        .ts_off = post_init_data->ts_off_indicator_set,
-        .tsal = post_init_data->tsal_indicator_set
-    };
-
-    if (!indicators_init(&indicator_functions) && next_state != FSM_STATE_ERROR) {
+    if (!indicators_init(post_init_data->indicator_set) && next_state != FSM_STATE_ERROR) {
         next_state = FSM_STATE_ERROR;
     }
 
-    if (post_run_power_on_init_tests() != POST_OK && next_state != FSM_STATE_ERROR) {
+    if (post_run_power_on_init_tests() != POST_RC_OK && next_state != FSM_STATE_ERROR) {
         next_state = FSM_STATE_ERROR;
     }
 
@@ -133,20 +125,19 @@ fsm_state_t fsm_do_idle(fsm_state_data_t *data) {
     indicators_update();
     feedback_update_state();
 
-    if (feedback_get_state() == FEEDBACK_LOW) {
-        if (feedback_get_state_after() == FEEDBACK_LOW && feedback_get_state_before() == FEEDBACK_HIGH) {
-            // The cockpit mushroom button is pressed
-        } else if (feedback_get_state_after() == FEEDBACK_LOW && feedback_get_state_before() == FEEDBACK_LOW) {
-            // There has been a shutdown event
-        } else if (feedback_get_state_before() == FEEDBACK_LOW && feedback_get_state_after() == FEEDBACK_HIGH) {
-            // Input discrepancy
-            next_state = FSM_STATE_ERROR;
-        }
-        if (feedback_get_state_sw() == FEEDBACK_LOW) {
-            // Steering wheel detached
-        }
-        // Handle pressed feedback buttons if needed
+    if (feedback_get_state(FEEDBACK_NAME_MUSHROOM_AFTER) == FEEDBACK_STATUS_LOW && feedback_get_state(FEEDBACK_NAME_MUSHROOM_AFTER) == FEEDBACK_STATUS_HIGH) {
+        // The cockpit mushroom button is pressed
+    } else if (feedback_get_state(FEEDBACK_NAME_MUSHROOM_AFTER) == FEEDBACK_STATUS_LOW && feedback_get_state(FEEDBACK_NAME_MUSHROOM_AFTER) == FEEDBACK_STATUS_LOW) {
+        // There has been a shutdown event
+    } else if (feedback_get_state(FEEDBACK_NAME_MUSHROOM_AFTER) == FEEDBACK_STATUS_LOW && feedback_get_state(FEEDBACK_NAME_MUSHROOM_AFTER) == FEEDBACK_STATUS_HIGH) {
+        // Input discrepancy
+        next_state = FSM_STATE_ERROR;
     }
+    if (feedback_get_state(FEEDBACK_NAME_STEERING_WHEEL) == FEEDBACK_STATUS_LOW) {
+        // Steering wheel detached
+    }
+    // Handle pressed feedback buttons if needed
+
     /*** USER CODE END DO_IDLE ***/
 
     switch (next_state) {

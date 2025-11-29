@@ -1,18 +1,14 @@
 #include "indicators.h"
 
 static struct IndicatorsHandler indicators_global_handler;
-static bool is_initialized = false;
 
-bool indicators_init(struct IndicatorsFunctionSet *set_indicator_fct) {
+bool indicators_init(indicator_set set_indicator_fct) {
 
-    if (set_indicator_fct == NULL || set_indicator_fct->ams == NULL || set_indicator_fct->imd == NULL || set_indicator_fct->ts_off == NULL || set_indicator_fct->tsal == NULL || is_initialized) {
+    if (set_indicator_fct == NULL || set_indicator_fct == NULL || indicators_global_handler.initialized) {
         return false;
     }
 
-    indicators_global_handler.ams = set_indicator_fct->ams;
-    indicators_global_handler.imd = set_indicator_fct->imd;
-    indicators_global_handler.ts_off = set_indicator_fct->ts_off;
-    indicators_global_handler.tsal = set_indicator_fct->tsal;
+    indicators_global_handler.set_indicator = set_indicator_fct;
 
     indicators_global_handler.ams_state_on = false;
     indicators_global_handler.imd_state_on = false;
@@ -21,54 +17,51 @@ bool indicators_init(struct IndicatorsFunctionSet *set_indicator_fct) {
 
     indicators_global_handler.pwm_value = 0;
 
-    indicators_global_handler.ams(0);
-    indicators_global_handler.imd(0);
-    indicators_global_handler.ts_off(0);
-    indicators_global_handler.tsal(0);
+    indicators_update();
 
-    is_initialized = true;
+    indicators_global_handler.initialized = true;
     return true;
 }
 
 bool is_indicators_initialized(void) {
-    return is_initialized;
+    return indicators_global_handler.initialized;
 }
 
 void indicators_update(void) {
 
     if (indicators_global_handler.ams_state_on)
-        indicators_global_handler.ams(indicators_global_handler.pwm_value);
+        indicators_global_handler.set_indicator(INDICATOR_NAME_AMS, indicators_global_handler.pwm_value);
     else
-        indicators_global_handler.ams(0);
+        indicators_global_handler.set_indicator(INDICATOR_NAME_AMS, 0);
 
     if (indicators_global_handler.imd_state_on)
-        indicators_global_handler.imd(indicators_global_handler.pwm_value);
+        indicators_global_handler.set_indicator(INDICATOR_NAME_IMD, indicators_global_handler.pwm_value);
     else
-        indicators_global_handler.imd(0);
+        indicators_global_handler.set_indicator(INDICATOR_NAME_IMD, 0);
 
     if (indicators_global_handler.ts_off_state_on)
-        indicators_global_handler.ts_off(indicators_global_handler.pwm_value);
+        indicators_global_handler.set_indicator(INDICATOR_NAME_TS_OFF, indicators_global_handler.pwm_value);
     else
-        indicators_global_handler.ts_off(0);
+        indicators_global_handler.set_indicator(INDICATOR_NAME_TS_OFF, 0);
 }
 
-void indicators_change_ams(bool state) {
-    indicators_global_handler.ams_state_on = state;
-    indicators_update();
-}
-
-void indicators_change_imd(bool state) {
-    indicators_global_handler.imd_state_on = state;
-    indicators_update();
-}
-
-void indicators_change_ts_off(bool state) {
-    indicators_global_handler.ts_off_state_on = state;
-    indicators_update();
-}
-
-void indicators_change_tsal(bool state) {
-    indicators_global_handler.tsal_state_on = state;
+void indicators_set(bool state, enum IndicatorsName indicator) {
+    switch (indicator) {
+        case INDICATOR_NAME_AMS:
+            indicators_global_handler.ams_state_on = state;
+            break;
+        case INDICATOR_NAME_IMD:
+            indicators_global_handler.imd_state_on = state;
+            break;
+        case INDICATOR_NAME_TS_OFF:
+            indicators_global_handler.ts_off_state_on = state;
+            break;
+        case INDICATOR_NAME_TSAL:
+            indicators_global_handler.tsal_state_on = state;
+            break;
+        default:
+            break;
+    }
     indicators_update();
 }
 

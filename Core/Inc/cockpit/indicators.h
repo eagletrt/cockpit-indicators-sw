@@ -5,21 +5,31 @@
 #include <stdio.h>
 
 /*!
+ * \brief Enum for identifying indicators
+ */
+enum IndicatorsName {
+    INDICATOR_NAME_AMS,
+    INDICATOR_NAME_IMD,
+    INDICATOR_NAME_TS_OFF,
+    INDICATOR_NAME_TSAL,
+    INDICATOR_NAME_COUNT
+};
+
+/*!
  * \brief Function signature for setting indicators
  * 
- * \param state true to turn on, false to turn off
+ * \param indicator Enum indicating which indicator to set
+ * \param pwm_value PWM value to set (0-100)
  * 
  */
-typedef void (*indicator_set)(uint8_t pwm_value);
+typedef void (*indicator_set)(enum IndicatorsName indicator, uint8_t pwm_value);
 
 /*!
  * \brief Struct that handles all relevant indicator information
  */
 struct IndicatorsHandler {
-    indicator_set ams;    //!< Function to set AMS indicator
-    indicator_set imd;    //!< Function to set IMD indicator
-    indicator_set ts_off; //!< Function to set TS_OFF indicator
-    indicator_set tsal;   //!< Function to set TSAL indicator
+
+    indicator_set set_indicator; //!< Function to set AMS indicator
 
     uint8_t pwm_value; //!< PWM value for all indicators (0-100)
 
@@ -27,25 +37,17 @@ struct IndicatorsHandler {
     bool imd_state_on;    //!< Insulation Monitoring Device indicator
     bool ts_off_state_on; //!< Traction System Off indicator
     bool tsal_state_on;   //!< TSAL indicator
-};
 
-/*!
- * \brief Struct containing all function pointers for indicators
- */
-struct IndicatorsFunctionSet {
-    indicator_set ams;    //!< Function to set AMS indicator
-    indicator_set imd;    //!< Function to set IMD indicator
-    indicator_set ts_off; //!< Function to set TS_OFF indicator
-    indicator_set tsal;   //!< Function to set TSAL indicator
+    bool initialized; //!< Indicates if the indicators handler has been initialized
 };
 
 /*!
  * \brief Initialize the indicators to OFF state.
- * \param indicator_handler The handler struct for the indicators functions.
+ * \param set_indicator_fct Function pointer to set an indicator's PWM value.
  * 
  * \retval True if initialization is successful, else false
  */
-bool indicators_init(struct IndicatorsFunctionSet *indicator_handler);
+bool indicators_init(indicator_set set_indicator_fct);
 
 /*!
  * \brief Check if indicators module is initialized.
@@ -61,26 +63,9 @@ void indicators_update(void);
 /*!
  * \brief Change the AMS indicator state.
  * \param state true to turn on, false to turn off
+ * \param indicator The indicator to change
  */
-void indicators_change_ams(bool state);
-
-/*!
- * \brief Change the IMD indicator state.
- * \param state true to turn on, false to turn off
- */
-void indicators_change_imd(bool state);
-
-/*!
- * \brief Change the TS_OFF indicator state.
- * \param state true to turn on, false to turn off
- */
-void indicators_change_ts_off(bool state);
-
-/*!
- * \brief Change the TSAL indicator state.
- * \param state true to turn on, false to turn off
- */
-void indicators_change_tsal(bool state);
+void indicators_set(bool state, enum IndicatorsName indicator);
 
 /*!
  * \brief Change pwm value of all indicators.

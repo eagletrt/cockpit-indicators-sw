@@ -22,7 +22,7 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN 0 */
-#include <tim.h>
+#include "feedback.h"
 /* USER CODE END 0 */
 
 /*----------------------------------------------------------------------------*/
@@ -63,19 +63,46 @@ void MX_GPIO_Init(void) {
 
 /* USER CODE BEGIN 2 */
 
-/* Wrapper function for Mushroom line before pin */
-bool GPIO_read_line_before_pin(void) {
-    return (HAL_GPIO_ReadPin(SHUTD_1_GPIO_Port, SHUTD_1_Pin) == GPIO_PIN_SET);
+static GPIO_TypeDef *prv_gpio_get_port_from_feedback_name(enum FeedbackName feedback) {
+    switch (feedback) {
+        case FEEDBACK_NAME_STEERING_WHEEL:
+            return SW_SD_GPIO_Port;
+        case FEEDBACK_NAME_MUSHROOM_BEFORE:
+            return SHUTD_1_GPIO_Port;
+        case FEEDBACK_NAME_MUSHROOM_AFTER:
+            return SHTD_2_GPIO_Port;
+        default:
+            return NULL;
+    };
 }
 
-/* Wrapper function for Mushroom line after pin */
-bool GPIO_read_line_after_pin(void) {
-    return (HAL_GPIO_ReadPin(SHTD_2_GPIO_Port, SHTD_2_Pin) == GPIO_PIN_SET);
+static int16_t prv_gpio_get_pin_from_feedback_name(enum FeedbackName feedback) {
+    switch (feedback) {
+        case FEEDBACK_NAME_STEERING_WHEEL:
+            return SW_SD_Pin;
+        case FEEDBACK_NAME_MUSHROOM_BEFORE:
+            return SHUTD_1_Pin;
+        case FEEDBACK_NAME_MUSHROOM_AFTER:
+            return SHTD_2_Pin;
+        default:
+            return -1;
+    };
 }
 
-/* Wrapper function for steering wheel shutdown line */
-bool GPIO_read_steering_wheel_pin(void) {
-    return (HAL_GPIO_ReadPin(SW_SD_GPIO_Port, SW_SD_Pin) == GPIO_PIN_SET);
+enum FeedbackState gpio_feedback_read(enum FeedbackName feedback) {
+    GPIO_TypeDef *port = prv_gpio_get_port_from_feedback_name(feedback);
+    int16_t pin = prv_gpio_get_pin_from_feedback_name(feedback);
+    if (port == NULL || pin < 0) {
+        return FEEDBACK_STATUS_ERROR;
+    }
+    switch (HAL_GPIO_ReadPin(port, pin)) {
+        case GPIO_PIN_SET:
+            return FEEDBACK_STATUS_HIGH;
+        case GPIO_PIN_RESET:
+            return FEEDBACK_STATUS_LOW;
+        default:
+            return FEEDBACK_STATUS_ERROR;
+    };
 }
 
 /* USER CODE END 2 */

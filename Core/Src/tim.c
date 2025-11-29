@@ -263,55 +263,46 @@ void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef *tim_baseHandle) {
 
 #define MAX_PWM_VALUE 65535
 
-// These will probably need to be reversed depending on the final circuit design
-
-// Technically this line is negated, once the hardware is finalized this may need to be adjusted
-/* Wrapper function to set AMS PWM value (0-100%) */
-void tim_ams_set_pwm(uint8_t pwm_value) {
-
-    uint16_t pwm_value_16 = (uint16_t)((pwm_value / 100.0f) * MAX_PWM_VALUE);
-    if (pwm_value_16 > MAX_PWM_VALUE) {
-        pwm_value_16 = MAX_PWM_VALUE;
+static TIM_HandleTypeDef *prv_tim_get_handle(enum IndicatorsName tim_name) {
+    switch (tim_name) {
+        case INDICATOR_NAME_AMS:
+        case INDICATOR_NAME_IMD:
+            return &htim1;
+        case INDICATOR_NAME_TS_OFF:
+        case INDICATOR_NAME_TSAL:
+            return &htim3;
+        default:
+            return NULL;
     }
-    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, pwm_value_16);
 }
 
-/* Wrapper function to set IMD PWM value (0-100%) */
-void tim_imd_set_pwm(uint8_t pwm_value) {
-
-    uint16_t pwm_value_16 = (uint16_t)((pwm_value / 100.0f) * MAX_PWM_VALUE);
-    if (pwm_value_16 > MAX_PWM_VALUE) {
-        pwm_value_16 = MAX_PWM_VALUE;
+static uint32_t prv_tim_get_channel(enum IndicatorsName tim_name) {
+    switch (tim_name) {
+        case INDICATOR_NAME_AMS:
+            return TIM_CHANNEL_2;
+        case INDICATOR_NAME_IMD:
+            return TIM_CHANNEL_1;
+        case INDICATOR_NAME_TS_OFF:
+            return TIM_CHANNEL_1;
+        case INDICATOR_NAME_TSAL:
+            return TIM_CHANNEL_2;
+        default:
+            return 0;
     }
-    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, pwm_value_16);
 }
 
-/* Wrapper function to set TS_OFF PWM value (0-100%) */
-void tim_ts_off_set_pwm(uint8_t pwm_value) {
+void tim_set_pwm(enum IndicatorsName indicator, uint8_t pwm_value) {
+    TIM_HandleTypeDef *tim_handle = prv_tim_get_handle(indicator);
+    uint32_t channel = prv_tim_get_channel(indicator);
+    if (tim_handle == NULL || channel == 0) {
+        return; // Invalid parameters
+    }
 
     uint16_t pwm_value_16 = (uint16_t)((pwm_value / 100.0f) * MAX_PWM_VALUE);
     if (pwm_value_16 > MAX_PWM_VALUE) {
         pwm_value_16 = MAX_PWM_VALUE;
     }
-    __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_1, pwm_value_16);
-}
-
-/* Wrapper function to set TSAL PWM value (0-100%) */
-void tim_tsal_set_pwm(uint8_t pwm_value) {
-    uint16_t pwm_value_16 = (uint16_t)((pwm_value / 100.0f) * MAX_PWM_VALUE);
-    if (pwm_value_16 > MAX_PWM_VALUE) {
-        pwm_value_16 = MAX_PWM_VALUE;
-    }
-    __HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, pwm_value_16);
-}
-
-/* Wrapper function to set ADDRESSABLE led strip (0-100%) NOT FINAL, PLACEHOLDER*/
-void tim_addressable_set_pwm(uint8_t pwm_value) {
-    uint16_t pwm_value_16 = (uint16_t)((pwm_value / 100.0f) * MAX_PWM_VALUE);
-    if (pwm_value_16 > MAX_PWM_VALUE) {
-        pwm_value_16 = MAX_PWM_VALUE;
-    }
-    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_3, pwm_value_16);
+    __HAL_TIM_SET_COMPARE(tim_handle, channel, pwm_value_16);
 }
 
 // TODO: Check if HAL_TIM_STATE_READY is the correct way to check initialization or if they should be buisy as they are PWM
