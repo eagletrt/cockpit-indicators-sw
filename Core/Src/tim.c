@@ -291,14 +291,14 @@ static uint32_t prv_tim_get_channel(enum IndicatorsName tim_name) {
     }
 }
 
-void tim_set_pwm(enum IndicatorsName indicator, uint8_t pwm_value) {
+void tim_set_pwm(enum IndicatorsName indicator, uint8_t luminosity) {
     TIM_HandleTypeDef *tim_handle = prv_tim_get_handle(indicator);
     uint32_t channel = prv_tim_get_channel(indicator);
     if (tim_handle == NULL || channel == 0) {
         return; // Invalid parameters
     }
 
-    uint16_t pwm_value_16 = (uint16_t)((pwm_value / 100.0f) * MAX_PWM_VALUE);
+    uint16_t pwm_value_16 = (uint16_t)((luminosity / 100.0f) * MAX_PWM_VALUE);
     if (pwm_value_16 > MAX_PWM_VALUE) {
         pwm_value_16 = MAX_PWM_VALUE;
     }

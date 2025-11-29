@@ -19,10 +19,10 @@ enum IndicatorsName {
  * \brief Function signature for setting indicators
  * 
  * \param indicator Enum indicating which indicator to set
- * \param pwm_value PWM value to set (0-100)
+ * \param luminosity PWM value to set (0-100)
  * 
  */
-typedef void (*indicator_set)(enum IndicatorsName indicator, uint8_t pwm_value);
+typedef void (*indicator_set)(enum IndicatorsName indicator, uint8_t luminosity);
 
 /*!
  * \brief Struct that handles all relevant indicator information
@@ -31,7 +31,7 @@ struct IndicatorsHandler {
 
     indicator_set set_indicator; //!< Function to set AMS indicator
 
-    uint8_t pwm_value; //!< PWM value for all indicators (0-100)
+    uint8_t luminosity; //!< PWM value for all indicators (0-100)
 
     bool ams_state_on;    //!< Accumulator Management System indicator
     bool imd_state_on;    //!< Insulation Monitoring Device indicator
@@ -69,8 +69,8 @@ void indicators_set(bool state, enum IndicatorsName indicator);
 
 /*!
  * \brief Change pwm value of all indicators.
- * \param pwm_value The PWM value to set for all indicators (0-100).
+ * \param luminosity The PWM value to set for all indicators (0-100).
 */
-void indicators_set_pwm_value(uint8_t pwm_value);
+void indicators_set_luminosity(uint8_t luminosity);
 
 #endif // INDICATORS_H

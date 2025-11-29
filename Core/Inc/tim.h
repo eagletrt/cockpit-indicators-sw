@@ -53,9 +53,9 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 /*!
  * \brief Set PWM value for a given indicator.
  * \param indicator The indicator to set.
- * \param pwm_value PWM value to set (0-100).
+ * \param luminosity PWM value to set (0-100).
  */
-void tim_set_pwm(enum IndicatorsName indicator, uint8_t pwm_value);
+void tim_set_pwm(enum IndicatorsName indicator, uint8_t luminosity);
 
 /*!
  * \brief Check if TIM module is initialized correctly.
