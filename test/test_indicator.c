@@ -1,0 +1,122 @@
+#include "unity.h"
+#include "indicators.h"
+#include <string.h>
+#include <stdio.h>
+
+extern struct IndicatorsHandler indicators_global_handler;
+
+typedef struct {
+    enum IndicatorsName last_indicator;
+    uint8_t last_luminosity;
+    int call_count;
+} MockState;
+
+static MockState mock_state;
+
+// MOCKING FUNCTIONS
+
+// The mock callback function to simulate hardware output
+void mock_set_indicator(enum IndicatorsName indicator, uint8_t luminosity) {
+    mock_state.last_indicator = indicator;
+    mock_state.last_luminosity = luminosity;
+    mock_state.call_count++;
+}
+
+// Helper to reset mock state
+void reset_mock() {
+    mock_state.last_indicator = INDICATOR_NAME_COUNT; // Invalid init value
+    mock_state.last_luminosity = 0;
+    mock_state.call_count = 0;
+}
+
+// Helper to forcefully reset the internal module state
+void reset_module_state() {
+    indicators_global_handler.initialized = false;
+    memset(indicators_global_handler.state, 0, sizeof(indicators_global_handler.state));
+    indicators_global_handler.luminosity = 0;
+    indicators_global_handler.set_indicator = NULL;
+}
+
+void setUp(void) {
+    reset_mock();
+    reset_module_state();
+}
+
+void tearDown(void) {
+}
+
+// TEST FUNCTIONS
+
+void test_initialization_success(void) {
+    bool result = indicators_init(mock_set_indicator);
+
+    TEST_ASSERT_TRUE_MESSAGE(result, "Initialization should return true");
+    TEST_ASSERT_TRUE_MESSAGE(is_indicators_initialized(), "Module should report initialized");
+
+    // Initialization triggers an update, so mock should be called 3 times (once per indicator)
+    TEST_ASSERT_EQUAL_INT_MESSAGE(3, mock_state.call_count, "Init should trigger update for all 3 indicators");
+}
+
+void test_initialization_failure_null_callback(void) {
+    bool result = indicators_init(NULL);
+
+    TEST_ASSERT_FALSE_MESSAGE(result, "Init should fail with NULL callback");
+    TEST_ASSERT_FALSE_MESSAGE(is_indicators_initialized(), "Module should not be initialized");
+}
+
+void test_initialization_failure_double_init(void) {
+    // First init
+    TEST_ASSERT_TRUE(indicators_init(mock_set_indicator));
+
+    // Second init should fail
+    bool result = indicators_init(mock_set_indicator);
+
+    TEST_ASSERT_FALSE_MESSAGE(result, "Double initialization should fail");
+}
+
+void test_set_indicator_state(void) {
+    indicators_init(mock_set_indicator);
+
+    indicators_set_luminosity(50);
+    reset_mock(); // Clear calls from the setup phase
+
+    // Test: Turn AMS ON
+    indicators_set(true, INDICATOR_NAME_AMS);
+
+    // Verify internal state matches request
+    TEST_ASSERT_TRUE_MESSAGE(indicators_global_handler.state[INDICATOR_NAME_AMS], "AMS State should be TRUE");
+    TEST_ASSERT_FALSE_MESSAGE(indicators_global_handler.state[INDICATOR_NAME_IMD], "IMD State should still be FALSE");
+
+    // Test: Turn AMS OFF
+    indicators_set(false, INDICATOR_NAME_AMS);
+    TEST_ASSERT_FALSE_MESSAGE(indicators_global_handler.state[INDICATOR_NAME_AMS], "AMS State should be FALSE");
+}
+
+void test_luminosity_clamping(void) {
+    indicators_init(mock_set_indicator);
+    reset_mock();
+
+    // Test: Set valid luminosity
+    indicators_set_luminosity(80);
+    TEST_ASSERT_EQUAL_UINT8_MESSAGE(80, indicators_global_handler.luminosity, "Luminosity should be 80");
+
+    // Test: Set overflow luminosity (>100)
+    indicators_set_luminosity(150);
+    TEST_ASSERT_EQUAL_UINT8_MESSAGE(100, indicators_global_handler.luminosity, "Luminosity should clamp to 100");
+
+    // Test: Set 0
+    indicators_set_luminosity(0);
+    TEST_ASSERT_EQUAL_UINT8_MESSAGE(0, indicators_global_handler.luminosity, "Luminosity should be 0");
+}
+
+int main(void) {
+    UNITY_BEGIN();
+
+    RUN_TEST(test_initialization_success);
+    RUN_TEST(test_initialization_failure_null_callback);
+    RUN_TEST(test_initialization_failure_double_init);
+    RUN_TEST(test_set_indicator_state);
+    RUN_TEST(test_luminosity_clamping);
+
+    return UNITY_END();
+}

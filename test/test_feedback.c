@@ -1,0 +1,134 @@
+#include "unity.h"
+#include "feedback.h"
+#include <string.h>
+#include <stdio.h>
+
+extern struct FeedbackHandler feedback_handler;
+
+// MOCKING FUNCTIONS
+
+// Array to control what the mock returns for each sensor
+static enum FeedbackState mock_input_values[FEEDBACK_NAME_COUNT];
+static int mock_call_count;
+
+// The mock callback function to simulate reading hardware
+enum FeedbackState mock_read_feedback(enum FeedbackName feedback) {
+    mock_call_count++;
+    if (feedback < FEEDBACK_NAME_COUNT) {
+        return mock_input_values[feedback];
+    }
+    return FEEDBACK_STATUS_ERROR;
+}
+
+// Helper to reset mock state
+void reset_mock() {
+    mock_call_count = 0;
+    for (int i = 0; i < FEEDBACK_NAME_COUNT; i++) {
+        mock_input_values[i] = FEEDBACK_STATUS_LOW; // Default safe state
+    }
+}
+
+// Helper to forcefully reset the internal module state
+void reset_module_state() {
+    feedback_handler.initialized = false;
+    feedback_handler.read_fb = NULL;
+    // Clear state array
+    memset((void *)feedback_handler.fb_line_state, 0, sizeof(feedback_handler.fb_line_state));
+}
+
+void setUp(void) {
+    reset_mock();
+    reset_module_state();
+}
+
+void tearDown(void) {
+}
+
+// TEST FUNCTIONS
+
+void test_initialization_success(void) {
+    enum FeedbackReturnCode result = feedback_init(mock_read_feedback);
+
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_RC_OK, result, "Initialization should return OK");
+    TEST_ASSERT_TRUE_MESSAGE(feedback_handler.initialized, "Module should be marked initialized");
+
+    // Verify default state after init is ERROR
+    for (int i = 0; i < FEEDBACK_NAME_COUNT; i++) {
+        TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_ERROR, feedback_handler.fb_line_state[i], "Init state should be ERROR");
+    }
+}
+
+void test_initialization_failure_null_callback(void) {
+    enum FeedbackReturnCode result = feedback_init(NULL);
+
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_RC_ERROR, result, "Init should fail with NULL callback");
+    TEST_ASSERT_FALSE_MESSAGE(feedback_handler.initialized, "Module should not be initialized");
+}
+
+void test_initialization_failure_double_init(void) {
+    // First init
+    TEST_ASSERT_EQUAL_INT(FEEDBACK_RC_OK, feedback_init(mock_read_feedback));
+
+    // Second init should fail
+    enum FeedbackReturnCode result = feedback_init(mock_read_feedback);
+
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_RC_ERROR, result, "Double initialization should return ERROR");
+}
+
+void test_update_and_get_state(void) {
+    feedback_init(mock_read_feedback);
+
+    // Setup Mock Inputs:
+    // 1. Steering Wheel -> HIGH
+    // 2. Mushroom Before -> LOW
+    // 3. Mushroom After -> ERROR (simulate fault)
+    mock_input_values[FEEDBACK_NAME_STEERING_WHEEL] = FEEDBACK_STATUS_HIGH;
+    mock_input_values[FEEDBACK_NAME_MUSHROOM_BEFORE] = FEEDBACK_STATUS_LOW;
+    mock_input_values[FEEDBACK_NAME_MUSHROOM_AFTER] = FEEDBACK_STATUS_ERROR;
+
+    // Run the update cycle
+    reset_mock(); // Reset call count
+    feedback_update_state();
+
+    // Verify mock was called correct number of times (once per indicator)
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_NAME_COUNT, mock_call_count, "Update should poll all sensors");
+
+    // Verify States via getter
+    TEST_ASSERT_EQUAL_INT(FEEDBACK_STATUS_HIGH, feedback_get_state(FEEDBACK_NAME_STEERING_WHEEL));
+    TEST_ASSERT_EQUAL_INT(FEEDBACK_STATUS_LOW, feedback_get_state(FEEDBACK_NAME_MUSHROOM_BEFORE));
+    TEST_ASSERT_EQUAL_INT(FEEDBACK_STATUS_ERROR, feedback_get_state(FEEDBACK_NAME_MUSHROOM_AFTER));
+}
+
+void test_state_persistence(void) {
+    // Ensure state doesn't change if update isn't called
+    feedback_init(mock_read_feedback);
+
+    // Initial Update: Set to HIGH
+    mock_input_values[FEEDBACK_NAME_STEERING_WHEEL] = FEEDBACK_STATUS_HIGH;
+    feedback_update_state();
+    TEST_ASSERT_EQUAL_INT(FEEDBACK_STATUS_HIGH, feedback_get_state(FEEDBACK_NAME_STEERING_WHEEL));
+
+    // Change Hardware to LOW, but DO NOT call update
+    mock_input_values[FEEDBACK_NAME_STEERING_WHEEL] = FEEDBACK_STATUS_LOW;
+
+    // State should still be HIGH
+    TEST_ASSERT_EQUAL_INT(FEEDBACK_STATUS_HIGH, feedback_get_state(FEEDBACK_NAME_STEERING_WHEEL));
+
+    // Now call update
+    feedback_update_state();
+
+    // State should now be LOW
+    TEST_ASSERT_EQUAL_INT(FEEDBACK_STATUS_LOW, feedback_get_state(FEEDBACK_NAME_STEERING_WHEEL));
+}
+
+int main(void) {
+    UNITY_BEGIN();
+
+    RUN_TEST(test_initialization_success);
+    RUN_TEST(test_initialization_failure_null_callback);
+    RUN_TEST(test_initialization_failure_double_init);
+    RUN_TEST(test_update_and_get_state);
+    RUN_TEST(test_state_persistence);
+
+    return UNITY_END();
+}
