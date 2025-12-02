@@ -1,6 +1,10 @@
 #include "indicators.h"
 
-static struct IndicatorsHandler indicators_global_handler;
+#ifdef UNIT_TEST
+    struct IndicatorsHandler indicators_global_handler; // Visible to tests
+#else
+    static struct IndicatorsHandler indicators_global_handler; // Private in production
+#endif
 
 bool indicators_init(indicator_set set_indicator_fct) {
 

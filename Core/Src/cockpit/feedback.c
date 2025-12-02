@@ -1,6 +1,10 @@
 #include "feedback.h"
 
-static struct FeedbackHandler feedback_handler;
+#ifdef UNIT_TEST
+    struct FeedbackHandler feedback_handler; // Visible to tests
+#else
+    static struct FeedbackHandler feedback_handler; // Private in production
+#endif
 
 enum FeedbackReturnCode feedback_init(read_feedback fb_read) {
 
@@ -26,4 +30,8 @@ void feedback_update_state(void) {
     for (int i = 0; i < FEEDBACK_NAME_COUNT; i++) {
         feedback_handler.fb_line_state[i] = feedback_handler.read_fb((enum FeedbackName)i);
     }
+}
+
+struct FeedbackHandler* feedback_get_handler(void) {
+    return &feedback_handler;
 }

@@ -69,4 +69,10 @@ enum FeedbackState feedback_get_state(enum FeedbackName feedback);
  */
 void feedback_update_state(void);
 
+/*!
+ * \brief  Get the global feedback handler
+ * \return Pointer to the global FeedbackHandler instance
+ */
+struct FeedbackHandler* feedback_get_handler(void);
+
 #endif // FEEDBACK_H

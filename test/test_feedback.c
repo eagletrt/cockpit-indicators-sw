@@ -21,7 +21,7 @@ enum FeedbackState mock_read_feedback(enum FeedbackName feedback) {
 }
 
 // Helper to reset mock state
-void reset_mock() {
+void feedback_reset_mock() {
     mock_call_count = 0;
     for (int i = 0; i < FEEDBACK_NAME_COUNT; i++) {
         mock_input_values[i] = FEEDBACK_STATUS_LOW; // Default safe state
@@ -29,24 +29,16 @@ void reset_mock() {
 }
 
 // Helper to forcefully reset the internal module state
-void reset_module_state() {
+void feedback_reset_module_state() {
     feedback_handler.initialized = false;
     feedback_handler.read_fb = NULL;
     // Clear state array
     memset((void *)feedback_handler.fb_line_state, 0, sizeof(feedback_handler.fb_line_state));
 }
 
-void setUp(void) {
-    reset_mock();
-    reset_module_state();
-}
-
-void tearDown(void) {
-}
-
 // TEST FUNCTIONS
 
-void test_initialization_success(void) {
+void feedback_test_initialization_success(void) {
     enum FeedbackReturnCode result = feedback_init(mock_read_feedback);
 
     TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_RC_OK, result, "Initialization should return OK");
@@ -58,14 +50,14 @@ void test_initialization_success(void) {
     }
 }
 
-void test_initialization_failure_null_callback(void) {
+void feedback_test_initialization_failure_null_callback(void) {
     enum FeedbackReturnCode result = feedback_init(NULL);
 
     TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_RC_ERROR, result, "Init should fail with NULL callback");
     TEST_ASSERT_FALSE_MESSAGE(feedback_handler.initialized, "Module should not be initialized");
 }
 
-void test_initialization_failure_double_init(void) {
+void feedback_test_initialization_failure_double_init(void) {
     // First init
     TEST_ASSERT_EQUAL_INT(FEEDBACK_RC_OK, feedback_init(mock_read_feedback));
 
@@ -75,19 +67,27 @@ void test_initialization_failure_double_init(void) {
     TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_RC_ERROR, result, "Double initialization should return ERROR");
 }
 
-void test_update_and_get_state(void) {
+void feedback_test_update_and_get_state(void) {
     feedback_init(mock_read_feedback);
 
     // Setup Mock Inputs:
     // 1. Steering Wheel -> HIGH
     // 2. Mushroom Before -> LOW
     // 3. Mushroom After -> ERROR (simulate fault)
+    
+    feedback_reset_mock(); // Reset mock struct
+
     mock_input_values[FEEDBACK_NAME_STEERING_WHEEL] = FEEDBACK_STATUS_HIGH;
     mock_input_values[FEEDBACK_NAME_MUSHROOM_BEFORE] = FEEDBACK_STATUS_LOW;
     mock_input_values[FEEDBACK_NAME_MUSHROOM_AFTER] = FEEDBACK_STATUS_ERROR;
 
+
+    // Verify Initial States via getter (should be ERROR from init)
+    TEST_ASSERT_EQUAL_INT(FEEDBACK_STATUS_ERROR, feedback_get_state(FEEDBACK_NAME_STEERING_WHEEL));
+    TEST_ASSERT_EQUAL_INT(FEEDBACK_STATUS_ERROR, feedback_get_state(FEEDBACK_NAME_MUSHROOM_BEFORE));
+    TEST_ASSERT_EQUAL_INT(FEEDBACK_STATUS_ERROR, feedback_get_state(FEEDBACK_NAME_MUSHROOM_AFTER));
+
     // Run the update cycle
-    reset_mock(); // Reset call count
     feedback_update_state();
 
     // Verify mock was called correct number of times (once per indicator)
@@ -99,7 +99,7 @@ void test_update_and_get_state(void) {
     TEST_ASSERT_EQUAL_INT(FEEDBACK_STATUS_ERROR, feedback_get_state(FEEDBACK_NAME_MUSHROOM_AFTER));
 }
 
-void test_state_persistence(void) {
+void feedback_test_state_persistence(void) {
     // Ensure state doesn't change if update isn't called
     feedback_init(mock_read_feedback);
 
@@ -121,14 +121,3 @@ void test_state_persistence(void) {
     TEST_ASSERT_EQUAL_INT(FEEDBACK_STATUS_LOW, feedback_get_state(FEEDBACK_NAME_STEERING_WHEEL));
 }
 
-int main(void) {
-    UNITY_BEGIN();
-
-    RUN_TEST(test_initialization_success);
-    RUN_TEST(test_initialization_failure_null_callback);
-    RUN_TEST(test_initialization_failure_double_init);
-    RUN_TEST(test_update_and_get_state);
-    RUN_TEST(test_state_persistence);
-
-    return UNITY_END();
-}

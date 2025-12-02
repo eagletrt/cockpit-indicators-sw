@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+#include <stdint.h>  // Fixes: unknown type name 'uint8_t'
+
 /*!
  * \brief Enum for identifying indicators
  */
