@@ -31,7 +31,3 @@ void feedback_update_state(void) {
         feedback_handler.fb_line_state[i] = feedback_handler.read_fb((enum FeedbackName)i);
     }
 }
-
-struct FeedbackHandler* feedback_get_handler(void) {
-    return &feedback_handler;
-}
