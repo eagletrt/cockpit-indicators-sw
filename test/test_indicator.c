@@ -58,7 +58,7 @@ void indicator_test_initialization_failure_null_callback(void) {
 
 void indicator_test_initialization_failure_double_init(void) {
     // First init
-    TEST_ASSERT_TRUE(indicators_init(indicator_mock_set_indicator));
+    TEST_ASSERT_TRUE_MESSAGE(indicators_init(indicator_mock_set_indicator), "First initialization should succeed");
 
     // Second init should fail
     bool result = indicators_init(indicator_mock_set_indicator);

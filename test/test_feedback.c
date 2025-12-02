@@ -59,7 +59,7 @@ void feedback_test_initialization_failure_null_callback(void) {
 
 void feedback_test_initialization_failure_double_init(void) {
     // First init
-    TEST_ASSERT_EQUAL_INT(FEEDBACK_RC_OK, feedback_init(mock_read_feedback));
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_RC_OK, feedback_init(mock_read_feedback), "First initialization should succeed");
 
     // Second init should fail
     enum FeedbackReturnCode result = feedback_init(mock_read_feedback);
@@ -83,9 +83,9 @@ void feedback_test_update_and_get_state(void) {
 
 
     // Verify Initial States via getter (should be ERROR from init)
-    TEST_ASSERT_EQUAL_INT(FEEDBACK_STATUS_ERROR, feedback_get_state(FEEDBACK_NAME_STEERING_WHEEL));
-    TEST_ASSERT_EQUAL_INT(FEEDBACK_STATUS_ERROR, feedback_get_state(FEEDBACK_NAME_MUSHROOM_BEFORE));
-    TEST_ASSERT_EQUAL_INT(FEEDBACK_STATUS_ERROR, feedback_get_state(FEEDBACK_NAME_MUSHROOM_AFTER));
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_ERROR, feedback_get_state(FEEDBACK_NAME_STEERING_WHEEL), "Initial state should be ERROR");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_ERROR, feedback_get_state(FEEDBACK_NAME_MUSHROOM_BEFORE), "Initial state should be ERROR");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_ERROR, feedback_get_state(FEEDBACK_NAME_MUSHROOM_AFTER), "Initial state should be ERROR");
 
     // Run the update cycle
     feedback_update_state();
@@ -94,9 +94,9 @@ void feedback_test_update_and_get_state(void) {
     TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_NAME_COUNT, mock_call_count, "Update should poll all sensors");
 
     // Verify States via getter
-    TEST_ASSERT_EQUAL_INT(FEEDBACK_STATUS_HIGH, feedback_get_state(FEEDBACK_NAME_STEERING_WHEEL));
-    TEST_ASSERT_EQUAL_INT(FEEDBACK_STATUS_LOW, feedback_get_state(FEEDBACK_NAME_MUSHROOM_BEFORE));
-    TEST_ASSERT_EQUAL_INT(FEEDBACK_STATUS_ERROR, feedback_get_state(FEEDBACK_NAME_MUSHROOM_AFTER));
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_HIGH, feedback_get_state(FEEDBACK_NAME_STEERING_WHEEL), "State should be HIGH after update");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_LOW, feedback_get_state(FEEDBACK_NAME_MUSHROOM_BEFORE), "State should be LOW after update");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_ERROR, feedback_get_state(FEEDBACK_NAME_MUSHROOM_AFTER), "State should be ERROR after update");
 }
 
 void feedback_test_state_persistence(void) {
@@ -106,18 +106,18 @@ void feedback_test_state_persistence(void) {
     // Initial Update: Set to HIGH
     mock_input_values[FEEDBACK_NAME_STEERING_WHEEL] = FEEDBACK_STATUS_HIGH;
     feedback_update_state();
-    TEST_ASSERT_EQUAL_INT(FEEDBACK_STATUS_HIGH, feedback_get_state(FEEDBACK_NAME_STEERING_WHEEL));
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_HIGH, feedback_get_state(FEEDBACK_NAME_STEERING_WHEEL), "State should be HIGH after first update");
 
     // Change Hardware to LOW, but DO NOT call update
     mock_input_values[FEEDBACK_NAME_STEERING_WHEEL] = FEEDBACK_STATUS_LOW;
 
     // State should still be HIGH
-    TEST_ASSERT_EQUAL_INT(FEEDBACK_STATUS_HIGH, feedback_get_state(FEEDBACK_NAME_STEERING_WHEEL));
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_HIGH, feedback_get_state(FEEDBACK_NAME_STEERING_WHEEL), "State should still be HIGH without update");
 
     // Now call update
     feedback_update_state();
 
     // State should now be LOW
-    TEST_ASSERT_EQUAL_INT(FEEDBACK_STATUS_LOW, feedback_get_state(FEEDBACK_NAME_STEERING_WHEEL));
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_LOW, feedback_get_state(FEEDBACK_NAME_STEERING_WHEEL), "State should be LOW after update");
 }
 
