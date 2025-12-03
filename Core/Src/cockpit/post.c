@@ -19,10 +19,14 @@ enum PostReturnCode post_run_power_on_tests(struct PostInitData *init_data) {
 
     // Additional power-on tests can be added here
 
-    return POST_RC_OK;
-}
+    // Initialization functions
+    if (feedback_init(init_data->fb_read) == FEEDBACK_RC_ERROR) {
+        return POST_RC_UNINITIALIZED;
+    }
 
-enum PostReturnCode post_run_power_on_init_tests(void) {
+    if (!indicators_init(init_data->indicator_set)) {
+        return POST_RC_UNINITIALIZED;
+    }
 
     // Update feedback states
     feedback_update_state();
@@ -40,4 +44,8 @@ enum PostReturnCode post_run_power_on_init_tests(void) {
         return POST_RC_UNINITIALIZED;
     }
     return POST_RC_OK;
+}
+
+enum PostReturnCode post_run_power_on_init_tests(void) {
+
 };

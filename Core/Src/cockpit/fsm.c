@@ -88,19 +88,6 @@ fsm_state_t fsm_do_init(fsm_state_data_t *data) {
         next_state = FSM_STATE_ERROR;
     }
 
-    // Initialization functions
-    if (feedback_init(post_init_data->fb_read) == FEEDBACK_RC_ERROR && next_state != FSM_STATE_ERROR) {
-        next_state = FSM_STATE_ERROR;
-    }
-
-    if (!indicators_init(post_init_data->indicator_set) && next_state != FSM_STATE_ERROR) {
-        next_state = FSM_STATE_ERROR;
-    }
-
-    if (post_run_power_on_init_tests() != POST_RC_OK && next_state != FSM_STATE_ERROR) {
-        next_state = FSM_STATE_ERROR;
-    }
-
     /*** USER CODE END DO_INIT ***/
 
     switch (next_state) {

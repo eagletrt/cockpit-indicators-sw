@@ -41,14 +41,4 @@ struct PostInitData {
  */
 enum PostReturnCode post_run_power_on_tests(struct PostInitData *init_data);
 
-/*!
- * \brief Run power-on initialization tests.
- * 
- * \retval POST_RC_OK if all tests pass
- * \retval POST_RC_UNINITIALIZED if a module is uninitialized
- * \retval POST_RC_SETUP_ERROR if a setup error is detected
- * \retval POST_RC_INVALID_POINTER if a null pointer is provided
- */
-enum PostReturnCode post_run_power_on_init_tests();
-
 #endif // POST_H
