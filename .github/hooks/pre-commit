@@ -99,6 +99,8 @@ def is_file_in_folders(file_path: Path, root: Path, folder_names) -> bool:
 
 if __name__ == "__main__":
 
+    print("Running clang-format on staged files...")
+
     root = find_git_root()
     if not root:
         print("[err] Not in a Git repository or an error occurred.")
