@@ -5,6 +5,8 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include "eagletrt.h"
+
 /*!
  * \brief Possible return codes for feedback functions
  */

@@ -1,9 +1,4 @@
-#ifndef UNIT_TEST
-#define UNIT_TEST
-#endif
-
-#include "test_feedback.h"
-#include "test_indicator.h"
+#include "test_config.h"
 
 void setUp(void) {
     indicator_reset_mock();

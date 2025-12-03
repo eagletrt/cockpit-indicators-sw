@@ -1,10 +1,6 @@
 #include "indicators.h"
 
-#ifdef UNIT_TEST
-    struct IndicatorsHandler indicators_global_handler; // Visible to tests
-#else
-    static struct IndicatorsHandler indicators_global_handler; // Private in production
-#endif
+EAGLETRT_STATIC struct IndicatorsHandler indicators_global_handler; // Private in production
 
 bool indicators_init(indicator_set set_indicator_fct) {
 

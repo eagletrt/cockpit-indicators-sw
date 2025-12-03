@@ -4,7 +4,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#include <stdint.h>  // Fixes: unknown type name 'uint8_t'
+#include <stdint.h> // Fixes: unknown type name 'uint8_t' in testing environment
+#include "eagletrt.h"
 
 /*!
  * \brief Enum for identifying indicators

@@ -1,10 +1,6 @@
 #include "feedback.h"
 
-#ifdef UNIT_TEST
-    struct FeedbackHandler feedback_handler; // Visible to tests
-#else
-    static struct FeedbackHandler feedback_handler; // Private in production
-#endif
+EAGLETRT_STATIC struct FeedbackHandler feedback_handler; // Private in production
 
 enum FeedbackReturnCode feedback_init(read_feedback fb_read) {
 
