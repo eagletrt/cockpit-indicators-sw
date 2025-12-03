@@ -31,14 +31,10 @@ typedef void (*indicator_set)(enum IndicatorsName indicator, uint8_t luminosity)
  * \brief Struct that handles all relevant indicator information
  */
 struct IndicatorsHandler {
-
-    indicator_set set_indicator; //!< Function to set AMS indicator
-
-    uint8_t luminosity; //!< PWM value for all indicators (0-100)
-
+    indicator_set set_indicator;      //!< Function to set AMS indicator
+    uint8_t luminosity;               //!< PWM value for all indicators (0-100)
     bool state[INDICATOR_NAME_COUNT]; //!< State of each indicator (on/off)
-
-    bool initialized; //!< Indicates if the indicators handler has been initialized
+    bool initialized;                 //!< Indicates if the indicators handler has been initialized
 };
 
 /*!
