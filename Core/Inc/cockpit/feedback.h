@@ -45,20 +45,12 @@ typedef enum FeedbackState (*read_feedback)(enum FeedbackName feedback);
  * \brief Struct that handles all relevant feedback information
  */
 struct FeedbackHandler {
-    read_feedback read_fb;                                          //!< Function to read feedback line state
-    
-    
-    
-    
+
+    read_feedback read_fb; //!< Function to read feedback line state
+
     volatile enum FeedbackState fb_line_state[FEEDBACK_NAME_COUNT]; //!< Feedback button state array
-    
-    
-    
-    
-    
-    
-    
-    volatile bool initialized;                                      //!< Indicates if the feedback handler has been initialized
+
+    volatile bool initialized; //!< Indicates if the feedback handler has been initialized
 };
 
 /*!

@@ -4,7 +4,7 @@ from pathlib import Path
 
 # --- CONFIGURATION ---
 # Hardcoded list of subfolders to format (relative to project root)
-TARGET_DIRS = ["src", "include", "test"]
+TARGET_DIRS = ["src", "include", "test", "Core/Inc", "Core/Src"]
 
 # File extensions to format
 EXTENSIONS = {".c", ".cpp", ".cc", ".h", ".hpp", ".hh"}
@@ -90,11 +90,14 @@ def detect_partial_staging(file: Path) -> bool:
     return bool(result.stdout.strip())
 
 def is_file_in_folders(file_path: Path, root: Path, folder_names) -> bool:
+    print(f"[debug] Checking if {file_path} is in target folders...")
     file_path = file_path.resolve()
     for folder in folder_names:
         target = (root / folder).resolve()
         if target in file_path.parents:
+            print(f"[debug] {file_path} is in {target}")
             return True
+        print(f"[debug] {file_path} is not in {target}")
     return False
 
 if __name__ == "__main__":
@@ -108,12 +111,17 @@ if __name__ == "__main__":
 
     staged = get_staged_files()
 
+    print(f"[info] Found {len(staged)} staged files")
+
     staged_targeted = [
         f for f in staged
         if f.suffix in EXTENSIONS and is_file_in_folders(f, root, TARGET_DIRS)
     ]
 
+    print(f"[info] Found {len(staged_targeted)} staged files to format")
+
     for f in staged_targeted:
+        print(f"[info] Formatting staged file: {f}")
         if detect_partial_staging(f):
             print(f"[warn] Partially staged file detected: {f}, script will commit the whole file")
     
