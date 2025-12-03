@@ -45,7 +45,3 @@ enum PostReturnCode post_run_power_on_tests(struct PostInitData *init_data) {
     }
     return POST_RC_OK;
 }
-
-enum PostReturnCode post_run_power_on_init_tests(void) {
-
-};
