@@ -1,8 +1,8 @@
 #ifndef UNIT_TEST
-    #define UNIT_TEST
+#define UNIT_TEST
 #endif
 
-#include "test_feedback.h" 
+#include "test_feedback.h"
 #include "test_indicator.h"
 
 void setUp(void) {
@@ -13,9 +13,10 @@ void setUp(void) {
 }
 
 void tearDown(void) {
+    // Nothing to clean up after each test
 }
 
-int main(){
+int main() {
 
     UNITY_BEGIN();
 
@@ -25,7 +26,6 @@ int main(){
     RUN_TEST(indicator_test_set_indicator_state);
     RUN_TEST(indicator_test_luminosity_clamping);
 
-
     RUN_TEST(feedback_test_initialization_success);
     RUN_TEST(feedback_test_initialization_failure_null_callback);
     RUN_TEST(feedback_test_initialization_failure_double_init);
@@ -33,5 +33,4 @@ int main(){
     RUN_TEST(feedback_test_state_persistence);
 
     return UNITY_END();
-
 }

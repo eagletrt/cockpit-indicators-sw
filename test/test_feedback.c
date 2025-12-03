@@ -74,13 +74,12 @@ void feedback_test_update_and_get_state(void) {
     // 1. Steering Wheel -> HIGH
     // 2. Mushroom Before -> LOW
     // 3. Mushroom After -> ERROR (simulate fault)
-    
+
     feedback_reset_mock(); // Reset mock struct
 
     mock_input_values[FEEDBACK_NAME_STEERING_WHEEL] = FEEDBACK_STATUS_HIGH;
     mock_input_values[FEEDBACK_NAME_MUSHROOM_BEFORE] = FEEDBACK_STATUS_LOW;
     mock_input_values[FEEDBACK_NAME_MUSHROOM_AFTER] = FEEDBACK_STATUS_ERROR;
-
 
     // Verify Initial States via getter (should be ERROR from init)
     TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_ERROR, feedback_get_state(FEEDBACK_NAME_STEERING_WHEEL), "Initial state should be ERROR");
@@ -120,4 +119,3 @@ void feedback_test_state_persistence(void) {
     // State should now be LOW
     TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_LOW, feedback_get_state(FEEDBACK_NAME_STEERING_WHEEL), "State should be LOW after update");
 }
-

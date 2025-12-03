@@ -9,7 +9,6 @@
 #include "unity.h"
 #include "feedback.h"
 
-
 /* Mocking functions used by the tests */
 enum FeedbackState mock_read_feedback(enum FeedbackName feedback);
 void feedback_reset_mock(void);
@@ -23,4 +22,3 @@ void feedback_test_update_and_get_state(void);
 void feedback_test_state_persistence(void);
 
 #endif /* TEST_TEST_FEEDBACK_H */
-

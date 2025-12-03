@@ -100,4 +100,3 @@ void indicator_test_luminosity_clamping(void) {
     indicators_set_luminosity(0);
     TEST_ASSERT_EQUAL_UINT8_MESSAGE(0, indicators_global_handler.luminosity, "Luminosity should be 0");
 }
-
