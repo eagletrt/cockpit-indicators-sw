@@ -1,4 +1,3 @@
-#include "test_config.h"
 #include "eagletrt.h"
 #include "test_feedback.h"
 #include "test_indicator.h"
