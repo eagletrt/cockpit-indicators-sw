@@ -1,3 +1,0 @@
-[submodule "libs/libeagletrt-sw"]
-	path = libs/libeagletrt-sw
-	url = git@github.com:eagletrt/libeagletrt-sw.git
