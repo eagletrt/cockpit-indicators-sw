@@ -11,11 +11,11 @@
  * \brief Enum for identifying indicators
  */
 enum IndicatorsName {
-    INDICATOR_NAME_AMS,
-    INDICATOR_NAME_IMD,
-    INDICATOR_NAME_TS_OFF,
-    INDICATOR_NAME_TSAL,
-    INDICATOR_NAME_COUNT
+    INDICATOR_NAME_AMS,    //!< AMS Indicator
+    INDICATOR_NAME_IMD,    //!< IMD Indicator
+    INDICATOR_NAME_TS_OFF, //!< TS_OFF Indicator
+    INDICATOR_NAME_TSAL,   //!< TSAL Indicator
+    INDICATOR_NAME_COUNT   //!< Total number of indicators
 };
 
 /*!

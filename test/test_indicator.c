@@ -5,13 +5,13 @@
 
 extern struct IndicatorsHandler indicators_global_handler;
 
-typedef struct {
+struct MockState {
     enum IndicatorsName last_indicator;
     uint8_t last_luminosity;
     int call_count;
-} MockState;
+};
 
-static MockState mock_state;
+static struct MockState mock_state;
 
 // MOCKING FUNCTIONS
 

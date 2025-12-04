@@ -17,21 +17,21 @@ enum FeedbackState {
 };
 
 /*!
- * \brief Enum for identifying feedback lines
+ * \brief Enum for identifying feedback lines, the names will be determined later when hardware is finalized
  */
 enum FeedbackName {
-    FEEDBACK_NAME_STEERING_WHEEL,
-    FEEDBACK_NAME_MUSHROOM_BEFORE,
-    FEEDBACK_NAME_MUSHROOM_AFTER,
-    FEEDBACK_NAME_COUNT
+    FEEDBACK_NAME_1,    //!< Feedback line 1
+    FEEDBACK_NAME_2,    //!< Feedback line 2
+    FEEDBACK_NAME_3,    //!< Feedback line 3
+    FEEDBACK_NAME_COUNT //!< Total number of feedback lines
 };
 
 /*!
  * \brief Possible return codes for feedback initialization function
  */
 enum FeedbackReturnCode {
-    FEEDBACK_RC_ERROR,
-    FEEDBACK_RC_OK
+    FEEDBACK_RC_ERROR, //!< Error during initialization
+    FEEDBACK_RC_OK     //!< Initialization successful
 };
 
 /*!
@@ -45,12 +45,9 @@ typedef enum FeedbackState (*read_feedback)(enum FeedbackName feedback);
  * \brief Struct that handles all relevant feedback information
  */
 struct FeedbackHandler {
-
-    read_feedback read_fb; //!< Function to read feedback line state
-
+    read_feedback read_fb;                                          //!< Function to read feedback line state
     volatile enum FeedbackState fb_line_state[FEEDBACK_NAME_COUNT]; //!< Feedback button state array
-
-    volatile bool initialized; //!< Indicates if the feedback handler has been initialized
+    volatile bool initialized;                                      //!< Indicates if the feedback handler has been initialized
 };
 
 /*!
