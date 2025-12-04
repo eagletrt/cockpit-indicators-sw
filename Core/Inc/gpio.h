@@ -38,7 +38,7 @@ extern "C" {
 /*
  * \brief  Wrapper function for feedback shutdown line reading
  * \param  feedback Enum indicating which feedback line to read 
- * \return true if high, false otherwise
+ * \return FeedbackState indicating the state of the feedback line
  */
 enum FeedbackState gpio_feedback_read(enum FeedbackName feedback);
 

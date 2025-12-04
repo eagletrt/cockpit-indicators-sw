@@ -4,7 +4,7 @@ EAGLETRT_STATIC struct IndicatorsHandler indicators_global_handler; // Private i
 
 bool indicators_init(indicator_set set_indicator_fct) {
 
-    if (set_indicator_fct == NULL || set_indicator_fct == NULL || indicators_global_handler.initialized) {
+    if (set_indicator_fct == NULL || indicators_global_handler.initialized) {
         return false;
     }
 

@@ -30,8 +30,8 @@ enum FeedbackName {
  * \brief Possible return codes for feedback initialization function
  */
 enum FeedbackReturnCode {
-    FEEDBACK_RC_ERROR, //!< Error during initialization
-    FEEDBACK_RC_OK     //!< Initialization successful
+    FEEDBACK_RC_OK,   //!< Initialization successful
+    FEEDBACK_RC_ERROR //!< Error during initialization
 };
 
 /*!
@@ -45,9 +45,9 @@ typedef enum FeedbackState (*read_feedback)(enum FeedbackName feedback);
  * \brief Struct that handles all relevant feedback information
  */
 struct FeedbackHandler {
-    read_feedback read_fb;                                          //!< Function to read feedback line state
-    volatile enum FeedbackState fb_line_state[FEEDBACK_NAME_COUNT]; //!< Feedback button state array
-    volatile bool initialized;                                      //!< Indicates if the feedback handler has been initialized
+    read_feedback read_fb;                                                   //!< Function to read feedback line state
+    EAGLETRT_VOLATILE enum FeedbackState fb_line_state[FEEDBACK_NAME_COUNT]; //!< Feedback button state array
+    EAGLETRT_VOLATILE bool initialized;                                      //!< Indicates if the feedback handler has been initialized
 };
 
 /*!
