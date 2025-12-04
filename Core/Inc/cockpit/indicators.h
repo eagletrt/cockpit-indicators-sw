@@ -11,11 +11,11 @@
  * \brief Enum for identifying indicators
  */
 enum IndicatorsName {
-    INDICATOR_NAME_AMS,    //!< AMS Indicator
-    INDICATOR_NAME_IMD,    //!< IMD Indicator
-    INDICATOR_NAME_TS_OFF, //!< TS_OFF Indicator
-    INDICATOR_NAME_TSAL,   //!< TSAL Indicator
-    INDICATOR_NAME_COUNT   //!< Total number of indicators
+    INDICATORS_NAME_AMS,    //!< AMS Indicator
+    INDICATORS_NAME_IMD,    //!< IMD Indicator
+    INDICATORS_NAME_TS_OFF, //!< TS_OFF Indicator
+    INDICATORS_NAME_TSAL,   //!< TSAL Indicator
+    INDICATORS_NAME_COUNT   //!< Total number of indicators
 };
 
 /*!
@@ -31,10 +31,10 @@ typedef void (*indicator_set)(enum IndicatorsName indicator, uint8_t luminosity)
  * \brief Struct that handles all relevant indicator information
  */
 struct IndicatorsHandler {
-    indicator_set set_indicator;      //!< Function to set AMS indicator
-    uint8_t luminosity;               //!< PWM value for all indicators (0-100)
-    bool state[INDICATOR_NAME_COUNT]; //!< State of each indicator (on/off)
-    bool initialized;                 //!< Indicates if the indicators handler has been initialized
+    indicator_set set_indicator;       //!< Function to set AMS indicator
+    uint8_t luminosity;                //!< PWM value for all indicators (0-100)
+    bool state[INDICATORS_NAME_COUNT]; //!< State of each indicator (on/off)
+    bool initialized;                  //!< Indicates if the indicators handler has been initialized
 };
 
 /*!

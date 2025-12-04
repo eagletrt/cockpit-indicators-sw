@@ -265,11 +265,11 @@ void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef *tim_baseHandle) {
 
 static TIM_HandleTypeDef *prv_tim_get_handle(enum IndicatorsName tim_name) {
     switch (tim_name) {
-        case INDICATOR_NAME_AMS:
-        case INDICATOR_NAME_IMD:
+        case INDICATORS_NAME_AMS:
+        case INDICATORS_NAME_IMD:
             return &htim1;
-        case INDICATOR_NAME_TS_OFF:
-        case INDICATOR_NAME_TSAL:
+        case INDICATORS_NAME_TS_OFF:
+        case INDICATORS_NAME_TSAL:
             return &htim3;
         default:
             return NULL;
@@ -278,13 +278,13 @@ static TIM_HandleTypeDef *prv_tim_get_handle(enum IndicatorsName tim_name) {
 
 static uint32_t prv_tim_get_channel(enum IndicatorsName tim_name) {
     switch (tim_name) {
-        case INDICATOR_NAME_AMS:
+        case INDICATORS_NAME_AMS:
             return TIM_CHANNEL_2;
-        case INDICATOR_NAME_IMD:
+        case INDICATORS_NAME_IMD:
             return TIM_CHANNEL_1;
-        case INDICATOR_NAME_TS_OFF:
+        case INDICATORS_NAME_TS_OFF:
             return TIM_CHANNEL_1;
-        case INDICATOR_NAME_TSAL:
+        case INDICATORS_NAME_TSAL:
             return TIM_CHANNEL_2;
         default:
             return 0;

@@ -10,10 +10,10 @@
  * \brief Possible return codes for POST functions
  */
 enum PostReturnCode {
-    POST_RC_OK,
-    POST_RC_UNINITIALIZED,
-    POST_RC_SETUP_ERROR,
-    POST_RC_INVALID_POINTER
+    POST_RC_OK,             //!< All tests passed
+    POST_RC_UNINITIALIZED,  //!< A module is uninitialized
+    POST_RC_SETUP_ERROR,    //!< A setup error is detected
+    POST_RC_INVALID_POINTER //!< A null pointer is provided
 };
 
 /*!

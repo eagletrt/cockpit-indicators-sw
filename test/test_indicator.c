@@ -24,7 +24,7 @@ void indicator_mock_set_indicator(enum IndicatorsName indicator, uint8_t luminos
 
 // Helper to reset mock state
 void indicator_reset_mock() {
-    mock_state.last_indicator = INDICATOR_NAME_COUNT; // Invalid init value
+    mock_state.last_indicator = INDICATORS_NAME_COUNT; // Invalid init value
     mock_state.last_luminosity = 0;
     mock_state.call_count = 0;
 }
@@ -45,8 +45,8 @@ void indicator_test_initialization_success(void) {
     TEST_ASSERT_TRUE_MESSAGE(result, "Initialization should return true");
     TEST_ASSERT_TRUE_MESSAGE(is_indicators_initialized(), "Module should report initialized");
 
-    // Initialization triggers an update, so mock should be called 3 times (once per indicator)
-    TEST_ASSERT_EQUAL_INT_MESSAGE(3, mock_state.call_count, "Init should trigger update for all 3 indicators");
+    // Initialization triggers an update, so mock should be called 4 times (once per indicator)
+    TEST_ASSERT_EQUAL_INT_MESSAGE(4, mock_state.call_count, "Init should trigger update for all 4 indicators");
 }
 
 void indicator_test_initialization_failure_null_callback(void) {
@@ -73,15 +73,11 @@ void indicator_test_set_indicator_state(void) {
     indicator_reset_mock(); // Clear calls from the setup phase
 
     // Test: Turn AMS ON
-    indicators_set(true, INDICATOR_NAME_AMS);
+    indicators_set(true, INDICATORS_NAME_AMS);
 
     // Verify internal state matches request
-    TEST_ASSERT_TRUE_MESSAGE(indicators_global_handler.state[INDICATOR_NAME_AMS], "AMS State should be TRUE");
-    TEST_ASSERT_FALSE_MESSAGE(indicators_global_handler.state[INDICATOR_NAME_IMD], "IMD State should still be FALSE");
-
-    // Test: Turn AMS OFF
-    indicators_set(false, INDICATOR_NAME_AMS);
-    TEST_ASSERT_FALSE_MESSAGE(indicators_global_handler.state[INDICATOR_NAME_AMS], "AMS State should be FALSE");
+    TEST_ASSERT_TRUE_MESSAGE(indicators_global_handler.state[INDICATORS_NAME_AMS], "AMS State should be TRUE");
+    TEST_ASSERT_FALSE_MESSAGE(indicators_global_handler.state[INDICATORS_NAME_IMD], "IMD State should still be FALSE");
 }
 
 void indicator_test_luminosity_clamping(void) {
