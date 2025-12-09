@@ -32,10 +32,10 @@ enum PostReturnCode post_run_power_on_tests(struct PostInitData *init_data) {
     feedback_update_state();
 
     // Check if feedback module is initialized
-    if (feedback_get_state(FEEDBACK_NAME_3) == FEEDBACK_STATUS_ERROR || feedback_get_state(FEEDBACK_NAME_2) == FEEDBACK_STATUS_ERROR || feedback_get_state(FEEDBACK_NAME_1) == FEEDBACK_STATUS_ERROR) {
+    if (feedback_get_state(FEEDBACK_MUSHROOM_AFTER) == FEEDBACK_STATUS_ERROR || feedback_get_state(FEEDBACK_MUSHROOM_BEFORE) == FEEDBACK_STATUS_ERROR || feedback_get_state(FEEDBACK_STEERING_WHEEL) == FEEDBACK_STATUS_ERROR) {
         return POST_RC_UNINITIALIZED;
     }
-    if (feedback_get_state(FEEDBACK_NAME_3) == FEEDBACK_STATUS_LOW || feedback_get_state(FEEDBACK_NAME_2) == FEEDBACK_STATUS_LOW || feedback_get_state(FEEDBACK_NAME_1) == FEEDBACK_STATUS_LOW) {
+    if (feedback_get_state(FEEDBACK_MUSHROOM_AFTER) == FEEDBACK_STATUS_LOW || feedback_get_state(FEEDBACK_MUSHROOM_BEFORE) == FEEDBACK_STATUS_LOW || feedback_get_state(FEEDBACK_STEERING_WHEEL) == FEEDBACK_STATUS_LOW) {
         // At least one mushroom button is pressed during initialization
         return POST_RC_SETUP_ERROR;
     }

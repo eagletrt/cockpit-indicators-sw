@@ -65,11 +65,11 @@ void MX_GPIO_Init(void) {
 
 static GPIO_TypeDef *prv_gpio_get_port_from_feedback_name(enum FeedbackName feedback) {
     switch (feedback) {
-        case FEEDBACK_NAME_1:
+        case FEEDBACK_STEERING_WHEEL:
             return SW_SD_GPIO_Port;
-        case FEEDBACK_NAME_2:
+        case FEEDBACK_MUSHROOM_BEFORE:
             return SHUTD_1_GPIO_Port;
-        case FEEDBACK_NAME_3:
+        case FEEDBACK_MUSHROOM_AFTER:
             return SHTD_2_GPIO_Port;
         default:
             return NULL;
@@ -78,11 +78,11 @@ static GPIO_TypeDef *prv_gpio_get_port_from_feedback_name(enum FeedbackName feed
 
 static int16_t prv_gpio_get_pin_from_feedback_name(enum FeedbackName feedback) {
     switch (feedback) {
-        case FEEDBACK_NAME_1:
+        case FEEDBACK_STEERING_WHEEL:
             return SW_SD_Pin;
-        case FEEDBACK_NAME_2:
+        case FEEDBACK_MUSHROOM_BEFORE:
             return SHUTD_1_Pin;
-        case FEEDBACK_NAME_3:
+        case FEEDBACK_MUSHROOM_AFTER:
             return SHTD_2_Pin;
         default:
             return -1;
