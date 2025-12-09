@@ -19,9 +19,15 @@ void indicator_reset_module_state(void);
 
 /* Test function prototypes */
 void indicator_test_initialization_success(void);
+void indicator_test_initialization_check(void);
 void indicator_test_initialization_failure_null_callback(void);
 void indicator_test_initialization_failure_double_init(void);
-void indicator_test_set_indicator_state(void);
+void indicator_test_initialization_state(void);
+void indicator_test_set_indicator_state(enum IndicatorsName indicator);
+void indicator_test_set_indicator_state_IMD(void);
+void indicator_test_set_indicator_state_AMS(void);
+void indicator_test_set_indicator_state_TS_OFF(void);
+void indicator_test_set_indicator_state_TSAL(void);
 void indicator_test_luminosity_set(void);
 void indicator_test_luminosity_clamping(void);
 
