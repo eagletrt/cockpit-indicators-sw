@@ -18,7 +18,7 @@ void feedback_reset_module_state(void);
 void feedback_test_initialization_success(void);
 void feedback_test_initialization_failure_null_callback(void);
 void feedback_test_initialization_failure_double_init(void);
-void feedback_test_update_and_get_state(void);
+void feedback_test_get_state(void);
 void feedback_test_state_persistence(void);
 
 #endif /* TEST_TEST_FEEDBACK_H */

@@ -80,19 +80,23 @@ void indicator_test_set_indicator_state(void) {
     TEST_ASSERT_FALSE_MESSAGE(indicators_global_handler.state[INDICATORS_NAME_IMD], "IMD State should still be FALSE");
 }
 
+void indicator_test_luminosity_set(void) {
+    indicators_init(indicator_mock_set_indicator);
+    indicator_reset_mock();
+
+    // Test: Set valid luminosities
+    indicators_set_luminosity(80);
+    TEST_ASSERT_EQUAL_UINT8_MESSAGE(80, indicators_global_handler.luminosity, "Luminosity should be 80");
+
+    indicators_set_luminosity(0);
+    TEST_ASSERT_EQUAL_UINT8_MESSAGE(0, indicators_global_handler.luminosity, "Luminosity should be 0");
+}
+
 void indicator_test_luminosity_clamping(void) {
     indicators_init(indicator_mock_set_indicator);
     indicator_reset_mock();
 
-    // Test: Set valid luminosity
-    indicators_set_luminosity(80);
-    TEST_ASSERT_EQUAL_UINT8_MESSAGE(80, indicators_global_handler.luminosity, "Luminosity should be 80");
-
-    // Test: Set overflow luminosity (>100)
+    // Test: Set luminosity above 100
     indicators_set_luminosity(150);
-    TEST_ASSERT_EQUAL_UINT8_MESSAGE(100, indicators_global_handler.luminosity, "Luminosity should clamp to 100");
-
-    // Test: Set 0
-    indicators_set_luminosity(0);
-    TEST_ASSERT_EQUAL_UINT8_MESSAGE(0, indicators_global_handler.luminosity, "Luminosity should be 0");
+    TEST_ASSERT_EQUAL_UINT8_MESSAGE(100, indicators_global_handler.luminosity, "Luminosity should be clamped to 100");
 }

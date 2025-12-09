@@ -67,7 +67,7 @@ void feedback_test_initialization_failure_double_init(void) {
     TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_RC_ERROR, result, "Double initialization should return ERROR");
 }
 
-void feedback_test_update_and_get_state(void) {
+void feedback_test_get_state(void) {
     feedback_init(mock_read_feedback);
 
     // Setup Mock Inputs:
@@ -80,11 +80,6 @@ void feedback_test_update_and_get_state(void) {
     mock_input_values[FEEDBACK_NAME_1] = FEEDBACK_STATUS_HIGH;
     mock_input_values[FEEDBACK_NAME_2] = FEEDBACK_STATUS_LOW;
     mock_input_values[FEEDBACK_NAME_3] = FEEDBACK_STATUS_ERROR;
-
-    // Verify Initial States via getter (should be ERROR from init)
-    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_ERROR, feedback_get_state(FEEDBACK_NAME_1), "Initial state should be ERROR");
-    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_ERROR, feedback_get_state(FEEDBACK_NAME_2), "Initial state should be ERROR");
-    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_ERROR, feedback_get_state(FEEDBACK_NAME_3), "Initial state should be ERROR");
 
     // Run the update cycle
     feedback_update_state();

@@ -22,6 +22,7 @@ void indicator_test_initialization_success(void);
 void indicator_test_initialization_failure_null_callback(void);
 void indicator_test_initialization_failure_double_init(void);
 void indicator_test_set_indicator_state(void);
+void indicator_test_luminosity_set(void);
 void indicator_test_luminosity_clamping(void);
 
 #endif /* TEST_TEST_INDICATOR_H */
