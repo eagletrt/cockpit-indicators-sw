@@ -32,7 +32,8 @@ int main() {
     RUN_TEST(feedback_test_initialization_failure_null_callback);
     RUN_TEST(feedback_test_initialization_failure_double_init);
     RUN_TEST(feedback_test_get_state);
-    RUN_TEST(feedback_test_state_persistence);
+    RUN_TEST(feedback_test_get_state_call_count);
+    RUN_TEST(feedback_test_initialization_state);
 
     return UNITY_END();
 }

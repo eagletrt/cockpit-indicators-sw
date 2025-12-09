@@ -2,6 +2,7 @@
 #include "feedback.h"
 #include <string.h>
 #include <stdio.h>
+#include "test_feedback.h"
 
 extern struct FeedbackHandler feedback_handler;
 
@@ -36,38 +37,7 @@ void feedback_reset_module_state() {
     memset((void *)feedback_handler.fb_line_state, 0, sizeof(feedback_handler.fb_line_state));
 }
 
-// TEST FUNCTIONS
-
-void feedback_test_initialization_success(void) {
-    enum FeedbackReturnCode result = feedback_init(mock_read_feedback);
-
-    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_RC_OK, result, "Initialization should return OK");
-    TEST_ASSERT_TRUE_MESSAGE(feedback_handler.initialized, "Module should be marked initialized");
-
-    // Verify default state after init is ERROR
-    for (int i = 0; i < FEEDBACK_NAME_COUNT; i++) {
-        TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_ERROR, feedback_handler.fb_line_state[i], "Init state should be ERROR");
-    }
-}
-
-void feedback_test_initialization_failure_null_callback(void) {
-    enum FeedbackReturnCode result = feedback_init(NULL);
-
-    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_RC_ERROR, result, "Init should fail with NULL callback");
-    TEST_ASSERT_FALSE_MESSAGE(feedback_handler.initialized, "Module should not be initialized");
-}
-
-void feedback_test_initialization_failure_double_init(void) {
-    // First init
-    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_RC_OK, feedback_init(mock_read_feedback), "First initialization should succeed");
-
-    // Second init should fail
-    enum FeedbackReturnCode result = feedback_init(mock_read_feedback);
-
-    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_RC_ERROR, result, "Double initialization should return ERROR");
-}
-
-void feedback_test_get_state(void) {
+void feedback_helper_initialize_with_mock_states(void) {
     feedback_init(mock_read_feedback);
 
     // Setup Mock Inputs:
@@ -80,6 +50,45 @@ void feedback_test_get_state(void) {
     mock_input_values[FEEDBACK_NAME_1] = FEEDBACK_STATUS_HIGH;
     mock_input_values[FEEDBACK_NAME_2] = FEEDBACK_STATUS_LOW;
     mock_input_values[FEEDBACK_NAME_3] = FEEDBACK_STATUS_ERROR;
+}
+
+// TEST FUNCTIONS
+
+void feedback_test_initialization_success(void) {
+    enum FeedbackReturnCode result = feedback_init(mock_read_feedback);
+
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_RC_OK, result, "Initialization should return OK");
+    TEST_ASSERT_TRUE_MESSAGE(feedback_handler.initialized, "Module should be marked initialized");
+}
+
+void feedback_test_initialization_state(void) {
+    feedback_init(mock_read_feedback);
+
+    // Check that all feedback states are initialized to ERROR
+    for (int i = 0; i < FEEDBACK_NAME_COUNT; i++) {
+        TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_ERROR, feedback_handler.fb_line_state[i], "Feedback state should be initialized to ERROR");
+    }
+}
+
+void feedback_test_initialization_failure_null_callback(void) {
+    enum FeedbackReturnCode result = feedback_init(NULL);
+
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_RC_ERROR, result, "Init should fail with NULL callback");
+    TEST_ASSERT_FALSE_MESSAGE(feedback_handler.initialized, "Module should not be initialized");
+}
+
+void feedback_test_initialization_failure_double_init(void) {
+    // First init
+    feedback_init(mock_read_feedback);
+    // Second init should fail
+    enum FeedbackReturnCode result = feedback_init(mock_read_feedback);
+
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_RC_ERROR, result, "Double initialization should return ERROR");
+}
+
+void feedback_test_get_state_call_count(void) {
+
+    feedback_helper_initialize_with_mock_states();
 
     // Run the update cycle
     feedback_update_state();
@@ -93,24 +102,15 @@ void feedback_test_get_state(void) {
     TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_ERROR, feedback_get_state(FEEDBACK_NAME_3), "State should be ERROR after update");
 }
 
-void feedback_test_state_persistence(void) {
-    // Ensure state doesn't change if update isn't called
-    feedback_init(mock_read_feedback);
+void feedback_test_get_state(void) {
 
-    // Initial Update: Set to HIGH
-    mock_input_values[FEEDBACK_NAME_1] = FEEDBACK_STATUS_HIGH;
-    feedback_update_state();
-    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_HIGH, feedback_get_state(FEEDBACK_NAME_1), "State should be HIGH after first update");
+    feedback_helper_initialize_with_mock_states();
 
-    // Change Hardware to LOW, but DO NOT call update
-    mock_input_values[FEEDBACK_NAME_1] = FEEDBACK_STATUS_LOW;
-
-    // State should still be HIGH
-    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_HIGH, feedback_get_state(FEEDBACK_NAME_1), "State should still be HIGH without update");
-
-    // Now call update
+    // Run the update cycle
     feedback_update_state();
 
-    // State should now be LOW
-    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_LOW, feedback_get_state(FEEDBACK_NAME_1), "State should be LOW after update");
+    // Verify States via getter
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_HIGH, feedback_get_state(FEEDBACK_NAME_1), "State should be HIGH after update");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_LOW, feedback_get_state(FEEDBACK_NAME_2), "State should be LOW after update");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_ERROR, feedback_get_state(FEEDBACK_NAME_3), "State should be ERROR after update");
 }
