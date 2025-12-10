@@ -47,9 +47,9 @@ void feedback_helper_initialize_with_mock_states(void) {
 
     feedback_reset_mock(); // Reset mock struct
 
-    mock_input_values[FEEDBACK_STEERING_WHEEL] = FEEDBACK_STATUS_HIGH;
-    mock_input_values[FEEDBACK_MUSHROOM_BEFORE] = FEEDBACK_STATUS_LOW;
-    mock_input_values[FEEDBACK_MUSHROOM_AFTER] = FEEDBACK_STATUS_ERROR;
+    mock_input_values[FEEDBACK_NAME_STEERING_WHEEL] = FEEDBACK_STATUS_HIGH;
+    mock_input_values[FEEDBACK_NAME_MUSHROOM_BEFORE] = FEEDBACK_STATUS_LOW;
+    mock_input_values[FEEDBACK_NAME_MUSHROOM_AFTER] = FEEDBACK_STATUS_ERROR;
 }
 
 // TEST FUNCTIONS
@@ -97,9 +97,9 @@ void feedback_test_get_state_call_count(void) {
     TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_NAME_COUNT, mock_call_count, "Update should poll all sensors");
 
     // Verify States via getter
-    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_HIGH, feedback_get_state(FEEDBACK_STEERING_WHEEL), "State should be HIGH after update");
-    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_LOW, feedback_get_state(FEEDBACK_MUSHROOM_BEFORE), "State should be LOW after update");
-    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_ERROR, feedback_get_state(FEEDBACK_MUSHROOM_AFTER), "State should be ERROR after update");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_HIGH, feedback_get_state(FEEDBACK_NAME_STEERING_WHEEL), "State should be HIGH after update");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_LOW, feedback_get_state(FEEDBACK_NAME_MUSHROOM_BEFORE), "State should be LOW after update");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_ERROR, feedback_get_state(FEEDBACK_NAME_MUSHROOM_AFTER), "State should be ERROR after update");
 }
 
 void feedback_test_get_state(void) {
@@ -110,7 +110,7 @@ void feedback_test_get_state(void) {
     feedback_update_state();
 
     // Verify States via getter
-    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_HIGH, feedback_get_state(FEEDBACK_STEERING_WHEEL), "State should be HIGH after update");
-    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_LOW, feedback_get_state(FEEDBACK_MUSHROOM_BEFORE), "State should be LOW after update");
-    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_ERROR, feedback_get_state(FEEDBACK_MUSHROOM_AFTER), "State should be ERROR after update");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_HIGH, feedback_get_state(FEEDBACK_NAME_STEERING_WHEEL), "State should be HIGH after update");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_LOW, feedback_get_state(FEEDBACK_NAME_MUSHROOM_BEFORE), "State should be LOW after update");
+    TEST_ASSERT_EQUAL_INT_MESSAGE(FEEDBACK_STATUS_ERROR, feedback_get_state(FEEDBACK_NAME_MUSHROOM_AFTER), "State should be ERROR after update");
 }

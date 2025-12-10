@@ -112,13 +112,13 @@ fsm_state_t fsm_do_idle(fsm_state_data_t *data) {
     indicators_update();
     feedback_update_state();
 
-    if (feedback_get_state(FEEDBACK_STEERING_WHEEL) == FEEDBACK_STATUS_LOW) {
+    if (feedback_get_state(FEEDBACK_NAME_STEERING_WHEEL) == FEEDBACK_STATUS_LOW) {
         // Line 1 low
     }
-    if (feedback_get_state(FEEDBACK_MUSHROOM_BEFORE) == FEEDBACK_STATUS_LOW) {
+    if (feedback_get_state(FEEDBACK_NAME_MUSHROOM_BEFORE) == FEEDBACK_STATUS_LOW) {
         // Line 2 low
     }
-    if (feedback_get_state(FEEDBACK_MUSHROOM_AFTER) == FEEDBACK_STATUS_LOW) {
+    if (feedback_get_state(FEEDBACK_NAME_MUSHROOM_AFTER) == FEEDBACK_STATUS_LOW) {
         // Line 3 low
     }
 

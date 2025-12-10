@@ -20,10 +20,10 @@ enum FeedbackState {
  * \brief Enum for identifying feedback lines, the names will be determined later when hardware is finalized
  */
 enum FeedbackName {
-    FEEDBACK_STEERING_WHEEL,  //!< Feedback mushroom for the steering wheel
-    FEEDBACK_MUSHROOM_BEFORE, //!< Feedback mushroom before line
-    FEEDBACK_MUSHROOM_AFTER,  //!< Feedback mushroom after line
-    FEEDBACK_NAME_COUNT       //!< Total number of feedback lines
+    FEEDBACK_NAME_STEERING_WHEEL,  //!< Feedback mushroom for the steering wheel
+    FEEDBACK_NAME_MUSHROOM_BEFORE, //!< Feedback mushroom before line
+    FEEDBACK_NAME_MUSHROOM_AFTER,  //!< Feedback mushroom after line
+    FEEDBACK_NAME_COUNT            //!< Total number of feedback lines
 };
 
 /*!
