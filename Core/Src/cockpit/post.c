@@ -2,13 +2,7 @@
 
 enum PostReturnCode post_run_power_on_tests(struct PostInitData *init_data) {
 
-    if (init_data == NULL || init_data->tim_post_function == NULL) {
-        return POST_RC_INVALID_POINTER;
-    }
-    if (init_data->fb_read == NULL) {
-        return POST_RC_INVALID_POINTER;
-    }
-    if (init_data->indicator_set == NULL) {
+    if (init_data == NULL || init_data->tim_post_function == NULL || init_data->indicator_set == NULL || init_data->fb_read == NULL) {
         return POST_RC_INVALID_POINTER;
     }
 
