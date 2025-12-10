@@ -48,14 +48,14 @@ void MX_GPIO_Init(void) {
     __HAL_RCC_GPIOC_CLK_ENABLE();
     __HAL_RCC_GPIOA_CLK_ENABLE();
 
-    /*Configure GPIO pin : SW_SD_Pin */
-    GPIO_InitStruct.Pin = SW_SD_Pin;
+    /*Configure GPIO pin : SHUTDOWN_LINE_STEERING_WHEEL_Pin */
+    GPIO_InitStruct.Pin = SHUTDOWN_LINE_STEERING_WHEEL_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(SW_SD_GPIO_Port, &GPIO_InitStruct);
+    HAL_GPIO_Init(SHUTDOWN_LINE_STEERING_WHEEL_GPIO_Port, &GPIO_InitStruct);
 
-    /*Configure GPIO pins : SHUTD_1_Pin SHTD_2_Pin */
-    GPIO_InitStruct.Pin = SHUTD_1_Pin | SHTD_2_Pin;
+    /*Configure GPIO pins : SHUTDOWN_LINE_BEFORE_Pin SHUTDOWN_LINE_AFTER_Pin */
+    GPIO_InitStruct.Pin = SHUTDOWN_LINE_BEFORE_Pin | SHUTDOWN_LINE_AFTER_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
@@ -66,11 +66,11 @@ void MX_GPIO_Init(void) {
 static GPIO_TypeDef *prv_gpio_get_port_from_feedback_name(enum FeedbackName feedback) {
     switch (feedback) {
         case FEEDBACK_STEERING_WHEEL:
-            return SW_SD_GPIO_Port;
+            return SHUTDOWN_LINE_STEERING_WHEEL_GPIO_Port;
         case FEEDBACK_MUSHROOM_BEFORE:
-            return SHUTD_1_GPIO_Port;
+            return SHUTDOWN_LINE_BEFORE_GPIO_Port;
         case FEEDBACK_MUSHROOM_AFTER:
-            return SHTD_2_GPIO_Port;
+            return SHUTDOWN_LINE_AFTER_GPIO_Port;
         default:
             return NULL;
     };
@@ -79,11 +79,11 @@ static GPIO_TypeDef *prv_gpio_get_port_from_feedback_name(enum FeedbackName feed
 static int16_t prv_gpio_get_pin_from_feedback_name(enum FeedbackName feedback) {
     switch (feedback) {
         case FEEDBACK_STEERING_WHEEL:
-            return SW_SD_Pin;
+            return SHUTDOWN_LINE_STEERING_WHEEL_Pin;
         case FEEDBACK_MUSHROOM_BEFORE:
-            return SHUTD_1_Pin;
+            return SHUTDOWN_LINE_BEFORE_Pin;
         case FEEDBACK_MUSHROOM_AFTER:
-            return SHTD_2_Pin;
+            return SHUTDOWN_LINE_AFTER_Pin;
         default:
             return -1;
     };

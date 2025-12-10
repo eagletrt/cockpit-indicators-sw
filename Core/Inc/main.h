@@ -57,12 +57,12 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define SW_SD_Pin GPIO_PIN_7
-#define SW_SD_GPIO_Port GPIOB
-#define SHUTD_1_Pin GPIO_PIN_2
-#define SHUTD_1_GPIO_Port GPIOA
-#define SHTD_2_Pin GPIO_PIN_3
-#define SHTD_2_GPIO_Port GPIOA
+#define SHUTDOWN_LINE_STEERING_WHEEL_Pin GPIO_PIN_7
+#define SHUTDOWN_LINE_STEERING_WHEEL_GPIO_Port GPIOB
+#define SHUTDOWN_LINE_BEFORE_Pin GPIO_PIN_2
+#define SHUTDOWN_LINE_BEFORE_GPIO_Port GPIOA
+#define SHUTDOWN_LINE_AFTER_Pin GPIO_PIN_3
+#define SHUTDOWN_LINE_AFTER_GPIO_Port GPIOA
 #define AMS_Pin GPIO_PIN_4
 #define AMS_GPIO_Port GPIOA
 #define IMD_Pin GPIO_PIN_5
