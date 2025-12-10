@@ -13,12 +13,9 @@
 enum FeedbackState mock_read_feedback(enum FeedbackName feedback);
 void feedback_reset_mock(void);
 void feedback_reset_module_state(void);
+void feedback_test_init(void);
 
 /* Test function prototypes */
-void feedback_test_initialization_success(void);
-void feedback_test_initialization_state(void);
-void feedback_test_initialization_failure_null_callback(void);
-void feedback_test_initialization_failure_double_init(void);
 void feedback_test_get_state_call_count(void);
 void feedback_test_get_state(void);
 

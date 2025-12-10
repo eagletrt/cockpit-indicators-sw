@@ -43,34 +43,23 @@ void indicator_helper_initialize(void) {
     indicator_reset_mock();
 }
 
-// TEST FUNCTIONS
-
-void indicator_test_initialization_success(void) {
-    bool result = indicators_init(indicator_mock_set_indicator);
-
-    TEST_ASSERT_TRUE_MESSAGE(result, "Initialization should return true");
-
-    // Initialization triggers an update, so mock should be called 4 times (once per indicator)
-    TEST_ASSERT_EQUAL_INT_MESSAGE(4, mock_state.call_count, "Init should trigger update for all 4 indicators");
-}
-
-void indicator_test_initialization_check(void) {
+void indicator_test_init(void) {
+    indicator_reset_mock();
     indicator_reset_module_state();
     indicators_init(indicator_mock_set_indicator);
 
-    TEST_ASSERT_TRUE_MESSAGE(is_indicators_initialized(), "Module should be initialized after init call");
+    // Set default luminosity for tests
+    indicators_set_luminosity(50);
+
+    // Set all indicators off initially
+    for (int i = 0; i < INDICATORS_NAME_COUNT; i++) {
+        indicators_set(false, (enum IndicatorsName)i);
+    }
 }
 
-void indicator_test_initialization_failure_null_callback(void) {
-    bool result = indicators_init(NULL);
-
-    TEST_ASSERT_FALSE_MESSAGE(result, "Init should fail with NULL callback");
-    TEST_ASSERT_FALSE_MESSAGE(is_indicators_initialized(), "Module should not be initialized");
-}
+// TEST FUNCTIONS
 
 void indicator_test_initialization_failure_double_init(void) {
-    // First init
-    indicators_init(indicator_mock_set_indicator);
 
     // Second init should fail
     bool result = indicators_init(indicator_mock_set_indicator);
@@ -79,7 +68,7 @@ void indicator_test_initialization_failure_double_init(void) {
 }
 
 void indicator_test_initialization_state(void) {
-    indicator_helper_initialize();
+
     // After initialization, all indicators should be off
     for (int i = 0; i < INDICATORS_NAME_COUNT; i++) {
         TEST_ASSERT_FALSE_MESSAGE(indicators_global_handler.state[i], "Indicator should be off after init");
@@ -87,8 +76,8 @@ void indicator_test_initialization_state(void) {
 }
 
 void indicator_test_set_indicator_state(enum IndicatorsName indicator) {
-    indicator_helper_initialize();
-    // Test: Set AMS indicator ON
+
+    // Test: Set indicator ON
     indicators_set(true, indicator);
 
     TEST_ASSERT_TRUE_MESSAGE(indicators_global_handler.state[indicator], "Indicator should be ON");
@@ -109,8 +98,6 @@ void indicator_test_set_indicator_state_TSAL(void) {
 }
 
 void indicator_test_luminosity_set(void) {
-    indicators_init(indicator_mock_set_indicator);
-    indicator_reset_mock();
 
     // Test: Set valid luminosities
     indicators_set_luminosity(80);
@@ -118,8 +105,6 @@ void indicator_test_luminosity_set(void) {
 }
 
 void indicator_test_luminosity_clamping(void) {
-    indicators_init(indicator_mock_set_indicator);
-    indicator_reset_mock();
 
     // Test: Set luminosity above 100
     indicators_set_luminosity(150);

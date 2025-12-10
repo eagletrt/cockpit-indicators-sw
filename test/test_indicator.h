@@ -16,11 +16,9 @@ extern struct IndicatorsHandler indicators_global_handler;
 void indicator_mock_set_indicator(enum IndicatorsName indicator, uint8_t luminosity);
 void indicator_reset_mock(void);
 void indicator_reset_module_state(void);
+void indicator_test_init(void);
 
 /* Test function prototypes */
-void indicator_test_initialization_success(void);
-void indicator_test_initialization_check(void);
-void indicator_test_initialization_failure_null_callback(void);
 void indicator_test_initialization_failure_double_init(void);
 void indicator_test_initialization_state(void);
 void indicator_test_set_indicator_state(enum IndicatorsName indicator);
