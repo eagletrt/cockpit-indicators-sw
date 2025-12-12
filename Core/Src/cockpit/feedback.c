@@ -9,6 +9,7 @@ enum FeedbackReturnCode feedback_init(read_feedback fb_read) {
     }
 
     feedback_handler.read_fb = fb_read;
+
     // Initialize feedback states to ERROR to indicate uninitialized state
     for (int i = 0; i < FEEDBACK_NAME_COUNT; i++) {
         feedback_handler.fb_line_state[i] = FEEDBACK_STATUS_ERROR;

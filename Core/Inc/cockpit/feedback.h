@@ -8,7 +8,7 @@
 #include "eagletrt.h"
 
 /*!
- * \brief Possible return codes for feedback functions
+ * \brief Possible return codes for feedback status functions
  */
 enum FeedbackState {
     FEEDBACK_STATUS_LOW,  //!< Feedback line is low
@@ -17,7 +17,7 @@ enum FeedbackState {
 };
 
 /*!
- * \brief Enum for identifying feedback lines, the names will be determined later when hardware is finalized
+ * \brief Enum for identifying feedback lines
  */
 enum FeedbackName {
     FEEDBACK_NAME_STEERING_WHEEL,  //!< Feedback mushroom for the steering wheel
@@ -37,7 +37,7 @@ enum FeedbackReturnCode {
 /*!
  * \brief Function signature for reading feedback state
  * \param feedback Enum indicating which feedback line to read
- * \return true if pressed, false otherwise
+ * \return FeedbackState indicating the state of the feedback line
  */
 typedef enum FeedbackState (*read_feedback)(enum FeedbackName feedback);
 

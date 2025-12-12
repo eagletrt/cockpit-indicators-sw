@@ -18,6 +18,7 @@ enum PostReturnCode {
 
 /*!
  * \brief Function signature for TIM module POST check
+ * \return true if TIM module is operational, false otherwise
  */
 typedef bool (*tim_post)(void);
 

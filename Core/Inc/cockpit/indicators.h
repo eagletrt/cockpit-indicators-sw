@@ -31,14 +31,14 @@ typedef void (*indicator_set)(enum IndicatorsName indicator, uint8_t luminosity)
  * \brief Struct that handles all relevant indicator information
  */
 struct IndicatorsHandler {
-    indicator_set set_indicator;       //!< Function to set AMS indicator
+    indicator_set set_indicator;       //!< Function to set indicators
     uint8_t luminosity;                //!< PWM value for all indicators (0-100)
     bool state[INDICATORS_NAME_COUNT]; //!< State of each indicator (on/off)
     bool initialized;                  //!< Indicates if the indicators handler has been initialized
 };
 
 /*!
- * \brief Initialize the indicators to OFF state.
+ * \brief Initialize the indicator module and sets them to OFF state.
  * \param set_indicator_fct Function pointer to set an indicator's PWM value.
  * 
  * \retval True if initialization is successful, else false
@@ -57,14 +57,14 @@ bool is_indicators_initialized(void);
 void indicators_update(void);
 
 /*!
- * \brief Change the AMS indicator state.
+ * \brief Change the specified indicator state and updates all indicators.
  * \param state true to turn on, false to turn off
  * \param indicator The indicator to change
  */
 void indicators_set(bool state, enum IndicatorsName indicator);
 
 /*!
- * \brief Change pwm value of all indicators.
+ * \brief Change pwm value of all indicators and updates all indicators.
  * \param luminosity The PWM value to set for all indicators (0-100).
 */
 void indicators_set_luminosity(uint8_t luminosity);

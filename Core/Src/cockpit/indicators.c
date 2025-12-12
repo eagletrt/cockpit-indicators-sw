@@ -4,12 +4,14 @@ EAGLETRT_STATIC struct IndicatorsHandler indicators_global_handler; // Private i
 
 bool indicators_init(indicator_set set_indicator_fct) {
 
+    // Prevent double initialization or null function pointer
     if (set_indicator_fct == NULL || indicators_global_handler.initialized) {
         return false;
     }
 
     indicators_global_handler.set_indicator = set_indicator_fct;
 
+    // Initialize all indicators to OFF state
     for (int i = 0; i < INDICATORS_NAME_COUNT; i++) {
         indicators_global_handler.state[i] = false;
     }
