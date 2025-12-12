@@ -3,8 +3,8 @@
  * `test/test_indicator.c`.
  */
 
-#ifndef TEST_TEST_INDICATOR_H
-#define TEST_TEST_INDICATOR_H
+#ifndef TEST_INDICATOR_H
+#define TEST_INDICATOR_H
 
 #include "unity.h"
 #include "indicators.h"
@@ -29,4 +29,4 @@ void indicator_test_set_indicator_state_TSAL(void);
 void indicator_test_luminosity_set(void);
 void indicator_test_luminosity_clamping(void);
 
-#endif /* TEST_TEST_INDICATOR_H */
+#endif /* TEST_INDICATOR_H */

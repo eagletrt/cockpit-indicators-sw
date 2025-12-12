@@ -3,8 +3,8 @@
  * `test/test_feedback.c`.
  */
 
-#ifndef TEST_TEST_FEEDBACK_H
-#define TEST_TEST_FEEDBACK_H
+#ifndef TEST_FEEDBACK_H
+#define TEST_FEEDBACK_H
 
 #include "unity.h"
 #include "feedback.h"
@@ -19,4 +19,4 @@ void feedback_test_init(void);
 void feedback_test_get_state_call_count(void);
 void feedback_test_get_state(void);
 
-#endif /* TEST_TEST_FEEDBACK_H */
+#endif /* TEST_FEEDBACK_H */
