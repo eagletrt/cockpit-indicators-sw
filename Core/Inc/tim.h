@@ -29,29 +29,37 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
-
+#include <stdbool.h>
+#include "indicators.h"
 /* USER CODE END Includes */
 
 extern TIM_HandleTypeDef htim1;
 
-extern TIM_HandleTypeDef htim2;
-
 extern TIM_HandleTypeDef htim3;
-
-extern TIM_HandleTypeDef htim16;
 
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
 
 void MX_TIM1_Init(void);
-void MX_TIM2_Init(void);
 void MX_TIM3_Init(void);
-void MX_TIM16_Init(void);
 
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
 /* USER CODE BEGIN Prototypes */
+
+/*!
+ * \brief Set PWM value for a given indicator.
+ * \param indicator The indicator to set.
+ * \param luminosity PWM value to set (0-100).
+ */
+void tim_set_pwm(enum IndicatorsName indicator, uint8_t luminosity);
+
+/*!
+ * \brief Check if TIM module is initialized correctly.
+ * \retval True if initialized, else false
+ */
+bool tim_test_timers_initialized(void);
 
 /* USER CODE END Prototypes */
 

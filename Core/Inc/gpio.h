@@ -29,10 +29,18 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
-
+#include <stdbool.h>
+#include "feedback.h"
 /* USER CODE END Includes */
 
 /* USER CODE BEGIN Private defines */
+
+/*
+ * \brief  Wrapper function for feedback shutdown line reading
+ * \param  feedback Enum indicating which feedback line to read 
+ * \return FeedbackState indicating the state of the feedback line
+ */
+enum FeedbackState gpio_feedback_read(enum FeedbackName feedback);
 
 /* USER CODE END Private defines */
 
