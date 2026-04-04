@@ -3,10 +3,10 @@
 #include "feedback.h"
 
 DEFINE_FFF_GLOBALS;
-FAKE_VALUE_FUNC(enum FeedbackState, feedback_get_state_callback, enum FeedbackName);
+FAKE_VALUE_FUNC(enum FeedbackState, fake_read_feedback, enum FeedbackName);
 
 void setUp() {
-    RESET_FAKE(feedback_get_state_callback);
+    RESET_FAKE(fake_read_feedback);
     FFF_RESET_HISTORY();
 
     static enum FeedbackState feedback_states[FEEDBACK_NAME_COUNT];
@@ -14,9 +14,9 @@ void setUp() {
     feedback_states[FEEDBACK_NAME_MUSHROOM_BEFORE] = FEEDBACK_STATUS_LOW;
     feedback_states[FEEDBACK_NAME_MUSHROOM_AFTER] = FEEDBACK_STATUS_ERROR;
 
-    SET_RETURN_SEQ(feedback_get_state_callback, feedback_states, FEEDBACK_NAME_COUNT)
+    SET_RETURN_SEQ(fake_read_feedback, feedback_states, FEEDBACK_NAME_COUNT)
 
-    feedback_init(feedback_get_state_callback);
+    feedback_init(fake_read_feedback);
 }
 
 void test_feedback_get_state_call_count(void) {
@@ -26,7 +26,7 @@ void test_feedback_get_state_call_count(void) {
     // Verify mock was called correct number of times (once per indicator)
     TEST_ASSERT_EQUAL_INT_MESSAGE(
         FEEDBACK_NAME_COUNT,
-        feedback_get_state_callback_fake.call_count,
+        fake_read_feedback_fake.call_count,
         "Update should poll all sensors");
 }
 
