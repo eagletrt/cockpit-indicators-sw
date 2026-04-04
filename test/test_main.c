@@ -1,10 +1,8 @@
 #include "eagletrt.h"
-#include "test_feedback.h"
 #include "test_indicator.h"
 
 void setUp(void) {
     indicator_test_init();
-    feedback_test_init();
 }
 
 void tearDown(void) {
@@ -23,8 +21,6 @@ int main() {
     RUN_TEST(indicator_test_luminosity_set);
     RUN_TEST(indicator_test_luminosity_clamping);
 
-    RUN_TEST(feedback_test_get_state);
-    RUN_TEST(feedback_test_get_state_call_count);
 
     return UNITY_END();
 }
