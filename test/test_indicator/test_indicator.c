@@ -2,17 +2,79 @@
 #include "fff.h"
 #include "indicators.h"
 
-DEFINE_FFF_GLOBALS;
+extern struct IndicatorsHandler indicators_global_handler;
 
-void setUp() {
-    // RESET_FAKE(...);
+DEFINE_FFF_GLOBALS;
+FAKE_VOID_FUNC(fake_set_indicator, enum IndicatorsName, uint8_t);
+
+void setUp() { RESET_FAKE(fake_set_indicator);
     FFF_RESET_HISTORY();
+    indicators_init(fake_set_indicator);
+}
+
+void test_indicator_initialization_failure_double_init(void) {
+    bool is_indicator_initialized = indicators_init(fake_set_indicator);
+
+    TEST_ASSERT_FALSE_MESSAGE(
+        is_indicator_initialized,
+        "Double initialization should fail");
+}
+
+void test_indicator_initialization_state(void) {
+    // After initialization, all indicators should be off
+    for (int i = 0; i < INDICATORS_NAME_COUNT; i++) {
+        TEST_ASSERT_FALSE_MESSAGE(
+            indicators_global_handler.state[i],
+            "Indicator should be off after init");
+    }
+}
+
+void support_test_indicator_set_indicator_state(enum IndicatorsName indicator) {
+    // Test: Set indicator ON
+    indicators_set(true, indicator);
+
+    TEST_ASSERT_TRUE_MESSAGE(
+    indicators_global_handler.state[indicator],
+    "Indicator should be ON");
+}
+
+// Specific tests for each indicator
+void test_indicator_set_indicator_state_IMD(void) {
+    support_test_indicator_set_indicator_state(INDICATORS_NAME_IMD);
+}
+void test_indicator_set_indicator_state_AMS(void) {
+    support_test_indicator_set_indicator_state(INDICATORS_NAME_AMS);
+}
+void test_indicator_set_indicator_state_TS_OFF(void) {
+    support_test_indicator_set_indicator_state(INDICATORS_NAME_TS_OFF);
+}
+void test_indicator_set_indicator_state_TSAL(void) {
+    support_test_indicator_set_indicator_state(INDICATORS_NAME_TSAL);
+}
+
+void test_indicator_luminosity_set(void) {
+    // Test: Set valid luminosities
+    indicators_set_luminosity(80);
+    TEST_ASSERT_EQUAL_UINT8_MESSAGE(80, indicators_global_handler.luminosity, "Luminosity should be 80");
+}
+
+void test_indicator_luminosity_clamping(void) {
+    // Test: Set luminosity above 100
+    indicators_set_luminosity(150);
+    TEST_ASSERT_EQUAL_UINT8_MESSAGE(100, indicators_global_handler.luminosity, "Luminosity should be clamped to 100");
 }
 
 int main() {
     UNITY_BEGIN();
 
-    // RUN_TEST(...);
+    RUN_TEST(test_indicator_initialization_failure_double_init);
+    RUN_TEST(test_indicator_initialization_state);
+    RUN_TEST(test_indicator_set_indicator_state_IMD);
+    RUN_TEST(test_indicator_set_indicator_state_AMS);
+    RUN_TEST(test_indicator_set_indicator_state_TS_OFF);
+    RUN_TEST(test_indicator_set_indicator_state_TSAL);
+    RUN_TEST(test_indicator_luminosity_set);
+    RUN_TEST(test_indicator_luminosity_clamping);
 
     return UNITY_END();
 }
