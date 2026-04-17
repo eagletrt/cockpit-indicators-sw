@@ -7,7 +7,8 @@ extern struct IndicatorsHandler indicators_global_handler;
 DEFINE_FFF_GLOBALS;
 FAKE_VOID_FUNC(fake_set_indicator, enum IndicatorsName, uint8_t);
 
-void setUp() { RESET_FAKE(fake_set_indicator);
+void setUp() { 
+    RESET_FAKE(fake_set_indicator);
     FFF_RESET_HISTORY();
     indicators_init(fake_set_indicator);
 }
@@ -29,27 +30,26 @@ void test_indicator_initialization_state(void) {
     }
 }
 
-void support_test_indicator_set_indicator_state(enum IndicatorsName indicator) {
-    // Test: Set indicator ON
-    indicators_set(true, indicator);
-
+void test_indicator_set_on_indicators_state(void) {
+    indicators_set(true, INDICATORS_NAME_IMD);
     TEST_ASSERT_TRUE_MESSAGE(
-    indicators_global_handler.state[indicator],
-    "Indicator should be ON");
-}
+    indicators_global_handler.state[INDICATORS_NAME_IMD],
+    "IMD indicator should be ON");
 
-// Specific tests for each indicator
-void test_indicator_set_indicator_state_IMD(void) {
-    support_test_indicator_set_indicator_state(INDICATORS_NAME_IMD);
-}
-void test_indicator_set_indicator_state_AMS(void) {
-    support_test_indicator_set_indicator_state(INDICATORS_NAME_AMS);
-}
-void test_indicator_set_indicator_state_TS_OFF(void) {
-    support_test_indicator_set_indicator_state(INDICATORS_NAME_TS_OFF);
-}
-void test_indicator_set_indicator_state_TSAL(void) {
-    support_test_indicator_set_indicator_state(INDICATORS_NAME_TSAL);
+    indicators_set(true, INDICATORS_NAME_AMS);
+    TEST_ASSERT_TRUE_MESSAGE(
+    indicators_global_handler.state[INDICATORS_NAME_AMS],
+    "AMS indicator should be ON");
+
+    indicators_set(true, INDICATORS_NAME_TS_OFF);
+    TEST_ASSERT_TRUE_MESSAGE(
+    indicators_global_handler.state[INDICATORS_NAME_TS_OFF],
+    "TS_OFF indicator should be ON");
+
+    indicators_set(true, INDICATORS_NAME_TSAL);
+    TEST_ASSERT_TRUE_MESSAGE(
+    indicators_global_handler.state[INDICATORS_NAME_TSAL],
+    "TSAL indicator should be ON");
 }
 
 void test_indicator_luminosity_set(void) {
@@ -69,10 +69,7 @@ int main() {
 
     RUN_TEST(test_indicator_initialization_failure_double_init);
     RUN_TEST(test_indicator_initialization_state);
-    RUN_TEST(test_indicator_set_indicator_state_IMD);
-    RUN_TEST(test_indicator_set_indicator_state_AMS);
-    RUN_TEST(test_indicator_set_indicator_state_TS_OFF);
-    RUN_TEST(test_indicator_set_indicator_state_TSAL);
+    RUN_TEST(test_indicator_set_on_indicators_state);
     RUN_TEST(test_indicator_luminosity_set);
     RUN_TEST(test_indicator_luminosity_clamping);
 
