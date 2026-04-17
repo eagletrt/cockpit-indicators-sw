@@ -19,6 +19,11 @@ void setUp() {
     feedback_init(fake_read_feedback);
 }
 
+/*!
+ * \defgroup feedback Test cases for feedback module functions
+ * \{
+ */
+
 void test_feedback_get_state_call_count(void) {
     // Run the update cycle
     feedback_update_state();
@@ -50,6 +55,8 @@ void test_feedback_get_state(void) {
         feedback_get_state(FEEDBACK_NAME_MUSHROOM_AFTER),
         "State should be ERROR after update");
 }
+
+/*! \} */
 
 int main() {
     UNITY_BEGIN();

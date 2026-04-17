@@ -13,6 +13,11 @@ void setUp() {
     indicators_init(fake_set_indicator);
 }
 
+/*!
+ * \defgroup indicator Test cases for indicator module functions
+ * \{
+ */
+
 void test_indicator_initialization_failure_double_init(void) {
     bool is_indicator_initialized = indicators_init(fake_set_indicator);
 
@@ -63,6 +68,8 @@ void test_indicator_luminosity_clamping(void) {
     indicators_set_luminosity(150);
     TEST_ASSERT_EQUAL_UINT8_MESSAGE(100, indicators_global_handler.luminosity, "Luminosity should be clamped to 100");
 }
+
+/*! \} */
 
 int main() {
     UNITY_BEGIN();
