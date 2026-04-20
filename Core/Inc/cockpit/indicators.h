@@ -19,6 +19,14 @@ enum IndicatorsName {
 };
 
 /*!
+ * \brief Enum with possible return codes for indicators module
+ */
+enum IndicatorsReturnCode {
+    INDICATORS_RC_OK = 0,
+    INDICATORS_RC_ERROR,
+};
+
+/*!
  * \brief Function signature for setting indicators
  * 
  * \param indicator Enum indicating which indicator to set
@@ -42,13 +50,7 @@ struct IndicatorsHandler {
  * 
  * \retval True if initialization is successful, else false
  */
-bool indicators_init(indicator_set set_indicator_fct);
-
-/*!
- * \brief Check if indicators module is initialized.
- * \retval True if initialized, else false
- */
-bool is_indicators_initialized(void);
+enum IndicatorsReturnCode indicators_init(indicator_set set_indicator_fct);
 
 /*!
  * \brief Update the indicators based on the current state.

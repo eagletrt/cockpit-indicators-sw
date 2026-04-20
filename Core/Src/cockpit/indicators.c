@@ -2,9 +2,7 @@
 
 EAGLETRT_STATIC struct IndicatorsHandler indicators_global_handler;
 
-bool indicators_init(indicator_set set_indicator_fct) {
-
-    // Prevent double initialization or null function pointer
+enum IndicatorsReturnCode indicators_init(indicator_set set_indicator_fct) {
     if (set_indicator_fct == NULL) {
         return false;
     }
