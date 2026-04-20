@@ -53,16 +53,11 @@ struct IndicatorsHandler {
 enum IndicatorsReturnCode indicators_init(indicator_set set_indicator_fct);
 
 /*!
- * \brief Update the indicators based on the current state.
- */
-void indicators_update(void);
-
-/*!
  * \brief Change the specified indicator state and updates all indicators.
  * \param state true to turn on, false to turn off
  * \param indicator The indicator to change
  */
-void indicators_set(bool state, enum IndicatorsName indicator);
+enum IndicatorsReturnCode indicators_set(enum IndicatorsName indicator, bool state);
 
 /*!
  * \brief Change pwm value of all indicators

@@ -1,10 +1,13 @@
 #include "indicators.h"
 
 #include "eagletrt-api.h"
+#include <string.h>
 
 EAGLETRT_STATIC struct IndicatorsHandler indicators_global_handler;
 
 enum IndicatorsReturnCode indicators_init(indicator_set set_indicator_fct) {
+    memset(&indicators_global_handler, 0U, sizeof(indicators_global_handler));
+
     if (set_indicator_fct == NULL) {
         return INDICATORS_RC_ERROR;
     }
@@ -18,21 +21,15 @@ enum IndicatorsReturnCode indicators_init(indicator_set set_indicator_fct) {
 
     indicators_global_handler.luminosity = 0;
 
-    indicators_update();
-
     return INDICATORS_RC_OK;
 }
 
-void indicators_update(void) {
-    for (enum IndicatorsName i = 0; i < INDICATORS_NAME_COUNT; ++i) {
-        const uint8_t luminosity = indicators_global_handler.state[i] ? indicators_global_handler.luminosity : 0U;
-        indicators_global_handler.set_indicator(i, luminosity);
-    }
-}
+enum IndicatorsReturnCode indicators_set(enum IndicatorsName indicator, bool state) {
+    if(indicator < 0 || indicator >= INDICATORS_NAME_COUNT)
+        return INDICATORS_RC_ERROR;
 
-void indicators_set(bool state, enum IndicatorsName indicator) {
     indicators_global_handler.state[indicator] = state;
-    indicators_update();
+    return INDICATORS_RC_OK;
 }
 
 void indicators_set_luminosity(double luminosity) {
