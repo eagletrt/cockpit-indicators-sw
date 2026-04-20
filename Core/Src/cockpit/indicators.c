@@ -1,5 +1,7 @@
 #include "indicators.h"
 
+#include "eagletrt-api.h"
+
 EAGLETRT_STATIC struct IndicatorsHandler indicators_global_handler;
 
 enum IndicatorsReturnCode indicators_init(indicator_set set_indicator_fct) {
@@ -33,10 +35,6 @@ void indicators_set(bool state, enum IndicatorsName indicator) {
     indicators_update();
 }
 
-void indicators_set_luminosity(uint8_t luminosity) {
-    if (luminosity > 100) {
-        luminosity = 100;
-    }
-    indicators_global_handler.luminosity = luminosity;
-    indicators_update();
+void indicators_set_luminosity(double luminosity) {
+    indicators_global_handler.luminosity = EAGLETRT_API_CLAMP(luminosity, 0.0, 1.0);
 }

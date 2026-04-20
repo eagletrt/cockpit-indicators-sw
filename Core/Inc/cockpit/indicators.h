@@ -65,9 +65,9 @@ void indicators_update(void);
 void indicators_set(bool state, enum IndicatorsName indicator);
 
 /*!
- * \brief Change pwm value of all indicators and updates all indicators.
- * \param luminosity The PWM value to set for all indicators (0-100).
+ * \brief Change pwm value of all indicators
+ * \param luminosity The PWM value to set for all indicators (0-1).
 */
-void indicators_set_luminosity(uint8_t luminosity);
+void indicators_set_luminosity(double luminosity);
 
 #endif // INDICATORS_H
