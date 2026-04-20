@@ -1,11 +1,11 @@
 #include "indicators.h"
 
-EAGLETRT_STATIC struct IndicatorsHandler indicators_global_handler; // Private in production
+EAGLETRT_STATIC struct IndicatorsHandler indicators_global_handler;
 
 bool indicators_init(indicator_set set_indicator_fct) {
 
     // Prevent double initialization or null function pointer
-    if (set_indicator_fct == NULL || indicators_global_handler.initialized) {
+    if (set_indicator_fct == NULL) {
         return false;
     }
 
@@ -20,12 +20,7 @@ bool indicators_init(indicator_set set_indicator_fct) {
 
     indicators_update();
 
-    indicators_global_handler.initialized = true;
     return true;
-}
-
-bool is_indicators_initialized(void) {
-    return indicators_global_handler.initialized;
 }
 
 void indicators_update(void) {

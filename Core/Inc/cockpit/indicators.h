@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-#include <stdint.h> // Fixes: unknown type name 'uint8_t' in testing environment
+#include <stdint.h>
 #include "eagletrt.h"
 
 /*!
@@ -34,7 +34,6 @@ struct IndicatorsHandler {
     indicator_set set_indicator;       //!< Function to set indicators
     uint8_t luminosity;                //!< PWM value for all indicators (0-100)
     bool state[INDICATORS_NAME_COUNT]; //!< State of each indicator (on/off)
-    bool initialized;                  //!< Indicates if the indicators handler has been initialized
 };
 
 /*!
