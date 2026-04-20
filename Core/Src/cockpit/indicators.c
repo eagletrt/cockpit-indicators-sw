@@ -6,7 +6,7 @@ EAGLETRT_STATIC struct IndicatorsHandler indicators_global_handler;
 
 enum IndicatorsReturnCode indicators_init(indicator_set set_indicator_fct) {
     if (set_indicator_fct == NULL) {
-        return false;
+        return INDICATORS_RC_ERROR;
     }
 
     indicators_global_handler.set_indicator = set_indicator_fct;
@@ -20,7 +20,7 @@ enum IndicatorsReturnCode indicators_init(indicator_set set_indicator_fct) {
 
     indicators_update();
 
-    return true;
+    return INDICATORS_RC_OK;
 }
 
 void indicators_update(void) {
