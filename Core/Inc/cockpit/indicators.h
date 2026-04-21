@@ -54,10 +54,16 @@ enum IndicatorsReturnCode indicators_init(indicator_set set_indicator_fct);
 
 /*!
  * \brief Change the specified indicator state and updates all indicators.
- * \param state true to turn on, false to turn off
  * \param indicator The indicator to change
+ * \param state true to turn on, false to turn off
  */
 enum IndicatorsReturnCode indicators_set(enum IndicatorsName indicator, bool state);
+
+/*!
+ * \brief Get the specified indicator state
+ * \param indicator The indicator to query
+ */
+bool indicators_get(enum IndicatorsName indicator);
 
 /*!
  * \brief Change pwm value of all indicators

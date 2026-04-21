@@ -25,11 +25,15 @@ enum IndicatorsReturnCode indicators_init(indicator_set set_indicator_fct) {
 }
 
 enum IndicatorsReturnCode indicators_set(enum IndicatorsName indicator, bool state) {
-    if(indicator < 0 || indicator >= INDICATORS_NAME_COUNT)
+    if (indicator < 0 || indicator >= INDICATORS_NAME_COUNT) 
         return INDICATORS_RC_ERROR;
 
     indicators_global_handler.state[indicator] = state;
     return INDICATORS_RC_OK;
+}
+
+bool indicators_get(enum IndicatorsName indicator) {
+    return indicators_global_handler.state[indicator];
 }
 
 void indicators_set_luminosity(double luminosity) {
