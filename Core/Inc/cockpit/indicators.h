@@ -2,9 +2,8 @@
 #define INDICATORS_H
 
 #include <stdbool.h>
-#include <stdio.h>
-
 #include <stdint.h>
+
 #include "eagletrt.h"
 
 /*!
