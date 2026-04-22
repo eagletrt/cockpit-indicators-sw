@@ -5,21 +5,15 @@
 
 EAGLETRT_STATIC struct IndicatorsHandler indicators_global_handler;
 
-enum IndicatorsReturnCode indicators_init(indicator_set set_indicator_fct) {
+enum IndicatorsReturnCode indicators_init(void) {
     memset(&indicators_global_handler, 0U, sizeof(indicators_global_handler));
-
-    if (set_indicator_fct == NULL) {
-        return INDICATORS_RC_ERROR;
-    }
-
-    indicators_global_handler.set_indicator = set_indicator_fct;
 
     // Initialize all indicators to OFF state
     for (int i = 0; i < INDICATORS_NAME_COUNT; i++) {
         indicators_global_handler.state[i] = false;
     }
 
-    indicators_global_handler.luminosity = 0;
+    indicators_global_handler.luminosity = 0.0;
 
     return INDICATORS_RC_OK;
 }

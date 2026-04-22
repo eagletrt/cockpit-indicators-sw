@@ -27,19 +27,9 @@ enum IndicatorsReturnCode {
 };
 
 /*!
- * \brief Function signature for setting indicators
- * 
- * \param indicator Enum indicating which indicator to set
- * \param luminosity PWM value to set (0-100)
- * 
- */
-typedef void (*indicator_set)(enum IndicatorsName indicator, uint8_t luminosity);
-
-/*!
  * \brief Struct that handles all relevant indicator information
  */
 struct IndicatorsHandler {
-    indicator_set set_indicator;       //!< Function to set indicators
     uint8_t luminosity;                //!< PWM value for all indicators (0-100)
     bool state[INDICATORS_NAME_COUNT]; //!< State of each indicator (on/off)
 };
@@ -50,7 +40,7 @@ struct IndicatorsHandler {
  * 
  * \retval True if initialization is successful, else false
  */
-enum IndicatorsReturnCode indicators_init(indicator_set set_indicator_fct);
+enum IndicatorsReturnCode indicators_init(void);
 
 /*!
  * \brief Change the specified indicator state and updates all indicators.
