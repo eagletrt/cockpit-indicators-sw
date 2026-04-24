@@ -26,7 +26,6 @@ typedef bool (*tim_post)(void);
  * \brief Struct containing initialization data for POST functions.
  */
 struct PostInitData {
-    indicator_set indicator_set; //!< Function pointer to set indicator luminosity
     read_feedback fb_read;       //!< Function pointer to read feedback state
     tim_post tim_post_function;  //!< Function pointer for the timer module POST check
 };

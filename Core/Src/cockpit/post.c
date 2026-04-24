@@ -3,7 +3,7 @@
 enum PostReturnCode post_run_power_on_tests(struct PostInitData *init_data) {
 
     // Validate input pointers
-    if (init_data == NULL || init_data->tim_post_function == NULL || init_data->indicator_set == NULL || init_data->fb_read == NULL) {
+    if (init_data == NULL || init_data->tim_post_function == NULL || init_data->fb_read == NULL) {
         return POST_RC_INVALID_POINTER;
     }
 
@@ -14,10 +14,6 @@ enum PostReturnCode post_run_power_on_tests(struct PostInitData *init_data) {
 
     // Initialization functions
     if (feedback_init(init_data->fb_read) == FEEDBACK_RC_ERROR) {
-        return POST_RC_UNINITIALIZED;
-    }
-
-    if (!indicators_init(init_data->indicator_set)) {
         return POST_RC_UNINITIALIZED;
     }
 
