@@ -44,13 +44,13 @@ enum IndicatorsReturnCode indicators_init(void);
  * \param indicator The indicator to change
  * \param state true to turn on, false to turn off
  */
-enum IndicatorsReturnCode indicators_set(enum IndicatorsName indicator, bool state);
+enum IndicatorsReturnCode indicators_set_indicator(enum IndicatorsName indicator, bool state);
 
 /*!
  * \brief Get the specified indicator state
  * \param indicator The indicator to query
  */
-bool indicators_get(enum IndicatorsName indicator);
+bool indicators_get_indicator(enum IndicatorsName indicator);
 
 /*!
  * \brief Change pwm value of all indicators

@@ -24,7 +24,7 @@ enum IndicatorsReturnCode indicators_init(void) {
     return INDICATORS_RC_OK;
 }
 
-enum IndicatorsReturnCode indicators_set(enum IndicatorsName indicator, bool state) {
+enum IndicatorsReturnCode indicators_set_indicator(enum IndicatorsName indicator, bool state) {
     if (indicator < 0 || indicator >= INDICATORS_NAME_COUNT) 
         return INDICATORS_RC_ERROR;
 
@@ -32,7 +32,7 @@ enum IndicatorsReturnCode indicators_set(enum IndicatorsName indicator, bool sta
     return INDICATORS_RC_OK;
 }
 
-bool indicators_get(enum IndicatorsName indicator) {
+bool indicators_get_indicator(enum IndicatorsName indicator) {
     return indicators_handler.state[indicator];
 }
 
