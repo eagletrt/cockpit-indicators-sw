@@ -6,11 +6,11 @@
 
 EAGLETRT_STATIC struct IndicatorsHandler indicators_handler;
 
-static void indicators_reset(void) {
+static void prv_indicators_reset(void) {
     memset(&indicators_handler, 0U, sizeof(indicators_handler));
 }
 
-static void indicators_setup(void) {
+static void prv_indicators_setup(void) {
     for (int i = 0; i < INDICATORS_NAME_COUNT; i++) {
         indicators_handler.state[i] = false;
     }
@@ -18,8 +18,8 @@ static void indicators_setup(void) {
 }
 
 enum IndicatorsReturnCode indicators_init(void) {
-    indicators_reset();
-    indicators_setup();
+    prv_indicators_reset();
+    prv_indicators_setup();
 
     return INDICATORS_RC_OK;
 }
