@@ -30,6 +30,6 @@ bool indicators_get(enum IndicatorsName indicator) {
     return indicators_handler.state[indicator];
 }
 
-void indicators_set_luminosity(double luminosity) {
-    indicators_handler.luminosity = EAGLETRT_API_CLAMP(luminosity, 0.0, 1.0);
+void indicators_set_luminosity(float luminosity) {
+    indicators_handler.luminosity = EAGLETRT_API_CLAMP(luminosity, 0.0f, 1.0f);
 }

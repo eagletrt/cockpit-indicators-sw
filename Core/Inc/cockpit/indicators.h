@@ -29,7 +29,7 @@ enum IndicatorsReturnCode {
  * \brief Struct that handles all relevant indicator information
  */
 struct IndicatorsHandler {
-    uint8_t luminosity;                //!< PWM value for all indicators (0-100)
+    float luminosity;                  //!< PWM value for all indicators (0f-1f)
     bool state[INDICATORS_NAME_COUNT]; //!< State of each indicator (on/off)
 };
 
@@ -56,8 +56,8 @@ bool indicators_get(enum IndicatorsName indicator);
 
 /*!
  * \brief Change pwm value of all indicators
- * \param luminosity The PWM value to set for all indicators (0-1).
+ * \param luminosity The PWM value to set for all indicators (0f-1f).
 */
-void indicators_set_luminosity(double luminosity);
+void indicators_set_luminosity(float luminosity);
 
 #endif // INDICATORS_H
