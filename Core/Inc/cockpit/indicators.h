@@ -4,8 +4,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "eagletrt.h"
-
 /*!
  * \brief Enum for identifying indicators
  */
