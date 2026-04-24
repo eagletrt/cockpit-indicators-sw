@@ -45,7 +45,7 @@ void test_indicators_initialization(void) {
  */
 
 void test_indicators_set_on_indicators_valid_state(void) {
-    enum IndicatorsReturnCode indicators_set_rc = indicators_set(INDICATORS_NAME_IMD, true);
+    enum IndicatorsReturnCode indicators_set_rc = indicators_set_indicator(INDICATORS_NAME_IMD, true);
 
     TEST_ASSERT_EQUAL_INT8_MESSAGE(
         INDICATORS_RC_OK,
@@ -58,7 +58,7 @@ void test_indicators_set_on_indicators_valid_state(void) {
 }
 
 void test_indicators_set_on_indicators_invalid_state(void) {
-    enum IndicatorsReturnCode indicators_set_rc = indicators_set(INDICATORS_NAME_COUNT, true);
+    enum IndicatorsReturnCode indicators_set_rc = indicators_set_indicator(INDICATORS_NAME_COUNT, true);
 
     TEST_ASSERT_EQUAL_INT8_MESSAGE(
         INDICATORS_RC_ERROR,
