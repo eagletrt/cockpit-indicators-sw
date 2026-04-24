@@ -27,7 +27,6 @@ typedef bool (*tim_post)(void);
  */
 struct PostInitData {
     read_feedback fb_read;       //!< Function pointer to read feedback state
-    tim_post tim_post_function;  //!< Function pointer for the timer module POST check
 };
 
 /*!

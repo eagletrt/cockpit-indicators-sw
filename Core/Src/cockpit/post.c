@@ -3,13 +3,8 @@
 enum PostReturnCode post_run_power_on_tests(struct PostInitData *init_data) {
 
     // Validate input pointers
-    if (init_data == NULL || init_data->tim_post_function == NULL || init_data->fb_read == NULL) {
+    if (init_data == NULL || init_data->fb_read == NULL) {
         return POST_RC_INVALID_POINTER;
-    }
-
-    // Check if TIM module is initialized
-    if (!init_data->tim_post_function()) {
-        return POST_RC_UNINITIALIZED;
     }
 
     // Initialization functions
