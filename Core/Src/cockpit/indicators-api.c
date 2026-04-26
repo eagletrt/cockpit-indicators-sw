@@ -6,26 +6,24 @@
 
 EAGLETRT_STATIC struct IndicatorsHandler indicators_api_handler;
 
-static void prv_indicators_api_reset(void) {
-    memset(&indicators_api_handler, 0U, sizeof(indicators_api_handler));
-}
-
 static void prv_indicators_api_setup(void) {
-    for (int i = 0; i < INDICATORS_NAME_COUNT; i++) {
+    for (int i = 0; i < INDICATORS_NAME_COUNT; i++)
         indicators_api_handler.state[i] = false;
-    }
+
     indicators_api_handler.luminosity = 0.0;
 }
 
 enum IndicatorsReturnCode indicators_api_init(void) {
-    prv_indicators_api_reset();
+    // reset `indicators_api_handler`
+    memset(&indicators_api_handler, 0U, sizeof(indicators_api_handler));
+
     prv_indicators_api_setup();
 
     return INDICATORS_RC_OK;
 }
 
 enum IndicatorsReturnCode indicators_api_set_indicator(enum IndicatorsName indicator, bool state) {
-    if (indicator < 0 || indicator >= INDICATORS_NAME_COUNT) 
+    if (indicator < 0 || indicator >= INDICATORS_NAME_COUNT)
         return INDICATORS_RC_ERROR;
 
     indicators_api_handler.state[indicator] = state;
