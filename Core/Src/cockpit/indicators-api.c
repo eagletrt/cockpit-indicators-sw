@@ -7,10 +7,7 @@
 EAGLETRT_STATIC struct IndicatorsHandler indicators_api_handler;
 
 static void prv_indicators_api_setup(void) {
-    for (int i = 0; i < INDICATORS_NAME_COUNT; i++)
-        indicators_api_handler.state[i] = false;
-
-    indicators_api_handler.luminosity = 0.0;
+    return;
 }
 
 enum IndicatorsReturnCode indicators_api_init(void) {
