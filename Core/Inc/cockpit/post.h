@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 #include "feedback.h"
-#include "indicators.h"
+#include "indicators-api.h"
 #include "fsm.h"
 
 /*!

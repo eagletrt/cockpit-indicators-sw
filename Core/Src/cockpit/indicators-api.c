@@ -1,0 +1,41 @@
+#include "indicators-api.h"
+
+#include "eagletrt.h"
+#include "eagletrt-api.h"
+#include <string.h>
+
+EAGLETRT_STATIC struct IndicatorsHandler indicators_api_handler;
+
+static void prv_indicators_api_reset(void) {
+    memset(&indicators_api_handler, 0U, sizeof(indicators_api_handler));
+}
+
+static void prv_indicators_api_setup(void) {
+    for (int i = 0; i < INDICATORS_NAME_COUNT; i++) {
+        indicators_api_handler.state[i] = false;
+    }
+    indicators_api_handler.luminosity = 0.0;
+}
+
+enum IndicatorsReturnCode indicators_api_init(void) {
+    prv_indicators_api_reset();
+    prv_indicators_api_setup();
+
+    return INDICATORS_RC_OK;
+}
+
+enum IndicatorsReturnCode indicators_api_set_indicator(enum IndicatorsName indicator, bool state) {
+    if (indicator < 0 || indicator >= INDICATORS_NAME_COUNT) 
+        return INDICATORS_RC_ERROR;
+
+    indicators_api_handler.state[indicator] = state;
+    return INDICATORS_RC_OK;
+}
+
+bool indicators_api_get_indicator(enum IndicatorsName indicator) {
+    return indicators_api_handler.state[indicator];
+}
+
+void indicators_api_set_luminosity(float luminosity) {
+    indicators_api_handler.luminosity = EAGLETRT_API_CLAMP(luminosity, 0.0f, 1.0f);
+}

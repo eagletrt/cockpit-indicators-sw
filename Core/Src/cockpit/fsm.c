@@ -17,7 +17,7 @@ Functions and types have been generated with prefix "fsm_"
 
 /*** USER CODE BEGIN MACROS ***/
 #include <feedback.h>
-#include <indicators.h>
+#include <indicators-api.h>
 #include <post.h>
 /*** USER CODE END MACROS ***/
 

@@ -1,5 +1,5 @@
-#ifndef INDICATORS_H
-#define INDICATORS_H
+#ifndef INDICATORS_API_H
+#define INDICATORS_API_H
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -37,25 +37,25 @@ struct IndicatorsHandler {
  * 
  * \retval True if initialization is successful, else false
  */
-enum IndicatorsReturnCode indicators_init(void);
+enum IndicatorsReturnCode indicators_api_init(void);
 
 /*!
  * \brief Change the specified indicator state and updates all indicators.
  * \param indicator The indicator to change
  * \param state true to turn on, false to turn off
  */
-enum IndicatorsReturnCode indicators_set_indicator(enum IndicatorsName indicator, bool state);
+enum IndicatorsReturnCode indicators_api_set_indicator(enum IndicatorsName indicator, bool state);
 
 /*!
  * \brief Get the specified indicator state
  * \param indicator The indicator to query
  */
-bool indicators_get_indicator(enum IndicatorsName indicator);
+bool indicators_api_get_indicator(enum IndicatorsName indicator);
 
 /*!
  * \brief Change pwm value of all indicators
  * \param luminosity The PWM value to set for all indicators (0f-1f).
 */
-void indicators_set_luminosity(float luminosity);
+void indicators_api_set_luminosity(float luminosity);
 
-#endif // INDICATORS_H
+#endif // INDICATORS_API_H
