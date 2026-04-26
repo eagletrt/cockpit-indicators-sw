@@ -7,6 +7,11 @@ enum PostReturnCode post_run_power_on_tests(struct PostInitData *init_data) {
         return POST_RC_INVALID_POINTER;
     }
 
+    // Indicators module initializzation
+    if (indicators_api_init() == INDICATORS_RC_ERROR) {
+        return POST_RC_UNINITIALIZED;
+    }
+
     // Initialization functions
     if (feedback_init(init_data->fb_read) == FEEDBACK_RC_ERROR) {
         return POST_RC_UNINITIALIZED;
