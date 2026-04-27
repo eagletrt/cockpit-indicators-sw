@@ -15,10 +15,7 @@ void setUp() {
  */
 
 void test_indicators_api_initialization(void) {
-    struct IndicatorsHandler expected_result = {
-        .state = { false },
-        .luminosity = 0,
-    };
+    struct IndicatorsHandler expected_result = { 0 };
 
     // reset `indicators_handler`
     memset(&indicators_api_handler, 0U, sizeof(indicators_api_handler));
