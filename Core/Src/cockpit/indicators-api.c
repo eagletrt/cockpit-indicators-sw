@@ -6,15 +6,9 @@
 
 EAGLETRT_STATIC struct IndicatorsHandler indicators_api_handler;
 
-static void prv_indicators_api_setup(void) {
-    return;
-}
-
 enum IndicatorsReturnCode indicators_api_init(void) {
     // reset `indicators_api_handler`
     memset(&indicators_api_handler, 0U, sizeof(indicators_api_handler));
-
-    prv_indicators_api_setup();
 
     return INDICATORS_RC_OK;
 }
