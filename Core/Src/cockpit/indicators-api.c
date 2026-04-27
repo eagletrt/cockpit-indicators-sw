@@ -22,6 +22,9 @@ enum IndicatorsReturnCode indicators_api_set_indicator(enum IndicatorsName indic
 }
 
 bool indicators_api_get_indicator(enum IndicatorsName indicator) {
+    if (indicator < 0 || indicator >= INDICATORS_NAME_COUNT)
+        return false;
+
     return indicators_api_handler.state[indicator];
 }
 
