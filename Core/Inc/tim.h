@@ -30,7 +30,7 @@ extern "C" {
 
 /* USER CODE BEGIN Includes */
 #include <stdbool.h>
-#include "indicators.h"
+#include "indicators-api.h"
 /* USER CODE END Includes */
 
 extern TIM_HandleTypeDef htim1;

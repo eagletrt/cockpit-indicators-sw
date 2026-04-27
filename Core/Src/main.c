@@ -99,7 +99,6 @@ int main(void) {
     fsm_state_t fsm_state = FSM_STATE_INIT;
 
     struct PostInitData post_init_data = {
-        .indicator_set = tim_set_pwm,
         .fb_read = gpio_feedback_read,
     };
 

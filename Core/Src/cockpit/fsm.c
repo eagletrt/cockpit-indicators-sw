@@ -17,7 +17,7 @@ Functions and types have been generated with prefix "fsm_"
 
 /*** USER CODE BEGIN MACROS ***/
 #include <feedback.h>
-#include <indicators.h>
+#include <indicators-api.h>
 #include <post.h>
 /*** USER CODE END MACROS ***/
 
@@ -109,7 +109,6 @@ fsm_state_t fsm_do_idle(fsm_state_data_t *data) {
     /*** USER CODE BEGIN DO_IDLE ***/
     //TODO: Implement can module to receive commands and update led_state_global accordingly
 
-    indicators_update();
     feedback_update_state();
 
     if (feedback_get_state(FEEDBACK_NAME_STEERING_WHEEL) == FEEDBACK_STATUS_LOW) {
