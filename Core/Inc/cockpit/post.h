@@ -2,9 +2,8 @@
 #define POST_H
 
 #include <stdint.h>
+
 #include "feedback.h"
-#include "indicators-api.h"
-#include "fsm.h"
 
 /*!
  * \brief Possible return codes for POST functions
@@ -32,7 +31,7 @@ struct PostInitData {
 /*!
  * \brief Run power-on self tests.
  * \param init_data Pointer to PostInitData struct containing initialization data.
- * 
+ *
  * \retval POST_RC_OK if all tests pass
  * \retval POST_RC_UNINITIALIZED if a module is uninitialized
  * \retval POST_RC_SETUP_ERROR if a setup error is detected

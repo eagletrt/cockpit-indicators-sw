@@ -1,4 +1,8 @@
 #include "post.h"
+#include "feedback-api.h"
+#include "indicators-api.h"
+
+#include <stdlib.h>
 
 enum PostReturnCode post_run_power_on_tests(struct PostInitData *init_data) {
 

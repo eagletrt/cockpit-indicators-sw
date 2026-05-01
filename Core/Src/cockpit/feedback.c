@@ -1,9 +1,12 @@
 #include "feedback.h"
+#include "eagletrt.h"
 
-EAGLETRT_STATIC struct FeedbackHandler feedback_handler; // Private in production
+#include <stdlib.h>
+#include <stdint.h>
+
+EAGLETRT_STATIC struct FeedbackHandler feedback_handler;
 
 enum FeedbackReturnCode feedback_init(read_feedback fb_read) {
-
     if (feedback_handler.initialized || fb_read == NULL) {
         return FEEDBACK_RC_ERROR; // Invalid parameters
     }
@@ -18,8 +21,8 @@ enum FeedbackReturnCode feedback_init(read_feedback fb_read) {
 
     return FEEDBACK_RC_OK;
 }
-enum FeedbackState feedback_get_state(enum FeedbackName feedback) {
 
+enum FeedbackState feedback_get_state(enum FeedbackName feedback) {
     return feedback_handler.fb_line_state[feedback];
 }
 
