@@ -33,17 +33,9 @@ enum FeedbackReturnCode {
 };
 
 /*!
- * \brief Function signature for reading feedback state
- * \param feedback Enum indicating which feedback line to read
- * \return FeedbackState indicating the state of the feedback line
- */
-typedef enum FeedbackState (*read_feedback)(enum FeedbackName feedback);
-
-/*!
  * \brief Struct that handles all relevant feedback information
  */
 struct FeedbackHandler {
-    read_feedback read_fb;                                                   //!< Function to read feedback line state
     EAGLETRT_VOLATILE enum FeedbackState fb_line_state[FEEDBACK_NAME_COUNT]; //!< Feedback button state array
     EAGLETRT_VOLATILE bool initialized;                                      //!< Indicates if the feedback handler has been initialized
 };

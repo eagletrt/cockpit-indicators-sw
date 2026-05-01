@@ -4,20 +4,14 @@
 
 #include <stdlib.h>
 
-enum PostReturnCode post_run_power_on_tests(struct PostInitData *init_data) {
-
-    // Validate input pointers
-    if (init_data == NULL || init_data->fb_read == NULL) {
-        return POST_RC_INVALID_POINTER;
-    }
-
+enum PostReturnCode post_run_power_on_tests(void) {
     // Indicators module initializzation
     if (indicators_api_init() == INDICATORS_RC_ERROR) {
         return POST_RC_UNINITIALIZED;
     }
 
     // Initialization functions
-    if (feedback_init(init_data->fb_read) == FEEDBACK_RC_ERROR) {
+    if (feedback_init() == FEEDBACK_RC_ERROR) {
         return POST_RC_UNINITIALIZED;
     }
 

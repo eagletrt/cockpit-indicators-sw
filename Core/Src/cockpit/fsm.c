@@ -81,10 +81,8 @@ fsm_state_t fsm_do_init(fsm_state_data_t *data) {
     /*** USER CODE BEGIN DO_INIT ***/
     fsm_state_t next_state = FSM_STATE_IDLE;
 
-    struct PostInitData *post_init_data = (struct PostInitData *)data;
-
     // Power on tests
-    if (post_run_power_on_tests(post_init_data) != POST_RC_OK) {
+    if (post_run_power_on_tests() != POST_RC_OK) {
         next_state = FSM_STATE_ERROR;
     }
 

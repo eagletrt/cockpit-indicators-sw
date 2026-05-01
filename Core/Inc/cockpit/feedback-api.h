@@ -9,7 +9,7 @@
  *
  * \return FeedbackState indicating if any button is pressed during initialization (FEEDBACK_STATUS_HIGH, FEEDBACK_STATUS_LOW, FEEDBACK_STATUS_ERROR)
  */
-enum FeedbackReturnCode feedback_init(read_feedback fb_read);
+enum FeedbackReturnCode feedback_init();
 
 /*!
  * \brief  Get the current state of a feedback line
