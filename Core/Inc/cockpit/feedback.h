@@ -36,8 +36,7 @@ enum FeedbackReturnCode {
  * \brief Struct that handles all relevant feedback information
  */
 struct FeedbackHandler {
-    EAGLETRT_VOLATILE enum FeedbackState fb_line_state[FEEDBACK_NAME_COUNT]; //!< Feedback button state array
-    EAGLETRT_VOLATILE bool initialized;                                      //!< Indicates if the feedback handler has been initialized
+    EAGLETRT_VOLATILE enum FeedbackState feedback_line_state[FEEDBACK_NAME_COUNT]; //!< Feedback button state array
 };
 
 #endif // FEEDBACK_H
