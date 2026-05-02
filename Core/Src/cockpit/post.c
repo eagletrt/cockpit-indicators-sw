@@ -11,7 +11,7 @@ enum PostReturnCode post_run_power_on_tests(void) {
     }
 
     // Initialization functions
-    if (feedback_init() == FEEDBACK_RC_ERROR) {
+    if (feedback_api_init() == FEEDBACK_RC_ERROR) {
         return POST_RC_UNINITIALIZED;
     }
 
@@ -19,7 +19,7 @@ enum PostReturnCode post_run_power_on_tests(void) {
     feedback_update_state();
 
     // Check if feedback module is not updating properly
-    if (feedback_get_state(FEEDBACK_NAME_MUSHROOM_AFTER) == FEEDBACK_STATUS_ERROR || feedback_get_state(FEEDBACK_NAME_MUSHROOM_BEFORE) == FEEDBACK_STATUS_ERROR || feedback_get_state(FEEDBACK_NAME_STEERING_WHEEL) == FEEDBACK_STATUS_ERROR) {
+    if (feedback_api_get_state(FEEDBACK_NAME_MUSHROOM_AFTER) == FEEDBACK_STATUS_ERROR || feedback_api_get_state(FEEDBACK_NAME_MUSHROOM_BEFORE) == FEEDBACK_STATUS_ERROR || feedback_api_get_state(FEEDBACK_NAME_STEERING_WHEEL) == FEEDBACK_STATUS_ERROR) {
         return POST_RC_SETUP_ERROR;
     }
 

@@ -9,14 +9,14 @@
  *
  * \return FeedbackState indicating if any button is pressed during initialization (FEEDBACK_STATUS_HIGH, FEEDBACK_STATUS_LOW, FEEDBACK_STATUS_ERROR)
  */
-enum FeedbackReturnCode feedback_init();
+enum FeedbackReturnCode feedback_api_init();
 
 /*!
  * \brief  Get the current state of a feedback line
  * \param  feedback Enum indicating which feedback line to read
  * \return FeedbackState indicating if any button is pressed (FEEDBACK_STATUS_HIGH, FEEDBACK_STATUS_LOW, FEEDBACK_STATUS_ERROR)
  */
-enum FeedbackState feedback_get_state(enum FeedbackName feedback);
+enum FeedbackState feedback_api_get_state(enum FeedbackName feedback);
 
 /*!
  * \brief  Update the state of all feedback lines
