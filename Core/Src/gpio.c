@@ -89,6 +89,7 @@ static int16_t prv_gpio_get_pin_from_feedback_name(enum FeedbackName feedback) {
     };
 }
 
+// TODO: call from the main.c
 enum FeedbackState gpio_feedback_read(enum FeedbackName feedback) {
     GPIO_TypeDef *port = prv_gpio_get_port_from_feedback_name(feedback);
     int16_t pin = prv_gpio_get_pin_from_feedback_name(feedback);
