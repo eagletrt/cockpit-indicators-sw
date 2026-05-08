@@ -5,9 +5,6 @@
 
 /*!
  * \brief  Initialize feedback module
- * \param  fb_read Function pointer to read feedback line state
- *
- * \return FeedbackState indicating if any button is pressed during initialization (FEEDBACK_STATUS_HIGH, FEEDBACK_STATUS_LOW, FEEDBACK_STATUS_ERROR)
  */
 enum FeedbackReturnCode feedback_api_init();
 
@@ -19,8 +16,8 @@ enum FeedbackReturnCode feedback_api_init();
 enum FeedbackState feedback_api_get_state(enum FeedbackName feedback);
 
 /*!
- * \brief  Update the state of all feedback lines
+ * \brief  Set the current state of a feedback line
  */
-void feedback_update_state(void);
+enum FeedbackReturnCode feedback_api_set_state(enum FeedbackName feedback, enum FeedbackState state);
 
 #endif // FEEDBACK_API_H

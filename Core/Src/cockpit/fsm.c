@@ -110,8 +110,6 @@ fsm_state_t fsm_do_idle(fsm_state_data_t *data) {
     EAGLETRT_API_UNUSED(data);
     //TODO: Implement can module to receive commands and update led_state_global accordingly
 
-    feedback_update_state();
-
     if (feedback_api_get_state(FEEDBACK_NAME_STEERING_WHEEL) == FEEDBACK_STATUS_LOW) {
         // Steering wheel line low
     }

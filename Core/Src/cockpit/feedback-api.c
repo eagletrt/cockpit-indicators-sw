@@ -23,10 +23,12 @@ enum FeedbackState feedback_api_get_state(enum FeedbackName feedback) {
     return feedback_api_handler.feedback_line_state[feedback];
 }
 
-void feedback_update_state(void) {
-    // TODO: decide feedback update logic
-    // for (int i = 0; i < FEEDBACK_NAME_COUNT; i++) {
-    //     feedback_handler.fb_line_state[i] =
-    //         feedback_handler.read_fb((enum FeedbackName)i);
-    // }
+enum FeedbackReturnCode feedback_api_set_state(enum FeedbackName feedback, enum FeedbackState state) {
+    if (feedback >= FEEDBACK_NAME_COUNT) {
+        return FEEDBACK_RC_ERROR;
+    }
+
+    feedback_api_handler.feedback_line_state[feedback] = state;
+
+    return FEEDBACK_RC_OK;
 }
