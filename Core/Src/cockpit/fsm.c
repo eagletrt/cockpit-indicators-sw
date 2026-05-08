@@ -18,6 +18,7 @@ Functions and types have been generated with prefix "fsm_"
 /*** USER CODE BEGIN MACROS ***/
 #include <feedback-api.h>
 #include <indicators-api.h>
+#include <eagletrt-api.h>
 #include <post.h>
 /*** USER CODE END MACROS ***/
 
@@ -58,7 +59,7 @@ bool fsm_is_event_triggered() {
 void fsm_event_trigger(fsm_event_data_t *event) {
     if (fsm_fired_event != NULL)
         return;
-    fsm_fired_event = event ? event : &(fsm_event_data_t){};
+    fsm_fired_event = event ? event : &(fsm_event_data_t){ .a = NULL };
 }
 
 /*  ____  _        _
@@ -79,6 +80,7 @@ void fsm_event_trigger(fsm_event_data_t *event) {
 fsm_state_t fsm_do_init(fsm_state_data_t *data) {
 
     /*** USER CODE BEGIN DO_INIT ***/
+    EAGLETRT_API_UNUSED(data);
     fsm_state_t next_state = FSM_STATE_IDLE;
 
     // Power on tests
@@ -105,6 +107,7 @@ fsm_state_t fsm_do_idle(fsm_state_data_t *data) {
     fsm_state_t next_state = FSM_NO_CHANGE;
 
     /*** USER CODE BEGIN DO_IDLE ***/
+    EAGLETRT_API_UNUSED(data);
     //TODO: Implement can module to receive commands and update led_state_global accordingly
 
     feedback_update_state();
@@ -140,6 +143,7 @@ fsm_state_t fsm_do_error(fsm_state_data_t *data) {
     fsm_state_t next_state = FSM_NO_CHANGE;
 
     /*** USER CODE BEGIN DO_ERROR ***/
+    EAGLETRT_API_UNUSED(data);
 
     /*** USER CODE END DO_ERROR ***/
 
@@ -160,7 +164,7 @@ fsm_state_t fsm_do_flash(fsm_state_data_t *data) {
     fsm_state_t next_state = FSM_NO_CHANGE;
 
     /*** USER CODE BEGIN DO_FLASH ***/
-
+    EAGLETRT_API_UNUSED(data);
     /*** USER CODE END DO_FLASH ***/
 
     switch (next_state) {
@@ -194,7 +198,7 @@ fsm_state_t fsm_do_flash(fsm_state_data_t *data) {
 void fsm_init_done(fsm_state_data_t *data) {
 
     /*** USER CODE BEGIN INIT_DONE ***/
-
+    EAGLETRT_API_UNUSED(data);
     /*** USER CODE END INIT_DONE ***/
 }
 
@@ -203,7 +207,7 @@ void fsm_init_done(fsm_state_data_t *data) {
 void fsm_init_error(fsm_state_data_t *data) {
 
     /*** USER CODE BEGIN INIT_ERROR ***/
-
+    EAGLETRT_API_UNUSED(data);
     /*** USER CODE END INIT_ERROR ***/
 }
 
@@ -212,7 +216,7 @@ void fsm_init_error(fsm_state_data_t *data) {
 void fsm_start_flash(fsm_state_data_t *data) {
 
     /*** USER CODE BEGIN START_FLASH ***/
-
+    EAGLETRT_API_UNUSED(data);
     /*** USER CODE END START_FLASH ***/
 }
 
@@ -222,7 +226,7 @@ void fsm_start_flash(fsm_state_data_t *data) {
 void fsm_error_detected(fsm_state_data_t *data) {
 
     /*** USER CODE BEGIN ERROR_DETECTED ***/
-
+    EAGLETRT_API_UNUSED(data);
     /*** USER CODE END ERROR_DETECTED ***/
 }
 
@@ -231,7 +235,7 @@ void fsm_error_detected(fsm_state_data_t *data) {
 void fsm_flash_done(fsm_state_data_t *data) {
 
     /*** USER CODE BEGIN FLASH_DONE ***/
-
+    EAGLETRT_API_UNUSED(data);
     /*** USER CODE END FLASH_DONE ***/
 }
 
@@ -266,7 +270,7 @@ fsm_state_t fsm_run_state(fsm_state_t cur_state, fsm_state_data_t *data) {
     if (transition)
         transition(data);
     return new_state;
-};
+}
 
 /*** USER CODE BEGIN FUNCTIONS ***/
 

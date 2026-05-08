@@ -299,9 +299,7 @@ void tim_set_pwm(enum IndicatorsName indicator, uint8_t luminosity) {
     }
 
     uint16_t pwm_value_16 = (uint16_t)((luminosity / 100.0f) * MAX_PWM_VALUE);
-    if (pwm_value_16 > MAX_PWM_VALUE) {
-        pwm_value_16 = MAX_PWM_VALUE;
-    }
+
     __HAL_TIM_SET_COMPARE(tim_handle, channel, pwm_value_16);
 }
 

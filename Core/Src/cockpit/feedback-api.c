@@ -16,8 +16,9 @@ enum FeedbackReturnCode feedback_api_init() {
 }
 
 enum FeedbackState feedback_api_get_state(enum FeedbackName feedback) {
-    if (feedback < 0 || feedback >= FEEDBACK_NAME_COUNT)
+    if (feedback >= FEEDBACK_NAME_COUNT) {
         return false;
+    }
 
     return feedback_api_handler.feedback_line_state[feedback];
 }
