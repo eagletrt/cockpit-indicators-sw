@@ -110,13 +110,13 @@ fsm_state_t fsm_do_idle(fsm_state_data_t *data) {
     EAGLETRT_API_UNUSED(data);
     //TODO: Implement can module to receive commands and update led_state_global accordingly
 
-    if (feedback_api_get_state(FEEDBACK_NAME_STEERING_WHEEL) == FEEDBACK_STATUS_LOW) {
+    if (feedback_api_get_state(FEEDBACK_NAME_STEERING_WHEEL) == FEEDBACK_STATE_LOW) {
         // Steering wheel line low
     }
-    if (feedback_api_get_state(FEEDBACK_NAME_MUSHROOM_BEFORE) == FEEDBACK_STATUS_LOW) {
+    if (feedback_api_get_state(FEEDBACK_NAME_MUSHROOM_BEFORE) == FEEDBACK_STATE_LOW) {
         // Mushroom before line low
     }
-    if (feedback_api_get_state(FEEDBACK_NAME_MUSHROOM_AFTER) == FEEDBACK_STATUS_LOW) {
+    if (feedback_api_get_state(FEEDBACK_NAME_MUSHROOM_AFTER) == FEEDBACK_STATE_LOW) {
         // Mushroom after line low
     }
 

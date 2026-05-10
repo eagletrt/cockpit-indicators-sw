@@ -9,9 +9,10 @@
  * \brief Possible return codes for feedback status functions
  */
 enum FeedbackState {
-    FEEDBACK_STATUS_LOW,  //!< Feedback line is low
-    FEEDBACK_STATUS_HIGH, //!< Feedback line is high
-    FEEDBACK_STATUS_ERROR //!< Error in reading feedback button states
+    FEEDBACK_STATE_LOW,   //!< Feedback line is low
+    FEEDBACK_STATE_HIGH,  //!< Feedback line is high
+    FEEDBACK_STATE_ERROR, //!< Error in reading feedback button states
+    FEEDBACK_STATE_COUNT  //!< Total number of feedback statuses
 };
 
 /*!
