@@ -10,12 +10,14 @@ enum FeedbackReturnCode feedback_api_init(void);
 
 /*!
  * \brief  Get the current state of a feedback line
- * \return state of the `feedback`
+ * \param  `enum FeedbackName feedback`
  * */
 enum FeedbackState feedback_api_get_state(enum FeedbackName feedback);
 
 /*!
  * \brief  Set the current state of a feedback line
+ * \param  `enum FeedbackName feedback`
+ * \param  `enum FeedbackState state`
  */
 enum FeedbackReturnCode feedback_api_set_state(enum FeedbackName feedback, enum FeedbackState state);
 
