@@ -6,7 +6,7 @@
 /*!
  * \brief  Initialize feedback-api module to `FEEDBACK_STATUS_ERROR`
  */
-enum FeedbackReturnCode feedback_api_init();
+enum FeedbackReturnCode feedback_api_init(void);
 
 /*!
  * \brief  Get the current state of a feedback line

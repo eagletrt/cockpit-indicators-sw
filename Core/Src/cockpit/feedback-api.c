@@ -6,7 +6,7 @@
 
 EAGLETRT_STATIC struct FeedbackHandler feedback_api_handler;
 
-enum FeedbackReturnCode feedback_api_init() {
+enum FeedbackReturnCode feedback_api_init(void) {
     // Initialize feedback states to ERROR to indicate uninitialized state
     for (int i = 0; i < FEEDBACK_NAME_COUNT; i++) {
         feedback_api_handler.feedback_line_state[i] = FEEDBACK_STATE_ERROR;
