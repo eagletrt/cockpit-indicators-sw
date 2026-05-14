@@ -89,19 +89,20 @@ static int16_t prv_gpio_get_pin_from_feedback_name(enum FeedbackName feedback) {
     };
 }
 
+// TODO: call from the main.c
 enum FeedbackState gpio_feedback_read(enum FeedbackName feedback) {
     GPIO_TypeDef *port = prv_gpio_get_port_from_feedback_name(feedback);
     int16_t pin = prv_gpio_get_pin_from_feedback_name(feedback);
     if (port == NULL || pin < 0) {
-        return FEEDBACK_STATUS_ERROR;
+        return FEEDBACK_STATE_ERROR;
     }
     switch (HAL_GPIO_ReadPin(port, pin)) {
         case GPIO_PIN_SET:
-            return FEEDBACK_STATUS_HIGH;
+            return FEEDBACK_STATE_HIGH;
         case GPIO_PIN_RESET:
-            return FEEDBACK_STATUS_LOW;
+            return FEEDBACK_STATE_LOW;
         default:
-            return FEEDBACK_STATUS_ERROR;
+            return FEEDBACK_STATE_ERROR;
     };
 }
 

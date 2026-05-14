@@ -98,15 +98,11 @@ int main(void) {
 
     fsm_state_t fsm_state = FSM_STATE_INIT;
 
-    struct PostInitData post_init_data = {
-        .fb_read = gpio_feedback_read,
-    };
-
     /* USER CODE END 2 */
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
-    fsm_state = fsm_run_state(fsm_state, &post_init_data);
+    fsm_state = fsm_run_state(fsm_state, NULL);
     while (1) {
         fsm_state = fsm_run_state(fsm_state, NULL);
         /* USER CODE END WHILE */
