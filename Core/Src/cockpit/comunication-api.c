@@ -12,7 +12,8 @@
 #define TX_CAPACITY (8 * 64U)
 #define MAX_MSG_SIZE (8U)
 
-static void *tmp_buffer; // TODO: use can stuff when available
+static void *tmp_rx_buffer; // TODO: use can stuff when available
+// static void *tmp_tx_buffer; // TODO: use can stuff when available
 
 EAGLETRT_STATIC struct PalHandler pal_handler;
 EAGLETRT_STATIC struct ArenaAllocatorHandler arena;
@@ -43,21 +44,30 @@ enum ComunicationReturnCode comunication_api_deinit(void) {
 }
 
 // To use inside the receive can callback
-enum ComunicationReturnCode comunication_api_read_from_queue(uint8_t *out_message, uint32_t size) {
-    pal_api_add_to_rx_queue(&pal_handler, out_message, size);
+enum ComunicationReturnCode comunication_api_add_to_rx_queue(uint8_t *out_message, uint32_t size) {
+    if (pal_api_add_to_rx_queue(&pal_handler, out_message, size) != PAL_RC_OK) {
+        return COMUNICATION_RC_ERROR;
+    }
     return COMUNICATION_RC_OK;
 }
 
 enum ComunicationReturnCode comunication_api_process_rx_queue(void) {
-    if (pal_api_process_rx(&pal_handler, tmp_buffer) != PAL_RC_OK)
+    if (pal_api_process_rx(&pal_handler, tmp_rx_buffer) != PAL_RC_OK) {
         return COMUNICATION_RC_ERROR;
-
+    }
     return COMUNICATION_RC_OK;
 }
 
-enum ComunicationReturnCode comunication_api_write_to_queue(uint8_t *in_message, uint32_t size) {
+enum ComunicationReturnCode comunication_api_add_to_tx_queue(uint8_t *in_message, uint32_t size) {
+    if (pal_api_add_to_tx_queue(&pal_handler, in_message, size) != PAL_RC_OK) {
+        return COMUNICATION_RC_ERROR;
+    }
     return COMUNICATION_RC_OK;
 }
+
 enum ComunicationReturnCode comunication_api_process_tx_queue(void) {
+    if (pal_api_process_tx(&pal_handler) != PAL_RC_OK) {
+        return COMUNICATION_RC_ERROR;
+    }
     return COMUNICATION_RC_OK;
 }
