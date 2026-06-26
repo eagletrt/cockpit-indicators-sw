@@ -26,7 +26,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "fsm.h"
-#include "post.h"
+#include <string.h>
 
 /* USER CODE END Includes */
 
@@ -94,7 +94,16 @@ int main(void) {
     MX_TIM1_Init();
     MX_TIM3_Init();
     MX_USART1_UART_Init();
+    MX_TIM2_Init();
     /* USER CODE BEGIN 2 */
+
+    HAL_SYSCFG_SetPinBinding(HAL_BIND_TSSOP20_PIN15_PB1);
+
+    if (HAL_FDCAN_ConfigGlobalFilter(&hfdcan1, FDCAN_ACCEPT_IN_RX_FIFO0, FDCAN_ACCEPT_IN_RX_FIFO0, FDCAN_REJECT_REMOTE, FDCAN_REJECT_REMOTE) != HAL_OK) {
+        Error_Handler();
+    }
+
+    HAL_FDCAN_Start(&hfdcan1);
 
     fsm_state_t fsm_state = FSM_STATE_INIT;
 
@@ -120,14 +129,14 @@ void SystemClock_Config(void) {
     RCC_OscInitTypeDef RCC_OscInitStruct = { 0 };
     RCC_ClkInitTypeDef RCC_ClkInitStruct = { 0 };
 
-    __HAL_FLASH_SET_LATENCY(FLASH_LATENCY_0);
+    __HAL_FLASH_SET_LATENCY(FLASH_LATENCY_1);
 
     /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
     RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
     RCC_OscInitStruct.HSIState = RCC_HSI_ON;
-    RCC_OscInitStruct.HSIDiv = RCC_HSI_DIV4;
+    RCC_OscInitStruct.HSIDiv = RCC_HSI_DIV1;
     RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
     if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) {
         Error_Handler();
@@ -141,7 +150,7 @@ void SystemClock_Config(void) {
     RCC_ClkInitStruct.AHBCLKDivider = RCC_HCLK_DIV1;
     RCC_ClkInitStruct.APB1CLKDivider = RCC_APB1_DIV1;
 
-    if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK) {
+    if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1) != HAL_OK) {
         Error_Handler();
     }
 }

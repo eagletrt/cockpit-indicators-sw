@@ -31,5 +31,4 @@ struct IndicatorsHandler {
     bool state[INDICATORS_NAME_COUNT]; //!< State of each indicator (on/off)
 };
 
-
 #endif // INDICATORS_H
