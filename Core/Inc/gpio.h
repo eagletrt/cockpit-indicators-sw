@@ -40,7 +40,9 @@ extern "C" {
  * \param  feedback Enum indicating which feedback line to read 
  * \return FeedbackState indicating the state of the feedback line
  */
+/*
 enum FeedbackState gpio_feedback_read(enum FeedbackName feedback);
+*/
 
 /* USER CODE END Private defines */
 

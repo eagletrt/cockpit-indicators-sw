@@ -48,21 +48,20 @@ void MX_GPIO_Init(void) {
     __HAL_RCC_GPIOC_CLK_ENABLE();
     __HAL_RCC_GPIOA_CLK_ENABLE();
 
-    /*Configure GPIO pin : SHUTDOWN_LINE_STEERING_WHEEL_Pin */
-    GPIO_InitStruct.Pin = SHUTDOWN_LINE_STEERING_WHEEL_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-    GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(SHUTDOWN_LINE_STEERING_WHEEL_GPIO_Port, &GPIO_InitStruct);
+    /*Configure GPIO pin Output Level */
+    HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_RESET);
 
-    /*Configure GPIO pins : SHUTDOWN_LINE_BEFORE_Pin SHUTDOWN_LINE_AFTER_Pin */
-    GPIO_InitStruct.Pin = SHUTDOWN_LINE_BEFORE_Pin | SHUTDOWN_LINE_AFTER_Pin;
-    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    /*Configure GPIO pin : USER_LED_Pin */
+    GPIO_InitStruct.Pin = USER_LED_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(USER_LED_GPIO_Port, &GPIO_InitStruct);
 }
 
 /* USER CODE BEGIN 2 */
 
+/*
 static GPIO_TypeDef *prv_gpio_get_port_from_feedback_name(enum FeedbackName feedback) {
     switch (feedback) {
         case FEEDBACK_NAME_STEERING_WHEEL:
@@ -105,5 +104,6 @@ enum FeedbackState gpio_feedback_read(enum FeedbackName feedback) {
             return FEEDBACK_STATE_ERROR;
     };
 }
+*/
 
 /* USER CODE END 2 */

@@ -24,8 +24,7 @@ enum FeedbackState feedback_api_get_state(enum FeedbackName feedback) {
 }
 
 enum FeedbackReturnCode feedback_api_set_state(enum FeedbackName feedback, enum FeedbackState state) {
-    if (feedback >= FEEDBACK_NAME_COUNT
-            || state >= FEEDBACK_STATE_COUNT) {
+    if (feedback >= FEEDBACK_NAME_COUNT || state >= FEEDBACK_STATE_COUNT) {
         return FEEDBACK_RC_ERROR;
     }
 
