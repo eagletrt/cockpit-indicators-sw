@@ -61,6 +61,12 @@ void Error_Handler(void);
 #define ADDRESS_LED_GPIO_Port GPIOA
 #define AMS_Pin GPIO_PIN_1
 #define AMS_GPIO_Port GPIOA
+#define FEEDBACK_1_Pin GPIO_PIN_2
+#define FEEDBACK_1_GPIO_Port GPIOA
+#define FEEDBACK_2_Pin GPIO_PIN_3
+#define FEEDBACK_2_GPIO_Port GPIOA
+#define TSAL_RED_INPUT_Pin GPIO_PIN_4
+#define TSAL_RED_INPUT_GPIO_Port GPIOA
 #define IMD_Pin GPIO_PIN_5
 #define IMD_GPIO_Port GPIOA
 #define TSAL_RED_Pin GPIO_PIN_6
