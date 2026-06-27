@@ -28,8 +28,8 @@ enum ComunicationReturnCode comunication_api_init(void) {
             RX_CAPACITY,
             TX_CAPACITY,
             MAX_MSG_SIZE,
-            NULL, // TODO: put callback
-            NULL, // TODO: put callback
+            NULL, // TODO: put callback to deserialize
+            NULL, // TODO: put callback with HAL_FDCAN_AddMessageToTxFifoQ()
             NULL,
             NULL,
             &arena) != PAL_RC_OK) {
@@ -46,7 +46,7 @@ enum ComunicationReturnCode comunication_api_deinit(void) {
     return COMUNICATION_RC_OK;
 }
 
-// To use inside the receive can callback
+// To use inside the receive can callback, use HAL_FDCAN_GetRxMessage to query message
 enum ComunicationReturnCode comunication_api_add_to_rx_queue(uint8_t *out_message, uint32_t size) {
     if (pal_api_add_to_rx_queue(&comunication_api_handler.pal_handler, out_message, size) != PAL_RC_OK) {
         return COMUNICATION_RC_ERROR;
@@ -68,6 +68,7 @@ enum ComunicationReturnCode comunication_api_add_to_tx_queue(uint8_t *in_message
     return COMUNICATION_RC_OK;
 }
 
+// call HAL_FDCAN_AddMessageToTxFifoQ
 enum ComunicationReturnCode comunication_api_process_tx_queue(void) {
     if (pal_api_process_tx(&comunication_api_handler.pal_handler) != PAL_RC_OK) {
         return COMUNICATION_RC_ERROR;
