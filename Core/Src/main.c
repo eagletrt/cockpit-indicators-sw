@@ -99,11 +99,7 @@ int main(void) {
     MX_ADC1_Init();
     /* USER CODE BEGIN 2 */
 
-    HAL_SYSCFG_SetPinBinding(HAL_BIND_TSSOP20_PIN15_PB1);
-
-    if (HAL_FDCAN_ConfigGlobalFilter(&hfdcan1, FDCAN_ACCEPT_IN_RX_FIFO0, FDCAN_ACCEPT_IN_RX_FIFO0, FDCAN_REJECT_REMOTE, FDCAN_REJECT_REMOTE) != HAL_OK) {
-        Error_Handler();
-    }
+    HAL_SYSCFG_SetPinBinding(HAL_BIND_TSSOP20_PIN15_PB1); // HAZARD: DO NOT TOUCH!!!
 
     HAL_FDCAN_Start(&hfdcan1);
 
@@ -113,7 +109,6 @@ int main(void) {
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
-    fsm_state = fsm_run_state(fsm_state, NULL);
     while (1) {
         fsm_state = fsm_run_state(fsm_state, NULL);
         /* USER CODE END WHILE */
