@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
 #include "fdcan.h"
 #include "tim.h"
 #include "usart.h"
@@ -95,6 +96,7 @@ int main(void) {
     MX_TIM3_Init();
     MX_USART1_UART_Init();
     MX_TIM2_Init();
+    MX_ADC1_Init();
     /* USER CODE BEGIN 2 */
 
     HAL_SYSCFG_SetPinBinding(HAL_BIND_TSSOP20_PIN15_PB1);

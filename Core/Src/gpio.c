@@ -51,6 +51,12 @@ void MX_GPIO_Init(void) {
     /*Configure GPIO pin Output Level */
     HAL_GPIO_WritePin(USER_LED_GPIO_Port, USER_LED_Pin, GPIO_PIN_RESET);
 
+    /*Configure GPIO pin : TSAL_RED_INPUT_Pin */
+    GPIO_InitStruct.Pin = TSAL_RED_INPUT_Pin;
+    GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+    GPIO_InitStruct.Pull = GPIO_NOPULL;
+    HAL_GPIO_Init(TSAL_RED_INPUT_GPIO_Port, &GPIO_InitStruct);
+
     /*Configure GPIO pin : USER_LED_Pin */
     GPIO_InitStruct.Pin = USER_LED_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
