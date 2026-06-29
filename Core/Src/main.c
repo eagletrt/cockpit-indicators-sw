@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
+#include "dma.h"
 #include "fdcan.h"
 #include "tim.h"
 #include "usart.h"
@@ -91,9 +92,8 @@ int main(void) {
 
     /* Initialize all configured peripherals */
     MX_GPIO_Init();
+    MX_DMA_Init();
     MX_FDCAN1_Init();
-    MX_TIM1_Init();
-    MX_TIM3_Init();
     MX_USART1_UART_Init();
     MX_TIM2_Init();
     MX_ADC1_Init();
@@ -102,6 +102,8 @@ int main(void) {
     HAL_SYSCFG_SetPinBinding(HAL_BIND_TSSOP20_PIN15_PB1); // HAZARD: DO NOT TOUCH!!!
 
     HAL_FDCAN_Start(&hfdcan1);
+
+    adc_feedback_init();
 
     fsm_state_t fsm_state = FSM_STATE_INIT;
 
@@ -165,6 +167,8 @@ void Error_Handler(void) {
     /* User can add his own implementation to report the HAL error return state */
     __disable_irq();
     while (1) {
+        uint8_t buffer[] = "Mi sono cacato addosso\n";
+        HAL_UART_Transmit(&huart1, buffer, sizeof(buffer) / sizeof(buffer[0]), 100);
     }
     /* USER CODE END Error_Handler_Debug */
 }
