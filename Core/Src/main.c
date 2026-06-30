@@ -102,7 +102,6 @@ int main(void) {
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
-    fsm_state = fsm_run_state(fsm_state, NULL);
     while (1) {
         fsm_state = fsm_run_state(fsm_state, NULL);
         /* USER CODE END WHILE */

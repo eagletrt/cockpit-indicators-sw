@@ -204,17 +204,4 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
         can_communications_api_add_to_rx_buffer(&msg);
     }
 }
-
-void HAL_FDCAN_RxFifo1Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo1ITs) {
-    if ((RxFifo1ITs & FDCAN_IT_RX_FIFO1_NEW_MESSAGE) != RESET) {
-        FDCAN_RxHeaderTypeDef header = { 0 };
-        struct CanCommunicationFrame msg = { 0 };
-        HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO1, &header, msg.data);
-        HAL_FDCAN_ActivateNotification(hfdcan, FDCAN_IT_RX_FIFO1_NEW_MESSAGE, 0);
-        msg.id = header.Identifier;
-        msg.length = (uint8_t)(header.DataLength >> 16U);
-        can_communications_api_add_to_rx_buffer(&msg);
-    }
-}
-
 /* USER CODE END 1 */
