@@ -9,7 +9,7 @@
  *
  * \retval True if initialization is successful, else false
  */
-enum IndicatorsReturnCode indicators_api_init(void);
+enum IndicatorsReturnCode indicators_api_init(indicators_api_get_tick_fn get_tick);
 
 /*!
  * \brief Change the specified indicator state and updates all indicators.

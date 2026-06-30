@@ -7,9 +7,14 @@
 
 EAGLETRT_STATIC struct IndicatorsHandler indicators_api_handler;
 
-enum IndicatorsReturnCode indicators_api_init(void) {
-    // reset `indicators_api_handler`
+enum IndicatorsReturnCode indicators_api_init(indicators_api_get_tick_fn get_tick) {
+    if (get_tick == NULL) {
+        return INDICATORS_RC_ERROR;
+    }
+
     memset(&indicators_api_handler, 0U, sizeof(indicators_api_handler));
+
+    indicators_api_handler.get_tick = get_tick;
 
     return INDICATORS_RC_OK;
 }
