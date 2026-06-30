@@ -20,6 +20,7 @@ Functions and types have been generated with prefix "fsm_"
 #include <indicators-api.h>
 #include <eagletrt-api.h>
 #include <post.h>
+#include <can-communications-api.h>
 /*** USER CODE END MACROS ***/
 
 // GLOBALS
@@ -108,21 +109,13 @@ fsm_state_t fsm_do_idle(fsm_state_data_t *data) {
 
     /*** USER CODE BEGIN DO_IDLE ***/
     EAGLETRT_API_UNUSED(data);
-    //TODO: Implement can module to receive commands and update led_state_global accordingly
 
-    if (feedback_api_get_state(FEEDBACK_NAME_STEERING_WHEEL) == FEEDBACK_STATE_LOW) {
-        // Steering wheel line low
-    }
-    if (feedback_api_get_state(FEEDBACK_NAME_MUSHROOM_BEFORE) == FEEDBACK_STATE_LOW) {
-        // Mushroom before line low
-    }
-    if (feedback_api_get_state(FEEDBACK_NAME_MUSHROOM_AFTER) == FEEDBACK_STATE_LOW) {
-        // Mushroom after line low
-    }
+    can_communications_api_process_tx();
+    can_communications_api_process_rx();
 
-    /*** USER CODE END DO_IDLE ***/
+        /*** USER CODE END DO_IDLE ***/
 
-    switch (next_state) {
+        switch (next_state) {
         case FSM_NO_CHANGE:
         case FSM_STATE_IDLE:
         case FSM_STATE_FLASH:
