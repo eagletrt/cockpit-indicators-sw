@@ -108,7 +108,7 @@ int main(void) {
 
     adc_feedback_init();
 
-     struct PostInit init_struct = {
+    struct PostInit init_struct = {
         .config = {
             .send = fdcan_send_primary,
             .on_receive = can_communications_router_api_receive_primary,
@@ -117,7 +117,20 @@ int main(void) {
 
     fsm_state_t fsm_state = FSM_STATE_INIT;
 
-    fsm_state = fsm_run_state(fsm_state, (void *) &init_struct);
+    fsm_state = fsm_run_state(fsm_state, (void *)&init_struct);
+
+    GPIO_TypeDef *pin_ports[] = {
+        AMS_GPIO_Port,
+        IMD_GPIO_Port,
+        TS_OFF_GPIO_Port,
+        TSAL_RED_GPIO_Port
+    };
+    uint16_t pins[INDICATORS_NAME_COUNT] = {
+        AMS_Pin,
+        IMD_Pin,
+        TS_OFF_Pin,
+        TSAL_RED_Pin
+    };
 
     /* USER CODE END 2 */
 
@@ -125,6 +138,12 @@ int main(void) {
     /* USER CODE BEGIN WHILE */
     while (1) {
         fsm_state = fsm_run_state(fsm_state, NULL);
+
+        if (fsm_state == FSM_STATE_IDLE) {
+            for (enum IndicatorsName indicator = 0; indicator < INDICATORS_NAME_COUNT; indicator++) {
+                HAL_GPIO_WritePin(pin_ports[indicator], pins[indicator], indicators_api_get_indicator(indicator));
+            }
+        }
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
