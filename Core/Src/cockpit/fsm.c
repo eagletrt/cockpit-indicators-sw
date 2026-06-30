@@ -81,11 +81,10 @@ void fsm_event_trigger(fsm_event_data_t *event) {
 fsm_state_t fsm_do_init(fsm_state_data_t *data) {
 
     /*** USER CODE BEGIN DO_INIT ***/
-    EAGLETRT_API_UNUSED(data);
     fsm_state_t next_state = FSM_STATE_IDLE;
 
     // Power on tests
-    if (post_run_power_on_tests() != POST_RC_OK) {
+    if (post_init((struct PostInit *)data) != POST_RC_OK) {
         next_state = FSM_STATE_ERROR;
     }
 
@@ -113,9 +112,9 @@ fsm_state_t fsm_do_idle(fsm_state_data_t *data) {
     can_communications_api_process_tx();
     can_communications_api_process_rx();
 
-        /*** USER CODE END DO_IDLE ***/
+    /*** USER CODE END DO_IDLE ***/
 
-        switch (next_state) {
+    switch (next_state) {
         case FSM_NO_CHANGE:
         case FSM_STATE_IDLE:
         case FSM_STATE_FLASH:

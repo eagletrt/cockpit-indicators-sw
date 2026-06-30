@@ -27,6 +27,7 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "can-communications.h"
 
 /* USER CODE BEGIN Includes */
 
@@ -41,7 +42,8 @@ extern FDCAN_HandleTypeDef hfdcan1;
 void MX_FDCAN1_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-
+enum CanCommunicationReturnCode fdcan_send_primary(const struct
+        CanCommunicationFrame *frame);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

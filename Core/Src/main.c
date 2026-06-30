@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
+#include "can-communications-router-api.h"
 #include "dma.h"
 #include "fdcan.h"
 #include "tim.h"
@@ -28,6 +29,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "fsm.h"
+#include "can-communications.h"
+#include "post.h"
 #include <string.h>
 
 /* USER CODE END Includes */
@@ -105,7 +108,16 @@ int main(void) {
 
     adc_feedback_init();
 
+     struct PostInit init_struct = {
+        .config = {
+            .send = fdcan_send_primary,
+            .on_receive = can_communications_router_api_receive_primary,
+        }
+    };
+
     fsm_state_t fsm_state = FSM_STATE_INIT;
+
+    fsm_state = fsm_run_state(fsm_state, (void *) &init_struct);
 
     /* USER CODE END 2 */
 

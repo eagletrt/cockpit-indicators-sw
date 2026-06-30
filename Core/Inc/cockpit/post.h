@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 #include "feedback.h"
+#include "can-communications.h"
 
 /*!
  * \brief Possible return codes for POST functions
@@ -15,11 +16,9 @@ enum PostReturnCode {
     POST_RC_INVALID_POINTER //!< A null pointer is provided
 };
 
-/*!
- * \brief Function signature for TIM module POST check
- * \return true if TIM module is operational, false otherwise
- */
-typedef bool (*tim_post)(void);
+struct PostInit {
+    struct CanCommunicationsNetworkConfig config;
+};
 
 /*!
  * \brief Run power-on self tests.
@@ -30,6 +29,6 @@ typedef bool (*tim_post)(void);
  * \retval POST_RC_SETUP_ERROR if a setup error is detected
  * \retval POST_RC_INVALID_POINTER if a null pointer is provided
  */
-enum PostReturnCode post_run_power_on_tests(void);
+enum PostReturnCode post_init(struct PostInit *Init);
 
 #endif // POST_H
