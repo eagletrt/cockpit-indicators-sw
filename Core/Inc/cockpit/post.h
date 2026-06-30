@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#include "feedback.h"
+#include "indicators.h"
 #include "can-communications.h"
 
 /*!
@@ -19,6 +19,7 @@ enum PostReturnCode {
 struct PostInit {
     bool fdcan_return_code;
     bool adc_return_code;
+    indicators_api_get_tick_fn get_tick;
     struct CanCommunicationsNetworkConfig config;
 };
 

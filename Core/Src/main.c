@@ -115,6 +115,7 @@ int main(void) {
     struct PostInit init_struct = {
         .fdcan_return_code = fdcan_return_code,
         .adc_return_code = adc_return_code,
+        .get_tick = HAL_GetTick,
         .config = {
             .send = fdcan_send_primary,
             .on_receive = can_communications_router_api_receive_primary,

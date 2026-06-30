@@ -7,7 +7,7 @@
 
 enum PostReturnCode post_init(struct PostInit *init) {
     // Indicators module initializzation
-    if (indicators_api_init() == INDICATORS_RC_ERROR) {
+    if (indicators_api_init(init->get_tick) == INDICATORS_RC_ERROR) {
         return POST_RC_UNINITIALIZED;
     }
 
