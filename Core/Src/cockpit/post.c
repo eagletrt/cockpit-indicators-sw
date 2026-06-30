@@ -1,9 +1,9 @@
 #include "post.h"
 #include "feedback-api.h"
 #include "indicators-api.h"
+#include "can-communications-api.h"
 
 #include <stdlib.h>
-#include "can-communications-api.h"
 
 enum PostReturnCode post_init(struct PostInit *init) {
     // Indicators module initializzation
@@ -17,6 +17,10 @@ enum PostReturnCode post_init(struct PostInit *init) {
     }
 
     if (can_communications_api_init(init->config) != CAN_COMMUNICATION_RC_OK) {
+        return POST_RC_UNINITIALIZED;
+    }
+
+    if (!(init->adc_return_code && init->fdcan_return_code)) {
         return POST_RC_UNINITIALIZED;
     }
 

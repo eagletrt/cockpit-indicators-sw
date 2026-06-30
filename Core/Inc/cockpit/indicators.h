@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#define INDICATORS_EXPIRE_TIME (1000U)
+
 /*!
  * \brief Enum for identifying indicators
  */
@@ -23,11 +25,16 @@ enum IndicatorsReturnCode {
     INDICATORS_RC_ERROR,
 };
 
+typedef uint32_t (*indicators_api_get_tick_fn)(void);
+
 /*!
  * \brief Struct that handles all relevant indicator information
  */
 struct IndicatorsHandler {
     float luminosity;                  //!< PWM value for all indicators (0f-1f)
+    uint32_t ams_last_update;
+    uint32_t imd_last_update;
+    indicators_api_get_tick_fn get_tick;
     bool state[INDICATORS_NAME_COUNT]; //!< State of each indicator (on/off)
 };
 

@@ -176,12 +176,13 @@ void HAL_ADC_MspDeInit(ADC_HandleTypeDef *adcHandle) {
 
 /* USER CODE BEGIN 1 */
 
-void adc_feedback_init(void) {
-    HAL_ADCEx_Calibration_Start(&hadc1);
+bool adc_feedback_init(void) {
+    return (HAL_ADCEx_Calibration_Start(&hadc1) == HAL_OK);
 }
 
-void adc_feedback_read(void) {
-    HAL_ADC_Start_DMA(&hadc1, (uint32_t *)adc_feedback_buffer, sizeof(adc_feedback_buffer) / sizeof(adc_feedback_buffer[0]));
+bool adc_feedback_read(void) {
+    constexpr size_t sizeofbuffer = sizeof(adc_feedback_buffer) / sizeof(adc_feedback_buffer[0]);
+    return (HAL_ADC_Start_DMA(&hadc1, (uint32_t *)adc_feedback_buffer, sizeofbuffer) == HAL_OK);
 }
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {

@@ -17,6 +17,8 @@ enum PostReturnCode {
 };
 
 struct PostInit {
+    bool fdcan_return_code;
+    bool adc_return_code;
     struct CanCommunicationsNetworkConfig config;
 };
 

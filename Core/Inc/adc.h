@@ -42,8 +42,8 @@ void MX_ADC1_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 // TODO: documentation
-void adc_feedback_init(void);
-void adc_feedback_read(void);
+bool adc_feedback_init(void);
+bool adc_feedback_read(void);
 volatile uint16_t *adc_get_feedback_values(void);
 /* USER CODE END Prototypes */
 

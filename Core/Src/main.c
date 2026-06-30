@@ -101,23 +101,25 @@ int main(void) {
     MX_TIM2_Init();
     MX_ADC1_Init();
     /* USER CODE BEGIN 2 */
+    fsm_state_t fsm_state = FSM_STATE_INIT;
 
     HAL_SYSCFG_SetPinBinding(HAL_BIND_TSSOP20_PIN15_PB1); // HAZARD: DO NOT TOUCH!!!
 
-    HAL_FDCAN_Start(&hfdcan1);
+    bool fdcan_return_code = (HAL_FDCAN_Start(&hfdcan1) == HAL_OK);
 
-    adc_feedback_init();
+    HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0);
+    HAL_FDCAN_ActivateNotification(&hfdcan1, FDCAN_IT_RX_FIFO1_NEW_MESSAGE, 0);
+
+    bool adc_return_code = adc_feedback_init();
 
     struct PostInit init_struct = {
+        .fdcan_return_code = fdcan_return_code,
+        .adc_return_code = adc_return_code,
         .config = {
             .send = fdcan_send_primary,
             .on_receive = can_communications_router_api_receive_primary,
         }
     };
-
-    fsm_state_t fsm_state = FSM_STATE_INIT;
-
-    fsm_state = fsm_run_state(fsm_state, (void *)&init_struct);
 
     GPIO_TypeDef *pin_ports[] = {
         AMS_GPIO_Port,
@@ -125,6 +127,7 @@ int main(void) {
         TS_OFF_GPIO_Port,
         TSAL_RED_GPIO_Port
     };
+
     uint16_t pins[INDICATORS_NAME_COUNT] = {
         AMS_Pin,
         IMD_Pin,
@@ -132,12 +135,16 @@ int main(void) {
         TSAL_RED_Pin
     };
 
+    fsm_state = fsm_run_state(fsm_state, (void *)&init_struct);
+
     /* USER CODE END 2 */
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     while (1) {
         fsm_state = fsm_run_state(fsm_state, NULL);
+
+        HAL_GetTick();
 
         if (fsm_state == FSM_STATE_IDLE) {
             for (enum IndicatorsName indicator = 0; indicator < INDICATORS_NAME_COUNT; indicator++) {

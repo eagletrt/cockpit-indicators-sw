@@ -12,8 +12,6 @@ enum CanCommunicationReturnCode can_communications_router_api_receive_primary(co
         return CAN_COMMUNICATION_RC_NULL_POINTER;
     }
 
-    // TODO: add libcan deserialization and dispatch logic here
-
     struct CanCommunicationFrame buffer = {
         .id = frame->id,
         .length = frame->length,
