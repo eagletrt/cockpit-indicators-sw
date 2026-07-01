@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
+#include "can-communications.h"
 #include "dma.h"
 #include "fdcan.h"
 #include "tim.h"
@@ -151,7 +152,19 @@ int main(void) {
             }
         }
 
-        can_communications_api_process_rx();
+        switch (can_communications_api_process_rx()) {
+            case CAN_COMMUNICATION_RC_OK:
+                break;
+            case CAN_COMMUNICATION_RC_QUEUE_EMPTY:
+                HAL_UART_Transmit(&huart1, (uint8_t *)"RX QUEUE EMPTY\n\r", 16, 100);
+                break;
+            case CAN_COMMUNICATION_RC_QUEUE_FULL:
+                HAL_UART_Transmit(&huart1, (uint8_t *)"RX QUEUE FULL\n\r", 15, 100);
+                break;
+            default:
+                HAL_UART_Transmit(&huart1, (uint8_t *)"RX QUEUE ERROR\n\r", 16, 100);
+                break;
+        }
         can_communications_api_process_tx();
 
         /* USER CODE END WHILE */

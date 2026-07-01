@@ -30,9 +30,6 @@ bool indicators_api_get_indicator(enum IndicatorsName indicator);
 */
 void indicators_api_set_luminosity(float luminosity);
 
-// TODO: make documentation
-void indicators_api_update_timestamp(enum IndicatorsName indicator);
-
-bool indicators_api_is_timestamp_expired(enum IndicatorsName indicator);
+bool indicators_api_is_timeout(enum IndicatorsName indicator);
 
 #endif // INDICATORS_API_H
