@@ -29,7 +29,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "fsm.h"
-#include "can-communications.h"
+#include "can-communications-api.h"
 #include "post.h"
 #include <string.h>
 
@@ -145,13 +145,15 @@ int main(void) {
     while (1) {
         fsm_state = fsm_run_state(fsm_state, NULL);
 
-        HAL_GetTick();
-
         if (fsm_state == FSM_STATE_IDLE) {
             for (enum IndicatorsName indicator = 0; indicator < INDICATORS_NAME_COUNT; indicator++) {
                 HAL_GPIO_WritePin(pin_ports[indicator], pins[indicator], indicators_api_get_indicator(indicator));
             }
         }
+
+        can_communications_api_process_rx();
+        can_communications_api_process_tx();
+
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */

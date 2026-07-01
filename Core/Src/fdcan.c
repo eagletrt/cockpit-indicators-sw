@@ -194,6 +194,7 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
         msg.id = header.Identifier;
         msg.length = (uint8_t)(header.DataLength >> 16U);
         can_communications_api_add_to_rx_buffer(&msg);
+        HAL_GPIO_TogglePin(USER_LED_GPIO_Port, USER_LED_Pin);
     }
 }
 
@@ -206,6 +207,7 @@ void HAL_FDCAN_RxFifo1Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo1ITs)
         msg.id = header.Identifier;
         msg.length = (uint8_t)(header.DataLength >> 16U);
         can_communications_api_add_to_rx_buffer(&msg);
+        HAL_GPIO_TogglePin(USER_LED_GPIO_Port, USER_LED_Pin);
     }
 }
 
