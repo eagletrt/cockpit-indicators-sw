@@ -31,7 +31,7 @@ typedef uint32_t (*indicators_api_get_tick_fn)(void);
  * \brief Struct that handles all relevant indicator information
  */
 struct IndicatorsHandler {
-    float luminosity;                  //!< PWM value for all indicators (0f-1f)
+    float luminosity; //!< PWM value for all indicators (0f-1f)
     uint32_t ams_last_update;
     uint32_t imd_last_update;
     indicators_api_get_tick_fn get_tick;

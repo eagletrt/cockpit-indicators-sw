@@ -10,20 +10,14 @@ enum CanCommunicationReturnCode can_communications_router_api_receive_primary(co
         return CAN_COMMUNICATION_RC_NULL_POINTER;
     }
 
-    struct CanCommunicationFrame buffer = {
-        .id = frame->id,
-        .length = frame->length,
-    };
-
-    memcpy(buffer.data, frame->data, frame->length);
-
     union CanNetworkMessage can_message;
 
-    can_networks_api_deserialize(CAN_PRIMARY_NETWORK, buffer.id, buffer.data, &can_message);
+    can_networks_api_deserialize(CAN_PRIMARY_NETWORK, frame->id, (uint8_t *) frame->data, &can_message);
 
-    switch(buffer.id) {
+    switch (frame->id) {
         case CAN_PRIMARY_MESSAGE_INDEX_HV_BMS_IMD:
-            indicators_api_set_indicator(INDICATORS_NAME_IMD, can_message.can_primary_message.hv_bms_imd.status);
+            uint8_t imd_status = can_message.can_primary_message.hv_bms_imd.status;
+            indicators_api_set_indicator(INDICATORS_NAME_IMD, (imd_status == CAN_PRIMARY_HV_BMS_IMD_STATUS_NORMAL || imd_status == CAN_PRIMARY_HV_BMS_IMD_STATUS_START_MEASURE));
             indicators_api_update_timestamp(INDICATORS_NAME_IMD);
             break;
         case CAN_PRIMARY_MESSAGE_INDEX_HV_BMS_STATUS:

@@ -56,7 +56,7 @@ enum CanCommunicationReturnCode can_communications_api_init(const struct CanComm
  * \retval CAN_COMMUNICATION_RC_QUEUE_FULL if the TX queue is saturated.
  * \retval CAN_COMMUNICATION_RC_ERROR on a PAL-internal failure.
  */
-enum CanCommunicationReturnCode can_communications_api_add_to_tx_buffer( const struct CanCommunicationFrame *frame);
+enum CanCommunicationReturnCode can_communications_api_add_to_tx_buffer(const struct CanCommunicationFrame *frame);
 
 /*!
  * \brief Push a frame into the RX queue.

@@ -112,11 +112,11 @@ fsm_state_t fsm_do_idle(fsm_state_data_t *data) {
     can_communications_api_process_tx();
     can_communications_api_process_rx();
 
-    if(indicators_api_is_timestamp_expired(INDICATORS_NAME_AMS)) {
+    if (indicators_api_is_timestamp_expired(INDICATORS_NAME_AMS)) {
         indicators_api_set_indicator(INDICATORS_NAME_AMS, false);
     }
 
-    if(indicators_api_is_timestamp_expired(INDICATORS_NAME_IMD)) {
+    if (indicators_api_is_timestamp_expired(INDICATORS_NAME_IMD)) {
         indicators_api_set_indicator(INDICATORS_NAME_IMD, false);
     }
 

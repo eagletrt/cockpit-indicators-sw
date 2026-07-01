@@ -43,7 +43,7 @@ void MX_FDCAN1_Init(void);
 
 /* USER CODE BEGIN Prototypes */
 enum CanCommunicationReturnCode fdcan_send_primary(const struct
-        CanCommunicationFrame *frame);
+                                                   CanCommunicationFrame *frame);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus

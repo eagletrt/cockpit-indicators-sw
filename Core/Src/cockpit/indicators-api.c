@@ -58,10 +58,10 @@ bool indicators_api_is_timestamp_expired(enum IndicatorsName indicator) {
 
     switch (indicator) {
         case INDICATORS_NAME_AMS:
-             milliseconds_elapsed -= indicators_api_handler.ams_last_update;
+            milliseconds_elapsed -= indicators_api_handler.ams_last_update;
             break;
         case INDICATORS_NAME_IMD:
-             milliseconds_elapsed -= indicators_api_handler.imd_last_update;
+            milliseconds_elapsed -= indicators_api_handler.imd_last_update;
             break;
         default:
             return false;
