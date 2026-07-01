@@ -12,7 +12,7 @@ enum CanCommunicationReturnCode can_communications_router_api_receive_primary(co
 
     union CanNetworkMessage can_message;
 
-    can_networks_api_deserialize(CAN_PRIMARY_NETWORK, frame->id, (uint8_t *) frame->data, &can_message);
+    can_networks_api_deserialize(CAN_PRIMARY_NETWORK, frame->id, (uint8_t *)frame->data, &can_message);
 
     switch (frame->id) {
         case CAN_PRIMARY_MESSAGE_INDEX_HV_BMS_IMD:

@@ -19,7 +19,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
-#include "can-communications-router-api.h"
 #include "dma.h"
 #include "fdcan.h"
 #include "tim.h"
@@ -30,6 +29,7 @@
 /* USER CODE BEGIN Includes */
 #include "fsm.h"
 #include "can-communications-api.h"
+#include "can-communications-router-api.h"
 #include "post.h"
 #include <string.h>
 

@@ -39,12 +39,12 @@
 /*!
  * \brief Depth of the per-network reception queue.
  */
-#define CAN_COMMUNICATIONS_RX_QUEUE_CAPACITY (32U)
+#define CAN_COMMUNICATIONS_RX_QUEUE_CAPACITY (128U)
 
 /*!
  * \brief Depth of the per-network transmission queue.
  */
-#define CAN_COMMUNICATIONS_TX_QUEUE_CAPACITY (32U)
+#define CAN_COMMUNICATIONS_TX_QUEUE_CAPACITY (128U)
 
 /*!
  * \brief Return codes for CAN-communications operations.

@@ -27,10 +27,9 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "can-communications.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "can-communications.h"
 /* USER CODE END Includes */
 
 extern FDCAN_HandleTypeDef hfdcan1;
